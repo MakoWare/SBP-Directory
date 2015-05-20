@@ -1,0 +1,84 @@
+.userSettingsForm {
+    @include span-columns(12);
+
+
+    @include media($small-screen) {
+        @include span-columns(10);
+    }
+
+    @include media($medium-screen) {
+        @include span-columns(8);
+    }
+
+    @include media($large-screen) {
+        @include span-columns(6);
+    }
+
+    input {
+        @include span-columns(12);
+
+        @include media($small-screen) {
+            @include span-columns(12);
+        }
+
+        @include media($medium-screen) {
+            @include span-columns(10);
+        }
+
+        @include media($large-screen) {
+            @include span-columns(8);
+        }
+    }
+
+    .inputError {
+        @include span-columns(12);
+        color: $gray;
+    }
+
+
+    .submitArea {
+        margin-top: 5px;
+        @include media($small-screen) {
+            @include span-columns(12);
+        }
+
+        @include media($medium-screen) {
+            @include span-columns(6);
+            @include shift(4);
+        }
+
+        @include media($large-screen) {
+            @include span-columns(6);
+            @include shift(2);
+        }
+    }
+
+    .button-login {
+        float: right;
+        font-family: 'Arvo', serif;
+        display: inline-block;
+        border: 0px;
+        font-weight: 300;
+        background: #65696B;
+        background-image: -webkit-linear-gradient(top, #65696B, #545759);
+        background-image: -moz-linear-gradient(top, #65696B, #545759);
+        background-image: -ms-linear-gradient(top, #65696B, #545759);
+        background-image: -o-linear-gradient(top, #65696B, #545759);
+        background-image: linear-gradient(to bottom, #65696B, #545759);
+        color: #ffffff;
+        font-size: 14px;
+        padding: 8px 20px 8px 20px;
+        text-decoration: none;
+        border-radius: 0px;
+
+        &:hover {
+            background: #939799;
+            text-decoration: none;
+        }
+
+    }
+
+    p {
+        font-size: .85em;
+    }
+}
