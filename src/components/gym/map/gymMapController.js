@@ -38,74 +38,107 @@ var GymMapController = BaseController.extend({
     highlightMap: function(){
         
         var body = $('body'),
+            contentArea = $('.mapContent'),
             map = $("#gymMap"),
             mapEl = $("#gymMap").get(0),
-            mapAreas = map.find('area');
-        
-        
-        $.each(mapAreas, function(index, object){
-            var object = $(object);
-            var area = object.get(0);
-            var coords = area.coords.split(", ");
+            mapAreas = map.find('area'),
+            image = $("img[usemap='#gymMap']").css('opacity','0'),
+            
+            // get the width and height from the image tag
+            imgWidth = image.width(),
+            imgHeight = image.height(),
+            imgAttrWidth = image.attr('width'),
+            imgAttrHeight = image.attr('height'),
+            xFactor = parseFloat(imgWidth/imgAttrWidth),
+            yFactor = parseFloat(imgHeight/imgAttrHeight);
 
-            //            console.log('coords');
-            //            console.log(coords);
+        console.log('imgAttrWidth: '+imgAttrWidth);
+        console.log('imgAttrHeight: '+imgAttrHeight);
+        console.log('xFactor: '+xFactor);
+        console.log('yFactor: '+yFactor);
+        
+        
+        var canvas = $('<canvas>').attr('width',imgWidth).attr('height',imgHeight);
+        canvas.css({
+            position:'absolute',
+            top:'0px',
+            left:'0px'
+        });
+        image.before(canvas);
+        var ctx = canvas.get(0).getContext('2d');
+        
+        image.on('load.omgmaps', function(event){
+            ctx.drawImage(this,0,0,imgWidth, imgHeight);
+        });
+        
+        
+        
+        $.each(mapAreas, function(index, area){
+            var area = $(area);
+            var areaEl = area.get(0);
+            var coords = areaEl.coords.split(", ");
+            
+            // map the coords because they are scaled for the image size and not the other size
+            coords = coords.map(function(value, index){
+                if(index%2 === 0){
+                    // x coord
+                    return value * xFactor;
+                } else {
+                    // y coord
+                    return value * yFactor;
+                }
+            });
             
             // create a canvas
-            var canvas = $('<canvas>').css('display', 'none');
-            // append said canvas
-            body.append(canvas);
+            var canvas = $('<canvas>').attr('width',imgAttrWidth).attr('height',imgAttrHeight);
+            canvas.css({
+                position:'absolute',
+                top:'0px',
+                left:'0px',
+                opacity:'0.0',
+                display:'none'
+            });
+            
+            // attach said canvas to DOM
+            contentArea.find('img').before(canvas);
             
             // grab the canvas context
             var ctx = canvas.get(0).getContext('2d');
-//            console.log('ctx');
-//            console.log(ctx);
-
             ctx.fillStyle = '#f00';
+            
+            var x = coords[0],
+                y = coords[1];
+            
             ctx.beginPath();
-
-            var x = coords[0];
-            var y = coords[1];
-
-            //            console.log("x: " + x);
-            //            console.log("y: " + y);
-            ctx.moveTo(coords[0], coords[1]);
-            //            console.log(coords.length);
-            for(var j = 2; j < coords.length-1 ; j += 2 ){
+            ctx.moveTo(x, y);
+            for(var j = 2,len = coords.length; j < len-1 ; j += 2 ){
                 x = coords[j];
                 y = coords[j + 1];
-
-                //                console.log("x: " + x);
-                //                console.log("y: " + y);
-                //                console.log("j: " + j);
-
+                
                 ctx.lineTo(x, y);
             }
-
-
-
-
-            ctx.lineTo(100, 50);
-            ctx.lineTo(50, 100);
-            ctx.lineTo(0, 90);
             ctx.closePath();
             ctx.fill();
 
-            //            ctx.closePath();
-            //            ctx.fill();
-
-            //            console.log(canvas);
-            
             // create an area mouseenter event listener
-            object.on('mouseenter.omgmaps', (function(canvas){
+            area.on('mouseenter.omgmaps', (function(canvas){
                 return function(event){
-                    canvas.css('display', 'inline-block');
+                    event.preventDefault();
+                    console.log('mouse enter');
+                    canvas.css('display', 'block');
+                    canvas.animate({opacity:'1.0'},200,'linear');
+//                    canvas.animate({display:'block'},200,'linear');
                 }
             })(canvas));
 
-            object.on('mouseleave.omgmaps', (function(canvas){
+            area.on('mouseleave.omgmaps', (function(canvas){
                 return function(event){
-                    canvas.css('display', 'none');
+                    event.preventDefault();
+                    console.log('mouse leave');
+                    canvas.animate({opacity:'0.0'},200,'linear',function(){
+                        canvas.css('display', 'none');
+                    });
+//                    canvas.animate({display:'none'},200,'linear');
                 }
             })(canvas));
 
