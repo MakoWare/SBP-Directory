@@ -671,7 +671,7 @@ body {
   opacity: 0; }
 
 .mapContent img {
-  height: 800px; }
+  height: auto; }
 .mapContent area {
   background-color: blue; }
 
