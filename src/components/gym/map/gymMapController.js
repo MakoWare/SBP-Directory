@@ -2,37 +2,76 @@
 
 var GymMapController = BaseController.extend({
     notifications:null,
+    rootCanvas:null,
+    rootImage:null,
 
     init:function($scope, Notifications){
-	this.notifications = Notifications;
-	this._super($scope);
+	   this.notifications = Notifications;
+	   this._super($scope);
     },
 
     defineListeners:function(){
-	this._super();
+        this._super();
         this.$scope.areaClicked = this.areaClicked.bind(this);
-        window.onresize = this.resize.bind(this);
+        window.onresize = this.onResize.bind(this);
     },
 
     defineScope:function(){
+        var that = this;
         $(document).ready(function(e) {
-            $('img[usemap]').rwdImageMaps();
             
-            
+            that.rootImage = $('.imageLayer img').on('load.omgmaps', function(event){
+                $(this).rwdImageMaps();
+                that.highlightMap();
+                
+                
+            }).css('opacity','0');
             
             console.log("done");
+            
         });
 
-        this.highlightMap();
+        
     },
 
     destroy:function(){
-        $('canvas').off('.omgmaps');
+        $('area').off('.omgmaps');
+        $('img').off('.omgmaps');
     },
 
 
     areaClicked: function(){
         console.log("RCH");
+    },
+    
+    createRootCanvas:function(){
+        var image = this.rootImage,
+            imgWidth = image.width(),
+            imgHeight = image.height();
+        
+        this.rootCanvas = $('<canvas>').attr('width',imgWidth).attr('height',imgHeight);
+        this.rootCanvas.css({
+            position:'absolute',
+            top:'0px',
+            left:'0px',
+            height:'auto'
+        });
+        image.before(this.rootCanvas);
+        var ctx = this.rootCanvas.get(0).getContext('2d');
+        ctx.drawImage(image.get(0),0,0,imgWidth, imgHeight);
+    },
+    
+    redrawRootCanvas: function(){
+        var image = this.rootImage,
+            imgWidth = image.width(),
+            imgHeight = image.height();
+        
+        var ctx = this.rootCanvas.get(0).getContext('2d');
+        ctx.clearRect(0, 0, this.rootCanvas.get(0).width, this.rootCanvas.get(0).width);
+
+        this.rootCanvas.attr('width',imgWidth).attr('height',imgHeight);
+
+        ctx.drawImage(image.get(0),0,0,image.width(), image.height());
     },
 
     highlightMap: function(){
@@ -42,7 +81,7 @@ var GymMapController = BaseController.extend({
             map = $("#gymMap"),
             mapEl = $("#gymMap").get(0),
             mapAreas = map.find('area'),
-            image = $("img[usemap='#gymMap']").css('opacity','0'),
+            image = this.rootImage,
             
             // get the width and height from the image tag
             imgWidth = image.width(),
@@ -52,26 +91,13 @@ var GymMapController = BaseController.extend({
             xFactor = parseFloat(imgWidth/imgAttrWidth),
             yFactor = parseFloat(imgHeight/imgAttrHeight);
 
-        console.log('imgAttrWidth: '+imgAttrWidth);
-        console.log('imgAttrHeight: '+imgAttrHeight);
-        console.log('xFactor: '+xFactor);
-        console.log('yFactor: '+yFactor);
+//        console.log('imgAttrWidth: '+imgAttrWidth);
+//        console.log('imgAttrHeight: '+imgAttrHeight);
+//        console.log('xFactor: '+xFactor);
+//        console.log('yFactor: '+yFactor);
         
         
-        var canvas = $('<canvas>').attr('width',imgWidth).attr('height',imgHeight);
-        canvas.css({
-            position:'absolute',
-            top:'0px',
-            left:'0px'
-        });
-        image.before(canvas);
-        var ctx = canvas.get(0).getContext('2d');
-        
-        image.on('load.omgmaps', function(event){
-            ctx.drawImage(this,0,0,imgWidth, imgHeight);
-        });
-        
-        
+        var rootCanvas = this.createRootCanvas();
         
         $.each(mapAreas, function(index, area){
             var area = $(area);
@@ -90,7 +116,7 @@ var GymMapController = BaseController.extend({
             });
             
             // create a canvas
-            var canvas = $('<canvas>').attr('width',imgAttrWidth).attr('height',imgAttrHeight);
+            var canvas = $('<canvas>').attr('width',imgWidth).attr('height',imgHeight).addClass('map-overlay');
             canvas.css({
                 position:'absolute',
                 top:'0px',
@@ -124,7 +150,7 @@ var GymMapController = BaseController.extend({
             area.on('mouseenter.omgmaps', (function(canvas){
                 return function(event){
                     event.preventDefault();
-                    console.log('mouse enter');
+//                    console.log('mouse enter');
                     canvas.css('display', 'block');
                     canvas.animate({opacity:'1.0'},200,'linear');
 //                    canvas.animate({display:'block'},200,'linear');
@@ -134,11 +160,18 @@ var GymMapController = BaseController.extend({
             area.on('mouseleave.omgmaps', (function(canvas){
                 return function(event){
                     event.preventDefault();
-                    console.log('mouse leave');
+//                    console.log('mouse leave');
                     canvas.animate({opacity:'0.0'},200,'linear',function(){
                         canvas.css('display', 'none');
                     });
 //                    canvas.animate({display:'none'},200,'linear');
+                }
+            })(canvas));
+            
+            area.on('click.omgmaps', (function(canvas){
+                return function(event){
+                    event.preventDefault();
+                    console.log('click');
                 }
             })(canvas));
 
@@ -146,8 +179,33 @@ var GymMapController = BaseController.extend({
         
     },
 
-    resize: function(){
+    onResize: function(){
+        var that = this;
 
+        if(this.resizeTimeout){
+            clearTimeout(this.resizeTimeout);
+        }
+        this.resizeTimeout = setTimeout(function(){
+            that.resize();
+        }, 200);
+    },
+    
+    resize: function(){
+        var that = this;
+        console.log('resize');
+        
+        if(this.rootCanvas){
+            this.redrawRootCanvas();
+        }
+        
+        $('canvas.map-overlay').each(function(index, canvas){
+            canvas = $(canvas);
+            
+            canvas.css({
+                height: that.rootImage.height(),
+                width: that.rootImage.width()
+            })
+        });
     }
 
 });
