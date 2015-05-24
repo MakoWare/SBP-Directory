@@ -18,22 +18,7 @@ var NavBarDirective = BaseDirective.extend({
     defineScope: function(){
         this.navShowing = false;
         this.$scope.currentUser = this.userModel.currentUser;
-        this.initNav();
-    },
-
-    initNav: function(){
-        var mobileMenu = document.getElementById("js-mobile-menu");
-        var navMenu = document.getElementById("js-navigation-menu");
-        navMenu.className = navMenu.className.replace(/\bshow\b/,'');
-        mobileMenu.addEventListener('click', function(e) {
-            e.preventDefault();
-            if(this.navShowing){
-                navMenu.className = navMenu.className.replace(/\bshow\b/,'');
-            } else {
-                navMenu.className = navMenu.className + " show";
-            }
-            this.navShowing = !this.navShowing;
-        }.bind(this));
+        $(".button-collapse").sideNav();
     },
 
     logout: function(){
@@ -45,7 +30,6 @@ var NavBarDirective = BaseDirective.extend({
     handleUserSignedIn: function(){
         this.$scope.currentUser = this.userModel.currentUser;
     }
-
 });
 
 angular.module('navbar',[])

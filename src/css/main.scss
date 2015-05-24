@@ -11,29 +11,15 @@
 
 /***** Custom Mixins *****/
 @import "base/mixins";
+@import "lib/material/materialize";
+
+
 
 /***** Custom Layout Styles *****/
 @import "layout";
 
 
 /** Components **/
-//Spinner
-@import "spinner/spinner";
 
 //NavBar
 @import "navbar/navbar";
-
-//ActionBar
-@import "actionBar/actionBar";
-
-//BreadCrumbs
-@import "breadCrumbs/breadCrumbs";
-
-//Footer
-@import "footer/footer";
-
-//Login Form
-@import "loginForm/loginForm";
-
-//User Settings Form
-@import "user/userSettingsForm/userSettingsForm";

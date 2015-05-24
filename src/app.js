@@ -1,9 +1,18 @@
 'use strict';
 
-angular.module('playfab', [
+angular.module('sbp', [
     'notifications',
 
     'navbar',
+
+    //Gyms
+
+    //Walls
+
+    //Routes
+    'routeList',
+    'routeListItem',
+
 
     //User
     'users.UserModel',
@@ -11,20 +20,6 @@ angular.module('playfab', [
 
     //Config
     'duxter.ConfigModel',
-
-    /*
-     //Articles
-     'articles.ArticleModel',
-     'articles.ArticleService',
-     'articles.articleList',
-     'articles.articleListItem',
-
-     //Comments
-     'comments.CommentModel',
-     'comments.CommentService',
-     'comments.commentList',
-     'comments.commentListItem',
-     */
 
     'ui.router',
     'ngCookies',
@@ -42,6 +37,10 @@ angular.module('playfab', [
             templateUrl: "partials/gym/map/map.html",
             controller: GymMapController
 
+        })
+        .state('routes', {
+            url: "/routes",
+            templateUrl: "partials/routes/routeList.html"
         })
         .state('userSettings', {
             url: "/users/:id/settings",
