@@ -67,8 +67,10 @@ gulp.task('copy', function () {
         'bower_components/angular-animate/angular-animate.min.*'
     ]).pipe(gulp.dest('dist/bower_components'));
 
+    gulp.src(['fonts/**/**']).pipe(gulp.dest('dist/font'));
     gulp.src(['index.html']).pipe(gulp.dest('dist'));
     gulp.src(['images/*']).pipe(gulp.dest('dist/images'));
+
 });
 
 

@@ -1,21 +1,20 @@
-<header class="navigation" role="banner">
-  <div class="navigation-wrapper">
-    <a href="javascript:void(0)" class="logo">
-      <img src="images/sbpStamp.png" alt="Logo Image">
-    </a>
-    <a href="javascript:void(0)" class="navigation-menu-button" id="js-mobile-menu">MENU</a>
-    <nav role="navigation">
-      <ul id="js-navigation-menu" class="navigation-menu show">
-        <li class="nav-link more"><a href="javascript:void(0)">Gym</a>
-          <ul class="submenu">
-            <li><a href="javascript:void(0)">Map</a></li>
-            <li><a href="javascript:void(0)">Another Item</a></li>
-          </ul>
-        </li>
-        <li class="nav-link"><a href="javascript:void(0)">Walls</a></li>
-        <li class="nav-link"><a href="javascript:void(0)">Routes</a></li>
-        <li class="nav-link"><a href="javascript:void(0)">Contact</a></li>
+<nav>
+  <div class="container">
+    <div class="nav-wrapper">
+      <a href="#!" class="brand-logo">SBP</a>
+      <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
+      <ul class="right hide-on-med-and-down">
+        <li><a ui-sref="gymMap">Gym</a></li>
+        <li><a href="components.html">Walls</a></li>
+        <li><a ui-sref="routes">Routes</a></li>
+        <li><a href="mobile.html">Contact</a></li>
       </ul>
-    </nav>
+      <ul class="side-nav" id="mobile-demo">
+        <li><a href="sass.html">Gym</a></li>
+        <li><a href="components.html">Walls</a></li>
+        <li><a href="javascript.html">Routes</a></li>
+        <li><a href="mobile.html">Contact</a></li>
+      </ul>
+    </div>
   </div>
-</header>
+</nav>
