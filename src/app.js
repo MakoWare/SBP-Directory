@@ -40,7 +40,15 @@ angular.module('sbp', [
         })
         .state('routes', {
             url: "/routes",
-            templateUrl: "partials/routes/routeList.html"
+            templateUrl: "partials/routes/routes.html"
+        })
+        .state('walls', {
+            url: "/walls",
+            templateUrl: "partials/walls/wallList.html"
+        })
+        .state('wall', {
+            url: "/walls/:id",
+            templateUrl: "partials/walls/wall.html"
         })
         .state('userSettings', {
             url: "/users/:id/settings",
