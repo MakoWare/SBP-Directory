@@ -8579,3 +8579,7 @@ nav {
     color: white; }
   nav li:hover {
     background-color: #00838f; }
+
+.collection img {
+  width: 20px;
+  box-shadow: 5px 5px 5px #888888; }

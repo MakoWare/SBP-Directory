@@ -16,8 +16,29 @@ var RouteListDirective = BaseDirective.extend({
     },
 
     defineScope: function(){
-        this.navShowing = false;
-        this.$scope.currentUser = this.userModel.currentUser;
+        console.log("routeListDirective");
+        this.$scope.routes = [];
+
+        var route = {
+            grade: 5,
+            color: "blue"
+        };
+
+        this.$scope.routes.push(route);
+
+        route = {
+            grade: 6,
+            color: "orange"
+        };
+        this.$scope.routes.push(route);
+
+        route = {
+            grade: 7,
+            color: "purple"
+        };
+        this.$scope.routes.push(route);
+        console.log(this.$scope.routes);
+
     },
 
     logout: function(){

@@ -41,6 +41,6 @@ angular.module('routeListItem',[])
 		new RouteListItemDirective($scope, UserModel, Notifications);
 	    },
 	    scope:true,
-            templateUrl: "partials/routes/routeList/routeListItem.html"
+            templateUrl: "partials/routes/routeListItem.html"
 	};
     });
