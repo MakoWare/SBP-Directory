@@ -1,25 +1,30 @@
 var BaseController = Class.extend({
-    scope: null,
+  scope: null,
 
-    init:function(scope){
-	this.$scope = scope;
-	this.defineListeners();
-	this.defineScope();
-    },
+  init:function(scope){
+    this.$scope = scope;
+    this.initialize.apply(this,arguments);
+    this.defineListeners();
+    this.defineScope();
+  },
 
-    defineListeners: function(){
-	this.$scope.$on('$destroy',this.destroy.bind(this));
-    },
+  initialize:function(){
+    //OVERRIDE
+  },
+
+  defineListeners: function(){
+    this.$scope.$on('$destroy',this.destroy.bind(this));
+  },
 
 
-    defineScope: function(){
-	//OVERRIDE
-    },
+  defineScope: function(){
+    //OVERRIDE
+  },
 
 
-    destroy:function(event){
-	//OVERRIDE
-    }
+  destroy:function(event){
+    //OVERRIDE
+  }
 });
 
 BaseController.$inject = ['$scope'];

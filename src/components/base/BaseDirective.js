@@ -1,25 +1,25 @@
 var BaseDirective = Class.extend({
-    scope: null,
+  scope: null,
 
-    init:function(scope){
-	this.$scope = scope;
-	this.defineListeners();
-	this.defineScope();
-    },
+  init:function(scope){
+    this.$scope = scope;
+    this.defineListeners();
+    this.defineScope();
+  },
 
-    defineListeners: function(){
-	this.$scope.$on('$destroy',this.destroy.bind(this));
-    },
-
-
-    defineScope: function(){
-	//OVERRIDE
-    },
+  defineListeners: function(){
+    this.$scope.$on('$destroy',this.destroy.bind(this));
+  },
 
 
-    destroy:function(event){
-	//OVERRIDE
-    }
+  defineScope: function(){
+    //OVERRIDE
+  },
+
+
+  destroy:function(event){
+    //OVERRIDE
+  }
 });
 
 BaseDirective.$inject = ['$scope'];
