@@ -5,21 +5,20 @@ var WallController = BaseController.extend({
   rootCanvas:null,
   rootImage:null,
   $state: null,
+  $stateParams: null,
 
-  init:function($scope, Notifications,$state){
+  initialize:function($scope, Notifications,$state,$stateParams){
     this.notifications = Notifications;
     this.$state = $state;
-    this._super($scope);
+    this.$stateParams = $stateParams;
   },
 
   defineListeners:function(){
-    console.log('wall controller: define listeners');
     this._super();
   },
 
   defineScope:function(){
-    var that = this;
-
+    this.$scope.wallId = this.$stateParams.wallId;
   },
 
   destroy:function(){
@@ -28,4 +27,4 @@ var WallController = BaseController.extend({
 
 });
 
-WallController.$inject = ['$scope','Notifications','$state'];
+WallController.$inject = ['$scope','Notifications','$state','$stateParams'];
