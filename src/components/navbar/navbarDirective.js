@@ -15,37 +15,21 @@ var NavBarDirective = BaseDirective.extend({
     this.$scope.logout = this.logout.bind(this);
   },
 
-  defineScope: function(){
-    this.navShowing = false;
-    this.$scope.currentUser = this.userModel.currentUser;
-    this.initNav();
-  },
+    defineScope: function(){
+        this.navShowing = false;
+        this.$scope.currentUser = this.userModel.currentUser;
+        $(".button-collapse").sideNav();
+    },
 
-  initNav: function(){
-    var mobileMenu = document.getElementById("js-mobile-menu");
-    var navMenu = document.getElementById("js-navigation-menu");
-    navMenu.className = navMenu.className.replace(/\bshow\b/,'');
-    mobileMenu.addEventListener('click', function(e) {
-      e.preventDefault();
-      if(this.navShowing){
-        navMenu.className = navMenu.className.replace(/\bshow\b/,'');
-      } else {
-        navMenu.className = navMenu.className + " show";
-      }
-      this.navShowing = !this.navShowing;
-    }.bind(this));
-  },
+    logout: function(){
+        this.userModel.logout();
+        this.$location.url("/");
+    },
 
-  logout: function(){
-    this.userModel.logout();
-    this.$location.url("/");
-  },
-
-  /** EVENT HANDLERS **/
-  handleUserSignedIn: function(){
-    this.$scope.currentUser = this.userModel.currentUser;
-  }
-
+    /** EVENT HANDLERS **/
+    handleUserSignedIn: function(){
+        this.$scope.currentUser = this.userModel.currentUser;
+    }
 });
 
 angular.module('navbar',[])
