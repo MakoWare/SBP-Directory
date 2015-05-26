@@ -46,5 +46,10 @@ angular.module('playfab', [
         .state('userSettings', {
             url: "/users/:id/settings",
             templateUrl: "partials/settingsPage.html"
+        })
+        .state('wallView', {
+            url: "/wall/:id",
+            templateUrl: "partials/gym/wall/wall.html",
+            controller:WallController
         });
 });
