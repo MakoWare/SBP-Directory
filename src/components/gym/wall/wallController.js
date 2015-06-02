@@ -5,7 +5,7 @@ var WallController = BaseController.extend({
   rootCanvas:null,
   rootImage:null,
   $state: null,
-  $stateParams: null,
+  // $stateParams: null,
 
   initialize:function($scope, Notifications,$state,$stateParams){
     this.notifications = Notifications;
@@ -14,11 +14,10 @@ var WallController = BaseController.extend({
   },
 
   defineListeners:function(){
-    this._super();
   },
 
   defineScope:function(){
-    this.$scope.wallId = this.$stateParams.wallId;
+    this.$scope.wallId = this.$stateParams.id;
   },
 
   destroy:function(){

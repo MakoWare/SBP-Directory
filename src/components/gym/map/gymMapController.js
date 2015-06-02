@@ -18,7 +18,6 @@ var GymMapController = BaseController.extend({
   },
 
   defineListeners:function(){
-    this._super();
     this.$scope.areaClicked = this.areaClicked.bind(this);
     window.onresize = this.onResize.bind(this);
   },
