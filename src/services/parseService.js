@@ -7,7 +7,6 @@ var ParseService = Class.extend({
     Route: Parse.Object.extend("Route"),
     Hold: Parse.Object.extend("Hold"),
 
-
     /** Users **/
     signIn: function(email, password){
 
@@ -64,6 +63,24 @@ var ParseService = Class.extend({
 
 
     /** Routes **/
+    getRoutesByWallId: function(id, callback){
+        var query = new Parse.Query(this.Route);
+        query.equalTo("wall", {
+            __type: "Pointer",
+            className: "Wall",
+            objectId: id
+        });
+
+        query.equalTo("takenDown", null);
+        return query.find({
+            success: function(wall){
+                callback(wall);
+            },
+            error: function(error){
+                callback(error);
+            }
+        });
+    },
 
 
 

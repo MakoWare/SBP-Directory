@@ -17,6 +17,7 @@ angular.module('sbp', [
     'RouteModel',
     'routeList',
     'routeListItem',
+    'routeTable',
 
 
     //User

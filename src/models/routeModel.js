@@ -1,5 +1,7 @@
 'use strict';
+
 namespace('models.events').ROUTE_LOADED = "ActivityModel.ROUTE_LOADED";
+namespace('models.events').ROUTES_LOADED = "ActivityModel.ROUTES_LOADED";
 
 var RouteModel = EventDispatcher.extend({
     route: {},
@@ -12,8 +14,11 @@ var RouteModel = EventDispatcher.extend({
         var promise = this.GameService.getGameById(id);
     },
 
-    getRoutesByWall: function(wall){
-
+    getRoutesByWallId: function(id){
+        return this.parseService.getRoutesByWallId(id, function(results){
+            this.routes = results;
+            this.notifications.notify(models.events.ROUTES_LOADED);
+        }.bind(this));
     },
 
     createRoute: function(wall){
