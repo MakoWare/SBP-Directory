@@ -1,0 +1,66 @@
+<div id="tableContainer">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <td><a href="" ng-click="predicate = 'attributes.order'; reverse=!reverse">Color</a></td>
+        <td><a href="" ng-click="predicate = 'attributes.order'; secondary = 'grade'; reverse=!reverse">Grade</a></td>
+        <td><a href="" ng-click="predicate = 'attributes.status'; secondary = 'attributes.order'; reverse=!reverse">Status</a></td>
+        <td><a href="" ng-click="predicate = 'attributes.setter.attributes.username'; secondary = 'attributes.order'; reverse=!reverse">Setter</a></td>
+        <td>View</td>
+        <td>Delete</td>
+      </tr>
+    </thead>
+    <tbody id="routesTable">
+      <tr ng-repeat="route in routes | orderBy:[predicate, secondary]:reverse | filter:search:strict">
+        <td ng-style="{'background-color': route.attributes.color}">
+          <select  ng-model="route.attributes.color" name="color" ng-style="{'background-color': route.attributes.color}" ng-change="saveRoute(route)">
+            <option>gray</option>
+            <option>yellow</option>
+            <option>green</option>
+            <option>red</option>
+            <option>blue</option>
+            <option>orange</option>
+            <option>purple</option>
+            <option>black</option>
+          </select>
+        </td>
+        <td>
+          <select class="form-control" ng-model="route.attributes.grade" ng-change="saveRoute(route)" name="status">
+            <option>0</option>
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+            <option>6</option>
+            <option>7</option>
+            <option>8</option>
+            <option>9</option>
+            <option>10</option>
+            <option>11</option>
+            <option>12</option>
+          </select>
+        </td>
+
+        <td ng-class="{status0: route.attributes.status == '1', status1: route.attributes.status == '2', status2: route.attributes.status == '3', status3: route.attributes.status == '4', status4: route.attributes.status == '5', status5: route.attributes.status == '6', status6: route.attributes.status == '6' }">
+          <select class="form-control" ng-model="route.attributes.status" name="status" style="font-size: 33px" ng-change="changeStatus(route)">
+            <option value="0"> </option>
+            <option value="1">&#8739</option>
+            <option value="2">&#8735</option>
+            <option value="3">&#8852</option>
+            <option value="4">&#9744</option>
+            <option value="5">&#9746;</option>
+            <option value="6">&#9745;</option>
+          </select>
+        </td>
+        <td>
+          <select class="form-control" ng-model="route.attributes.setter" name="setter" ng-options="setter as setter.attributes.username for setter in setters" ng-change="saveRoute(route)">
+            <option></option>
+          </select>
+        </td>
+        <td><a ng-href="{{'#/routes/' + route.id}}"><button class="btn btn-primary">View</button></a></td>
+        <td><button class="btn btn-danger" ng-click="deleteRoute(route)">Delete</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
