@@ -177,8 +177,9 @@ var GymMapController = BaseController.extend({
 
       area.on('click.omgmaps', (function(canvas){
         return function(event){
+          var wall = $(this);
           event.preventDefault();
-          that.$state.go('wallView',{id:'10'});
+          that.$state.go('wall',{id:wall.attr('id')});
         }
       })(canvas));
 

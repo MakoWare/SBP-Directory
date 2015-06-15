@@ -15,9 +15,10 @@ var RouteModel = EventDispatcher.extend({
     },
 
     getRoutesByWallId: function(id){
-        return this.parseService.getRoutesByWallId(id, function(results){
+        return this.parseService.getRoutesByWallId(id).then(function(results){
             this.routes = results;
             this.notifications.notify(models.events.ROUTES_LOADED);
+            return Parse.Promise.as(results);
         }.bind(this));
     },
 

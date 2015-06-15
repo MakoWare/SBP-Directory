@@ -1,0 +1,41 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h3>Users</h3>
+    </div>
+  </div>
+
+  <table class="bordered hoverable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th># of Routes Set</th>
+        <th>Color Most Set</th>
+        <th>Grade Most Set</th>
+        <th>Favorite Theme</th>
+        <th>Setter</th>
+        <th>View</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="user in users">
+        <td>{{user.attributes.username}}</td>
+        <td>{{user.attributes.routes.length}}</td>
+        <td ng-style="{'background-color': user.attributes.mostColor}"></td>
+        <td>{{user.attributes.mostGrade}}</td>
+        <td>{{user.attributes.mostTheme}}</td>
+        <td>
+          <div class="switch">
+            <label>
+              <!-- Off -->
+              <input data-user-id="{{user.id}}" ng-model="user.attributes.setter" type="checkbox">
+              <span class="lever"></span>
+              <!-- On -->
+            </label>
+          </div>
+        </td>
+        <td><button class="btn btn-primary" ng-click="viewUser(user)">View</button></td>
+      </tr>
+    <tbody>
+  </table>
+</div>

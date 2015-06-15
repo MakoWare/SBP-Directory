@@ -20,6 +20,15 @@ gulp.task('default', ['build', 'connect'], function () {
     });
 });
 
+gulp.task('parse', ['build', 'parse-no-build'], function(){
+  // to be run from the command line
+});
+
+// can be inserted as dependency after a build task
+gulp.task('parse-no-build', function(){
+  gulp.src('dist/**')
+  .pipe(gulp.dest('parse/public'));
+});
 
 // Test
 gulp.task('test', ['casperTest'], function () {
@@ -38,8 +47,8 @@ gulp.task('js', function () {
         .pipe($.plumber())
         .pipe($.sourcemaps.init())
         .pipe($.concat('app.js'))
-        .pipe($.ngAnnotate())
-        .pipe($.uglify())
+        // .pipe($.ngAnnotate())
+        // .pipe($.uglify())
         .pipe($.sourcemaps.write())
         .pipe(gulp.dest('dist'));
 });
