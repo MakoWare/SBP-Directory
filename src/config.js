@@ -12,6 +12,10 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
       return routeModel.getRoutesByWallId(stateParams.id);
     }];
 
+    var getUsers = ['UserModel', function(userModel){
+      return userModel.getUsers();
+    }];
+
     $urlRouterProvider.otherwise("/gym/map");
 
     $stateProvider
@@ -28,7 +32,8 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
             templateUrl: "partials/user/users.html",
             controller: UsersCtrl,
             resolve: {
-                initGym: initGym
+                initGym: initGym,
+                Users: getUsers
             }
         })
         .state('walls', {

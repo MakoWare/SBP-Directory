@@ -4,13 +4,15 @@
 var UsersCtrl = BaseController.extend({
 
   /**** OVERRIDE Methods ****/
-  initialize:function($scope, $location, ParseService, UserModel, $state,GymModel){
+  initialize:function($scope, $location, ParseService, UserModel, $state, GymModel,Users){
     this.$location = $location;
     this.ParseService = ParseService;
     this.userModel = UserModel;
     this.$state = $state;
-    
-    // this.getUsers();
+
+    this.$scope.users = Users;
+    this.setUpUsers();
+    this.setUpUserObjectListeners();
   },
 
   defineListeners:function(){
@@ -18,7 +20,7 @@ var UsersCtrl = BaseController.extend({
   },
 
   defineScope:function(){
-    this.getUsers();
+    // this.getUsers();
     this.$scope.viewUser = this.viewUser.bind(this);
   },
 
@@ -28,16 +30,16 @@ var UsersCtrl = BaseController.extend({
 
   /**** Instance Methods ****/
   getUsers:function(){
-    this.userModel.getUsers().then(function(results){
-        this.$scope.users = results;
-        this.$scope.$apply();
-        this.setUpUsers();
-        this.setUpUserObjectListeners();
-    }.bind(this),
-    function(err){
-      console.log('failed to get users');
-      console.log(err);
-    }.bind(this));
+    // this.userModel.getUsers().then(function(results){
+    //     this.$scope.users = results;
+    //     this.$scope.$apply();
+    //     this.setUpUsers();
+    //     this.setUpUserObjectListeners();
+    // }.bind(this),
+    // function(err){
+    //   console.log('failed to get users');
+    //   console.log(err);
+    // }.bind(this));
   },
 
   setUpUsers:function(){
@@ -163,4 +165,4 @@ var UsersCtrl = BaseController.extend({
 
 });
 
-UsersCtrl.$inject = ['$scope', '$location', 'ParseService', 'UserModel', '$state','GymModel'];
+UsersCtrl.$inject = ['$scope', '$location', 'ParseService', 'UserModel', '$state','GymModel','Users'];
