@@ -50,7 +50,7 @@ var UsersCtrl = BaseController.extend({
   },
 
   getUserRoutes:function(user){
-    this.ParseService.getRoutesByUser(user, function(results){
+    this.ParseService.getRoutesByUser(user).then(function(results){
         user.attributes.routes = results;
         this.$scope.$apply();
         this.generateStats(user);
