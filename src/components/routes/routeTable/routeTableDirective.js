@@ -20,6 +20,7 @@ var RouteTableDirective = BaseDirective.extend({
 
   defineScope: function(){
     this.$scope.routes = this.routeModel.routes;
+    console.log(this.routeModel.routes);
   },
 
   getRoutes: function(){
