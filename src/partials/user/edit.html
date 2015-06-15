@@ -1,0 +1,79 @@
+<div class="container">
+  <div class="row">
+    <div class="col s12">
+      <h3>{{user.attributes.username}}</h3>
+    </div>
+  </div>
+
+  <!-- <ul class="nav nav-tabs nav-justified">
+    <li role="presentation" ng-class="{'active':  tab == 'routes'}"><a ng-click="tabClicked('routes')">Routes</a></li>
+    <li role="presentation" ng-class="{'active':  tab == 'routesDistro'}"><a ng-click="tabClicked('routesDistro')">Routes Set Distribution</a></li>
+    <li role="presentation" ng-class="{'active':  tab == 'holds'}"><a ng-click="tabClicked('holds')">Hold Usage Distribution</a></li>
+  </ul> -->
+
+  <div class="row">
+    <div class="col s12">
+      <ul id="user-tabs" class="tabs z-depth-1">
+        <li class="tab col s4 m4 l2"><a class="active" href="#tabRoutes">Routes</a></li>
+        <li class="tab col s4 m4 l5"><a href="#tabRoutesSetDistribution">Set Distribution</a></li>
+        <li class="tab col s4 m4 l5"><a href="#tabHoldUsageDistribution">Hold Distribution</a></li>
+      </ul>
+    </div>
+    <!-- <div id="routes" class="col s12">Routes</div>
+    <div id="routesSetDistribution" class="col s12">Routes Set Distribution</div>
+    <div id="holdUsageDistribution" class="col s12">Hold Usage Distribution</div> -->
+  </div>
+
+
+  <div id="tabRoutes">
+    <table class="bordered centered hoverable">
+      <thead>
+        <tr>
+          <th class="th-col s2 m3 l3"><a href="" ng-click="predicate = 'attributes.name'; reverse=!reverse">Name</a></th>
+          <th class="th-col s2 m1 l1"><a href="" ng-click="predicate = 'attributes.color'; reverse=!reverse">Color</a></th>
+          <th class="th-col s2 m2 l2"><a href="" ng-click="predicate = 'attributes.grade'; reverse=!reverse">Grade</a></th>
+          <!-- <th><a href="" ng-click="predicate = 'attributes.setterComments'; reverse=!reverse">Setter's Comments</a></th> -->
+          <!-- <th><a href="" ng-click="predicate = 'attributes.risk'; reverse=!reverse">Risk</a></th> -->
+          <!-- <th><a href="" ng-click="predicate = 'attributes.intensity'; reverse=!reverse">Intensity</a></th> -->
+          <!-- <th><a href="" ng-click="predicate = 'attributes.complexity'; reverse=!reverse">Complexity</a></th> -->
+          <th class="th-col s2 m1 offset-m1 l1 offset-l1"><a href="" ng-click="predicate = 'attributes.status'; reverse=!reverse">Status</a></th>
+          <th class="th-col s2 m2 l2"><a href="" ng-click="predicate = 'createdAt'; reverse=!reverse">Created On</a></th>
+          <th class="th-col s2 m2 l2">View</td>
+        </tr>
+      </thead>
+      <tbody id="routesTable">
+        <tr ng-repeat="route in user.attributes.routes | orderBy:predicate:reverse | filter:search:strict">
+          <td>{{route.attributes.name}}</td>
+          <td ng-style="{'background-color': route.attributes.color}"></td>
+          <td>{{route.attributes.grade}}</td>
+          <!-- <td>{{route.attributes.setterComments}}</td> -->
+          <!-- <td>{{route.attributes.risk}}</td> -->
+          <!-- <td>{{route.attributes.intensity}}</td> -->
+          <!-- <td>{{route.attributes.complexity}}</td> -->
+          <td>{{route.attributes.status}}</td>
+          <td>{{(route.createdAt.getMonth() + 1) + "/" + route.createdAt.getDate() + "/" + route.createdAt.getFullYear()}}</td>
+          <td><button class="btn btn-primary" ng-click="editRoute(route)">View</button></td>
+        </tr>
+      <tbody>
+    </table>
+  </div>
+
+  <div id="tabRoutesSetDistribution">
+    <div class="row">
+      <div class="col-md-12">
+        <div style="font-size: 18px" class="ct-chart ct-octave" id="general"></div>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="tabHoldUsageDistribution">
+    <div class="row">
+      <div class="col-md-12">
+        <div style="font-size: 18px" class="ct-chart ct-octave" id="holdDistribution"></div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
