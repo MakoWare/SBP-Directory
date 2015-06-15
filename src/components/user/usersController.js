@@ -12,15 +12,15 @@ var UsersCtrl = BaseController.extend({
 
     this.$scope.users = Users;
     this.setUpUsers();
-    this.setUpUserObjectListeners();
   },
 
   defineListeners:function(){
-
+    this.setUpUserObjectListeners();
   },
 
   defineScope:function(){
     // this.getUsers();
+    this.$scope.setUpUserObjectListeners = this.setUpUserObjectListeners.bind(this);
     this.$scope.viewUser = this.viewUser.bind(this);
   },
 
@@ -66,7 +66,7 @@ var UsersCtrl = BaseController.extend({
 
   onUserSetterSwitchToggle:function(element){
     this.ParseService.toggleUserSetterStatus(element.data('user-id'),element.is(':checked')).then(function(user){
-      // console.log(user);
+      console.log(user);
     },function(err){
       console.log(err);
       element.prop('checked',!element.is(':checked'));

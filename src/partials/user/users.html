@@ -6,39 +6,7 @@
   </div>
 
   <div class="row">
-    <table class="bordered centered hoverable">
-      <thead>
-        <tr>
-          <th class="th-col s2 m2 l2">Name</th>
-          <th class="th-col s1 m1 l1"># of Routes</th>
-          <th class="th-col s2 m2 l2">Color Most Set</th>
-          <th class="th-col s2 m2 l2">Grade Most Set</th>
-          <th class="th-col s2 m2 l2">Favorite Theme</th>
-          <th class="th-col s1 m1 l1">Setter</th>
-          <th class="th-col s2 m2 l2"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="user in users">
-          <td>{{user.attributes.username}}</td>
-          <td>{{user.attributes.routes.length}}</td>
-          <td ng-style="{'background-color': user.attributes.mostColor}"></td>
-          <td>{{user.attributes.mostGrade}}</td>
-          <td>{{user.attributes.mostTheme}}</td>
-          <td>
-            <div class="switch">
-              <label>
-                <!-- Off -->
-                <input data-user-id="{{user.id}}" ng-model="user.attributes.setter" type="checkbox">
-                <span class="lever"></span>
-                <!-- On -->
-              </label>
-            </div>
-          </td>
-          <td><button class="btn btn-primary" ng-click="viewUser(user)">View</button></td>
-        </tr>
-      <tbody>
-    </table>
+    <users-table></users-table>
   </div>
 
 </div>
