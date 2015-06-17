@@ -25,6 +25,12 @@ var ParseService = Class.extend({
     return query.find();
   },
 
+  getSetters: function(){
+    var query = new Parse.Query(Parse.User);
+    query.equalTo('setter', true);
+    return query.find();
+  },
+
   getCurrentUser: function(){
     return Parse.User.current();
   },
@@ -58,6 +64,8 @@ var ParseService = Class.extend({
     return query.find();
   },
 
+
+
   getWallById: function(id){
     var query = new Parse.Query(this.Wall);
     return query.get(id);
@@ -80,9 +88,18 @@ var ParseService = Class.extend({
   //Get Route By User
   getRoutesByUser: function(user){
     var query = new Parse.Query(this.Route);
+    query.include('wall');
     query.equalTo("setter", user);
     query.limit(1000);
     return query.find();
+  },
+
+  // get route by Id
+  getRouteById: function(id){
+    var query = new Parse.Query(this.Route);
+    query.include('wall');
+    query.include('setter');
+    return query.get(id);
   }
 
 

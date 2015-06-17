@@ -67,7 +67,7 @@
             {{route.attributes.setter.attributes.username}}
           </div>
         </td>
-        <td><a ng-href="{{'#/routes/' + route.id}}"><button class="btn btn-primary">View</button></a></td>
+        <td><button class="btn btn-primary" ng-click="viewRoute(route)">View</button></td>
         <td><button class="btn btn-danger" ng-click="deleteRoute(route)">Delete</button></td>
       </tr>
     </tbody>

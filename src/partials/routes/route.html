@@ -1,0 +1,389 @@
+<div class="container">
+  <div class="row valign-wrapper">
+    <div class="col l8">
+      <h3>{{route.attributes.name ? route.attributes.name : '*no name*'}}</h3>
+    </div>
+    <div class="col l2 valign">
+      <button class="btn"  ng-click="deleteRoute()">Delete</button>
+    </div>
+    <div class="col l2 valign">
+      <button class="btn" ng-disabled="routeForm.$invalid" ng-click="saveRoute()">Save</button>
+
+    </div>
+  </div>
+
+  <div class="z-depth-1">
+    <div class="col s12">
+      <ul class="tabs">
+        <li class="tab col s3"><a class="active" href="#infoTab">Information</a></li>
+        <li class="tab col s3"><a href="#holdsTab">Holds</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- spacer -->
+  <div class="row"></div>
+
+  <!-- container for all tabs -->
+  <div id="tabsContentContainer" class="row">
+
+    <!-- Info Tab Content Pane -->
+    <div id="infoTab">
+      <div class="row" style="margin-bottom: 5px">
+        <div class="col m12">
+          <h4>Route Information</h4>
+        </div>
+      </div>
+
+      <form name="routeForm">
+
+        <!-- Row 1 of inputs -->
+        <div class="row valign-wrapper">
+          <div class="input-field col s3">
+            <input ng-model="route.attributes.name" type="text" name="name" class="form-control" id="name" required/>
+            <label for="name">Name</label>
+          </div>
+
+          <div class="input-field col s3">
+            <select mat-select="attributes.username" ng-model="route.attributes.setter" name="setter" ng-options="setter as setter.attributes.username for setter in setters" ng-change="setterChange(route)" required>
+              <!-- <option value="" disabled selected>Choose Setter</option> -->
+            </select>
+            <label for="setter">Setter</label>
+          </div>
+
+          <div class="input-field col s2">
+            <select mat-select ng-model="route.attributes.grade" name="grade">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+              <option value="11">11</option>
+              <option value="12">12</option>
+            </select>
+            <label for="grade">Grade</label>
+          </div>
+
+          <div class="input-field col s2">
+            <select mat-select ng-model="route.attributes.color" name="color" ng-style="{'color': route.attributes.color}">
+              <option></option>
+              <option>gray</option>
+              <option>yellow</option>
+              <option>green</option>
+              <option>red</option>
+              <option>blue</option>
+              <option>orange</option>
+              <option>purple</option>
+              <option>black</option>
+            </select>
+            <label for="color">Color</label>
+          </div>
+
+          <div class="input-field col s2 valign">
+            <button type="button" class="btn btn-default" ng-click="changeStatus(route)">
+              <img width="35" src="" id="statusImage"></img>
+            </button>
+          </div>
+          <!-- <label for="status">Status</label> -->
+        </div>
+
+        <!-- Row 2 of inputs -->
+        <div class="row">
+          <div class="input-field col s3">
+            <select mat-select="attributes.name" class="" ng-model="route.attributes.wall" name="wall" ng-options="wall as wall.attributes.name for wall in walls">
+              <option value="">Not Selected</option>
+            </select>
+            <label for="wall">Wall</label>
+          </div>
+
+          <div class="input-field col s6">
+            <textarea class="form-control" rows="2" ng-model="route.attributes.setterComments"></textarea>
+            <label for="setterComments">Setter's Comments</label>
+          </div>
+        </div>
+
+        <!-- Row 3 of input -->
+        <div class="row">
+          <div class="input-field col s2">
+            <select mat-select class="form-control" ng-model="route.attributes.crimps" name="crimps">
+              <option>0</option>
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+              <option>6</option>
+              <option>7</option>
+              <option>8</option>
+              <option>9</option>
+              <option>10</option>
+              <option>11</option>
+              <option>12</option>
+              <option>13</option>
+              <option>14</option>
+              <option>15</option>
+              <option>16</option>
+              <option>17</option>
+              <option>18</option>
+              <option>19</option>
+              <option>20</option>
+            </select>
+            <label for="crimps">Crimps</label>
+          </div>
+
+          <div class="input-field col s2">
+            <select mat-select class="form-control" ng-model="route.attributes.jugs" name="jugs">
+              <option>0</option>
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+              <option>6</option>
+              <option>7</option>
+              <option>8</option>
+              <option>9</option>
+              <option>10</option>
+              <option>11</option>
+              <option>12</option>
+              <option>13</option>
+              <option>14</option>
+              <option>15</option>
+              <option>16</option>
+              <option>17</option>
+              <option>18</option>
+              <option>19</option>
+              <option>20</option>
+            </select>
+            <label for="jugs">Jugs</label>
+          </div>
+
+          <div class="input-field col s2">
+            <select mat-select class="form-control" ng-model="route.attributes.pinches" name="pinches">
+              <option>0</option>
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+              <option>6</option>
+              <option>7</option>
+              <option>8</option>
+              <option>9</option>
+              <option>10</option>
+              <option>11</option>
+              <option>12</option>
+              <option>13</option>
+              <option>14</option>
+              <option>15</option>
+              <option>16</option>
+              <option>17</option>
+              <option>18</option>
+              <option>19</option>
+              <option>20</option>
+            </select>
+            <label for="pinches">Pinches</label>
+          </div>
+
+          <div class="input-field col s2">
+            <select mat-select class="form-control" ng-model="route.attributes.slopers" name="slopers">
+              <option>0</option>
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+              <option>6</option>
+              <option>7</option>
+              <option>8</option>
+              <option>9</option>
+              <option>10</option>
+              <option>11</option>
+              <option>12</option>
+              <option>13</option>
+              <option>14</option>
+              <option>15</option>
+              <option>16</option>
+              <option>17</option>
+              <option>18</option>
+              <option>19</option>
+              <option>20</option>
+            </select>
+            <label for="slopers">Slopers</label>
+          </div>
+
+          <div class="input-field col s2">
+            <select mat-select class="form-control" ng-model="route.attributes.edges" name="edges">
+              <option>0</option>
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+              <option>6</option>
+              <option>7</option>
+              <option>8</option>
+              <option>9</option>
+              <option>10</option>
+              <option>11</option>
+              <option>12</option>
+              <option>13</option>
+              <option>14</option>
+              <option>15</option>
+              <option>16</option>
+              <option>17</option>
+              <option>18</option>
+              <option>19</option>
+              <option>20</option>
+            </select>
+            <label for="edges">Edges</label>
+          </div>
+
+          <div class="input-field col s2">
+            <select mat-select class="form-control" ng-model="route.attributes.volumes" name="edges">
+              <option>0</option>
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+              <option>6</option>
+              <option>7</option>
+              <option>8</option>
+              <option>9</option>
+              <option>10</option>
+              <option>11</option>
+              <option>12</option>
+              <option>13</option>
+              <option>14</option>
+              <option>15</option>
+              <option>16</option>
+              <option>17</option>
+              <option>18</option>
+              <option>19</option>
+              <option>20</option>
+            </select>
+            <label for="edges">Volumes</label>
+          </div>
+        </div>
+
+        <!-- Row 4 of inputs -->
+        <div class="row">
+          <div class="input-field col s3">
+            <input ng-model="route.attributes.totalHolds" type="text" name="totalHolds" class="form-control" id="totalHolds"/>
+            <label for="totalHolds">Total Holds</label>
+          </div>
+
+          <div class="input-field col s3">
+            <select mat-select class="form-control" ng-model="route.attributes.theme" name="edges">
+              <option>dyno</option>
+              <option>slab</option>
+              <option>crimpy</option>
+              <option>unicorn</option>
+              <option>tictacky</option>
+              <option>starfish</option>
+            </select>
+            <label for="edges">Theme</label>
+          </div>
+
+          <div class="input-field col s2">
+            <select mat-select class="form-control" ng-model="route.attributes.risk" name="risk">
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+            </select>
+            <label for="risk">Risk</label>
+          </div>
+
+          <div class="input-field col s2">
+            <select mat-select class="form-control" ng-model="route.attributes.intensity" name="intensity">
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+            </select>
+            <label for="intensity">Intensity</label>
+          </div>
+
+          <div class="input-field col s2">
+            <select mat-select class="form-control" ng-model="route.attributes.complexity" name="complexity">
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+            </select>
+            <label for="complexity">Complexity</label>
+          </div>
+        </div>
+
+        <br>
+        <div class="row">
+          <div class="col s12">
+            <h4 style="margin-top: 10px">User's Comments</h4>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col s12" style="margin-left: 10px">
+            <p>I Loved this Route, fun dyno, I want more!</p>
+            <p>The dyno on this Route was way too far, I'm only 5'3!!!</p>
+            <p>Some Other Examlpe Feedback!</p>
+          </div>
+        </div>
+
+
+      </form>
+    </div>
+
+    <!-- Holds Tab Content Pane -->
+    <div id="holdsTab">
+      <div class="row valign-wrapper">
+        <div class="col s10 m10 l10">
+          <h4>Holds Used in Route</h4>
+        </div>
+        <div class="col s2 m2 l2 valign">
+          <button class="btn" ng-click="createModal()">Add Holds</button>
+        </div>
+      </div>
+
+
+      <table class="bordered centered">
+        <thead>
+          <tr>
+            <th>Picture</th>
+            <th>Color</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Size</th>
+            <th>Description</th>
+            <th>ID</th>
+            <th>Remove</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="hold in route.attributes.holds">
+            <td><img ng-src="{{hold.attributes.holdPicture.url()}}" class="img-responsive" alt="Hold Image" id="holdPicture" style="width: 100px; height: 100px;"></td>
+            <td ng-style="{'background-color':  hold.attributes.color}"></td>
+            <td>{{hold.attributes.name}}</td>
+            <td>{{hold.attributes.type}}</td>
+            <td>{{hold.attributes.size}}</td>
+            <td>{{hold.attributes.description}}</td>
+            <td>{{hold.id}}</td>
+            <td><button class="btn btn-info" ng-click="removeHoldFromRoute(hold)">Remove</button></td>
+          </tr>
+        <tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

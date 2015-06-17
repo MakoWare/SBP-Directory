@@ -34,6 +34,13 @@ var UserModel = EventDispatcher.extend({
       this.notifications.notify(models.events.USERS_FETCHED);
       return Parse.Promise.as(results);
     }.bind(this));
+  },
+  
+  getSetters: function(){
+    return this.ParseService.getSetters().then(function(results){
+      this.users = results;
+      return Parse.Promise.as(results);
+    }.bind(this));
   }
 
 });

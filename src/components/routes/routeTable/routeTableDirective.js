@@ -20,6 +20,7 @@ var RouteTableDirective = BaseDirective.extend({
 
   defineScope: function(){
     this.$scope.routes = this.routeModel.routes;
+    this.$scope.viewRoute = this.viewRoute.bind(this);
     console.log(this.routeModel.routes);
   },
 
@@ -30,6 +31,11 @@ var RouteTableDirective = BaseDirective.extend({
   /** EVENT HANDLERS **/
   handleRoutesChanged: function(){
     // this.$scope.routes = this.routeModel.routes;
+  },
+
+  /**** scope methods ****/
+  viewRoute: function(route){
+    this.$state.go('route', {id:route.id});
   }
 
 });

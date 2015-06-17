@@ -28,6 +28,11 @@ angular.module('sbp', [
 
     'ui.router',
     'ngCookies',
-    'ngAnimate'
+    'ngAnimate',
+
+    // custom stuff
+    'CustomModule',
+    'matSelect'
+
 
 ]);

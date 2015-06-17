@@ -11,7 +11,11 @@ var RouteModel = EventDispatcher.extend({
     gameService: null,
 
     getRouteById: function(id){
-        var promise = this.GameService.getGameById(id);
+      return this.parseService.getRouteById(id).then(function(route){
+        this.route = route;
+        this.notifications.notify(models.events.ROUTE_LOADED);
+        return Parse.Promise.as(route);
+      }.bind(this));
     },
 
     getRoutesByWallId: function(id){
