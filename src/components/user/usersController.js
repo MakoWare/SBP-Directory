@@ -8,6 +8,7 @@ var UsersCtrl = BaseController.extend({
     this.$location = $location;
     this.ParseService = ParseService;
     this.userModel = UserModel;
+    this.gymModel = GymModel;
     this.$state = $state;
 
     this.$scope.users = Users;
@@ -19,9 +20,13 @@ var UsersCtrl = BaseController.extend({
   },
 
   defineScope:function(){
+    this.$scope.gym = this.gymModel.gym;
+    this.$scope.gyms = this.gymModel.gyms;
+
     // this.getUsers();
     this.$scope.setUpUserObjectListeners = this.setUpUserObjectListeners.bind(this);
     this.$scope.viewUser = this.viewUser.bind(this);
+    this.$scope.onMenuSelect = this.onMenuSelect.bind(this);
   },
 
   destroy:function(){
@@ -74,6 +79,26 @@ var UsersCtrl = BaseController.extend({
     });
     // console.log(element.data('user-id') + ", " + element.is(':checked'));
   },
+
+  onMenuSelect:function(gym){
+    // console.log(gym.attributes.name);
+    var tableBody = $('#users-table-body').detach();
+
+    this.$scope.$apply(function(scope){
+      scope.users.length = 0;
+      scope.gym = gym;
+    });
+
+
+    this.ParseService.getUsersForGym(gym).then(function(users){
+      this.$scope.users = users;
+      this.setUpUsers();
+      $('#users-table').append(tableBody);
+    }.bind(this));
+
+  },
+
+
 
   /**** Statistics Methods ****/
 

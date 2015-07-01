@@ -25,6 +25,12 @@ var ParseService = Class.extend({
     return query.find();
   },
 
+  getUsersForGym:function(gym){
+    var query = new Parse.Query(Parse.User);
+    query.equalTo('currentGym', gym);
+    return query.find();
+  },
+
   getSetters: function(){
     var query = new Parse.Query(Parse.User);
     query.equalTo('setter', true);
@@ -47,15 +53,24 @@ var ParseService = Class.extend({
 
 
   /**** Gyms ****/
-  getDefaultGym: function(callback){
+  baseGymQuery:function(){
+    var query = new Parse.Query(this.Gym);
+    return query;
+  },
+
+  getDefaultGym: function(){
     return this.getGymById("4WChpaHxDE");
   },
 
   getGymById:function(id){
-    var query = new Parse.Query(this.Gym);
+    var query = this.baseGymQuery();
     return query.get(id);
   },
 
+  getGyms:function(){
+    var query = this.baseGymQuery();
+    return query.find();
+  },
 
   /**** Walls ****/
   getWallsByGym: function(gym){

@@ -1,7 +1,8 @@
 angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
 
     var initGym = ['GymModel', function(gymModel){
-        return gymModel.getDefaultGym();
+        // return gymModel.getDefaultGym();
+        return gymModel.initGym();
     }];
 
     var getWallById = ['$stateParams', 'WallModel', function(stateParams,wallModel){
@@ -20,8 +21,8 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
       return routeModel.getRouteById(params.id);
     }];
 
-    var getUsers = ['UserModel', function(userModel){
-      return userModel.getUsers();
+    var getUsers = ['UserModel','initGym', function(userModel, gym){
+      return userModel.getUsersForGym(gym);
     }];
 
     var getSetters = ['UserModel', function(userModel){

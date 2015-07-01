@@ -1,4 +1,4 @@
-<table class="bordered centered hoverable">
+<table id="users-table" class="bordered centered hoverable">
   <thead>
     <tr>
       <th class="th-col s2 m2 l2">Name</th>
@@ -10,7 +10,7 @@
       <th class="th-col s2 m2 l2"></th>
     </tr>
   </thead>
-  <tbody>
+  <tbody id="users-table-body">
     <tr ng-repeat="user in users">
       <td>{{user.attributes.username}}</td>
       <td>{{user.attributes.routes.length}}</td>

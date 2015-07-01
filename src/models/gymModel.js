@@ -30,12 +30,19 @@ var GymModel = EventDispatcher.extend({
 
   },
 
+  initGym:function(){
+    this.getGyms();
+    return this.getDefaultGym();
+  },
+
   getGymById: function(id){
 
   },
 
   getGyms: function(gym){
-
+    return this.parseService.getGyms().then(function(gyms){
+      this.gyms = gyms;
+    }.bind(this));
   }
 
 });

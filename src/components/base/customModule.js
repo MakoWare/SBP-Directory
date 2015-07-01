@@ -1,50 +1,49 @@
 angular.module('CustomModule',[])
 
-.directive('nullable', function() {
-  return {
-    restrict: 'A',
-    require: 'ngModel',
-    link: function(scope, elm, attrs, ctrl) {
-      ctrl.$validators.nullable = function(modelValue, viewValue) {
-        if (ctrl.$isEmpty(modelValue)) {
-          // consider empty models to be valid
-          return true;
+.directive('matDropdownItem', function() {
+
+  var dropdownId;
+
+  var link = function(scope, elm, attrs, ctrl) {
+    if(scope.$first === true){
+      dropdownId = $(elm).closest('ul.dropdown-content').attr('id');
+    }
+    if(scope.$last === true){
+      var dropdown = $('a.dropdown-button[data-activates="'+dropdownId+'"]');
+      var options = dropdown.data('dropdown-options');
+      dropdown.dropdown(options);
+    }
+
+    var params = attrs.matDropdownItem;
+    if(params){
+      var splits = params.split('('),
+          funcName,
+          pName,
+          hasParam = false;
+
+      if(splits.length>1){
+        funcName = splits[0];
+        pName = splits[1].split(')')[0];
+        hasParam = true;
+      }
+
+      $(elm).on('click.'+params, function(event){
+        event.preventDefault();
+        if(hasParam){
+          scope[funcName](scope[pName]);
         }
+      });
 
-        console.log(modelValue);
-        console.log(viewValue);
-
-        // if () {
-        //   // it is valid
-        //   return true;
-        // }
-
-        // it is invalid
-        return false;
-      };
+      scope.$on('$destroy', function(){
+        console.log('destory dropdown items');
+        $(elm).off('click.'+params);
+      });
     }
   };
-})
-.directive('wallConverter', function() {
+
   return {
-    require: 'ngModel',
-    link: function(scope, element, attrs, ngModel) {
-      ngModel.$parsers.push(function(val) {
-        // var num = parseInt(val, 10);
-
-        console.log('parsers');
-        console.log(val);
-        console.log(ngModel.$modelValue);
-
-        // ngModel.$modelValue.name = num;
-        return ngModel.$modelValue;
-      });
-      ngModel.$formatters.push(function(val) {
-        console.log('formatters');
-        console.log(val);
-        // return '' + val.name;
-      });
-    }
+    restrict: 'A',
+    link: link
   };
 })
 
