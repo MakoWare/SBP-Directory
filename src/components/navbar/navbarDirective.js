@@ -13,7 +13,7 @@ var NavBarDirective = BaseDirective.extend({
 
     this.gymModel.getDefaultGym().then(this.onGymFetch.bind(this));
     this.gymModel.getGyms().then(this.onGymsFetch.bind(this));
-    console.log(this.gymModel);
+
   },
 
   defineListeners: function(){
@@ -37,7 +37,7 @@ var NavBarDirective = BaseDirective.extend({
 
   onGymFetch:function(gym){
     this.$scope.gym = this.gymModel.gym;
-    console.log(this.$scope.gym);
+
   },
 
   onGymsFetch:function(gyms){
@@ -45,15 +45,7 @@ var NavBarDirective = BaseDirective.extend({
   },
 
   onGymSelect:function(gym){
-    // console.log(gym);
     this.gymModel.setCurrentGym(gym);
-  },
-
-  onGymChange:function(event, gym){
-    console.log(gym);
-    this.$scope.$apply(function(scope){
-      scope.gym = gym;
-    });
   },
 
   logout: function(){
@@ -68,7 +60,14 @@ var NavBarDirective = BaseDirective.extend({
 
   handleBrandChange: function(event, brand){
     this.$scope.brand = brand;
+  },
+
+  onGymChange:function(event, gym){
+    this.$scope.$apply(function(scope){
+      scope.gym = gym;
+    });
   }
+  
 });
 
 angular.module('navbar',[])
