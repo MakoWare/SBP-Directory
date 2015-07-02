@@ -4,6 +4,8 @@ namespace('models.events').GYM_LOADED = "ActivityModel.GYM_LOADED";
 namespace('models.events').GYM_LOAD_FAILED = "ActivityModel.GYM_LOAD_FAILED";
 namespace('models.events').GYMS_LOADED = "ActivityModel.GYMS_LOADED";
 
+namespace('models.events').GYM_CHANGE = "ActivityModel.GYM_CHANGE";
+
 var GymModel = EventDispatcher.extend({
   gym: null,
   gyms: null,
@@ -43,6 +45,11 @@ var GymModel = EventDispatcher.extend({
     return this.parseService.getGyms().then(function(gyms){
       this.gyms = gyms;
     }.bind(this));
+  },
+
+  setCurrentGym:function(gym){
+    this.gym = gym;
+    this.notifications.notify(models.events.GYM_CHANGE,gym);
   }
 
 });

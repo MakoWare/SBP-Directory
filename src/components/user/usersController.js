@@ -4,18 +4,20 @@
 var UsersCtrl = BaseController.extend({
 
   /**** OVERRIDE Methods ****/
-  initialize:function($scope, $location, ParseService, UserModel, $state, GymModel,Users){
+  initialize:function($scope, $location, Notifications, ParseService, UserModel, $state, GymModel,Users){
     this.$location = $location;
     this.ParseService = ParseService;
     this.userModel = UserModel;
     this.gymModel = GymModel;
     this.$state = $state;
+    this.notifications = Notifications;
 
     this.$scope.users = Users;
     this.setUpUsers();
   },
 
   defineListeners:function(){
+    this.notifications.addEventListener(models.events.GYM_CHANGE, this.onGymChange.bind(this));
     this.setUpUserObjectListeners();
   },
 
@@ -82,6 +84,14 @@ var UsersCtrl = BaseController.extend({
 
   onMenuSelect:function(gym){
     // console.log(gym.attributes.name);
+    this.changeGym(gym);
+  },
+
+  onGymChange:function(event, gym){
+    this.changeGym(gym);
+  },
+
+  changeGym:function(gym){
     var tableBody = $('#users-table-body').detach();
 
     this.$scope.$apply(function(scope){
@@ -95,10 +105,7 @@ var UsersCtrl = BaseController.extend({
       this.setUpUsers();
       $('#users-table').append(tableBody);
     }.bind(this));
-
   },
-
-
 
   /**** Statistics Methods ****/
 
@@ -190,4 +197,4 @@ var UsersCtrl = BaseController.extend({
 
 });
 
-UsersCtrl.$inject = ['$scope', '$location', 'ParseService', 'UserModel', '$state','GymModel','Users'];
+UsersCtrl.$inject = ['$scope', '$location', 'Notifications', 'ParseService', 'UserModel', '$state','GymModel','Users'];

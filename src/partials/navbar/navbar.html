@@ -5,7 +5,9 @@
         <a href="#!" class="brand-logo">{{brand}}</a>
         <a href="#" data-activates="sideNav" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
         <ul class="right hide-on-med-and-down">
-          <li><a ui-sref="gymMap">Gym</a></li>
+          <!-- <li><a ui-sref="gymMap">Gym</a></li> -->
+          <!-- Dropdown Trigger -->
+          <li><a class="dropdown-button" ui-sref="gymMap" href="#!" data-dropdown-options='{"constrain_width": false,"hover": true,"gutter": 0,"belowOrigin": true}' data-activates="gym-select">{{gym.attributes.name}}<i class="material-icons right">arrow_drop_down</i></a></li>
           <li><a ui-sref="users">Users</a></li>
           <li><a ui-sref="walls">Walls</a></li>
           <li><a ui-sref="routes">Routes</a></li>
@@ -22,3 +24,9 @@
     </div>
   </nav>
 </div>
+<ul id="gym-select" class="dropdown-content">
+  <li mat-dropdown-item="onGymSelect(gym)" ng-repeat-start="gym in gyms">
+    <a href="#!">{{gym.attributes.name}}</a>
+  </li>
+  <li ng-repeat-end class="divider"></li>
+</ul>

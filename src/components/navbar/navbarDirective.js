@@ -3,52 +3,83 @@
 namespace('models.events').BRAND_CHANGE = "ActivityModel.BRAND_CHANGE";
 
 var NavBarDirective = BaseDirective.extend({
-    userModel: null,
-    notifications: null,
+  userModel: null,
+  notifications: null,
 
-    init: function($scope, UserModel, Notifications){
-        this.userModel = UserModel;
-        this.notifications = Notifications;
-        this._super($scope);
-    },
+  initialize: function($scope, UserModel, Notifications,GymModel){
+    this.userModel = UserModel;
+    this.notifications = Notifications;
+    this.gymModel = GymModel;
 
-    defineListeners: function(){
-        this.notifications.addEventListener(models.events.USER_SIGNED_IN, this.handleUserSignedIn.bind(this));
-        this.notifications.addEventListener(models.events.BRAND_CHANGE, this.handleBrandChange.bind(this));
-        this.$scope.logout = this.logout.bind(this);
-    },
+    this.gymModel.getDefaultGym().then(this.onGymFetch.bind(this));
+    this.gymModel.getGyms().then(this.onGymsFetch.bind(this));
+    console.log(this.gymModel);
+  },
 
-    defineScope: function(){
-        this.navShowing = false;
-        this.$scope.brand = "SBP";
-        this.$scope.currentUser = this.userModel.currentUser;
-        $(".button-collapse").sideNav();
-    },
+  defineListeners: function(){
+    this.notifications.addEventListener(models.events.USER_SIGNED_IN, this.handleUserSignedIn.bind(this));
+    this.notifications.addEventListener(models.events.BRAND_CHANGE, this.handleBrandChange.bind(this));
+    this.notifications.addEventListener(models.events.GYM_CHANGE, this.onGymChange.bind(this));
 
-    logout: function(){
-        this.userModel.logout();
-        this.$location.url("/");
-    },
+    this.$scope.logout = this.logout.bind(this);
+  },
 
-    /** EVENT HANDLERS **/
-    handleUserSignedIn: function(){
-        this.$scope.currentUser = this.userModel.currentUser;
-    },
+  defineScope: function(){
+    this.navShowing = false;
+    this.$scope.brand = "SBP";
+    this.$scope.currentUser = this.userModel.currentUser;
+    $(".button-collapse").sideNav();
 
-    handleBrandChange: function(event, brand){
-        this.$scope.brand = brand;
-    }
+    this.$scope.gym = this.gymModel.gym;
+    this.$scope.gyms = this.gymModel.gyms;
+    this.$scope.onGymSelect = this.onGymSelect.bind(this);
+  },
+
+  onGymFetch:function(gym){
+    this.$scope.gym = this.gymModel.gym;
+    console.log(this.$scope.gym);
+  },
+
+  onGymsFetch:function(gyms){
+    this.$scope.gyms = this.gymModel.gyms;
+  },
+
+  onGymSelect:function(gym){
+    // console.log(gym);
+    this.gymModel.setCurrentGym(gym);
+  },
+
+  onGymChange:function(event, gym){
+    console.log(gym);
+    this.$scope.$apply(function(scope){
+      scope.gym = gym;
+    });
+  },
+
+  logout: function(){
+    this.userModel.logout();
+    this.$location.url("/");
+  },
+
+  /** EVENT HANDLERS **/
+  handleUserSignedIn: function(){
+    this.$scope.currentUser = this.userModel.currentUser;
+  },
+
+  handleBrandChange: function(event, brand){
+    this.$scope.brand = brand;
+  }
 });
 
 angular.module('navbar',[])
-    .directive('navbar', function(UserModel, Notifications){
-	return {
-	    restrict:'E',
-	    isolate:true,
-	    link: function($scope){
-		new NavBarDirective($scope, UserModel, Notifications);
-	    },
-	    scope:true,
-            templateUrl: "partials/navbar/navbar.html"
-	};
-    });
+.directive('navbar',['UserModel', 'Notifications', 'GymModel', function(UserModel, Notifications, GymModel){
+  return {
+    restrict:'E',
+    isolate:true,
+    link: function($scope){
+      new NavBarDirective($scope, UserModel, Notifications, GymModel);
+    },
+    scope:true,
+    templateUrl: "partials/navbar/navbar.html"
+  };
+}]);
