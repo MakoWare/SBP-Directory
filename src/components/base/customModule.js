@@ -47,5 +47,29 @@ angular.module('CustomModule',[])
   };
 })
 
+.directive('noScroll', function(){
+
+  var link = function(scope, el, attrs){
+    $(el).on('focus.noScroll', function(e){
+      $(this).on('mousewheel.noScroll',function(e){
+        e.preventDefault();
+      });
+    });
+
+    $(el).on('blur.noScroll', function(e){
+      $(this).off('mousewheel.noScroll');
+    });
+
+    scope.$on('$destroy', function(){
+      $(el).off('.noScroll');
+    });
+  };
+
+  return {
+    restrict: 'C',
+    link:link,
+    scope:{}
+  };
+})
 
 ;

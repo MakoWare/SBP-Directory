@@ -40,6 +40,14 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
                 initGym: initGym
             }
         })
+        .state('gymInfo', {
+            url: "/gym/info",
+            templateUrl: "partials/gym/gymInfo.html",
+            controller: GymInfoController,
+            resolve: {
+                initGym: initGym
+            }
+        })
         .state('users', {
             url: "/users",
             templateUrl: "partials/user/users.html",
