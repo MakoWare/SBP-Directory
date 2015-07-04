@@ -21,6 +21,9 @@
 
 /** Components **/
 
+//Overlay
+@import "overlay/overlay";
+
 //NavBar
 @import "navbar/navbar";
 
@@ -30,5 +33,6 @@
 // custom tables
 @import "table/table";
 
-//Wall List
+//Walls
+@import "walls/wallPage";
 @import "walls/wallList";

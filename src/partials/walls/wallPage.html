@@ -1,21 +1,22 @@
-<div class="container">
-  <div class="row">
-    <div class="col s12">
-      <h3>{{wall.attributes.name}}</h3>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col s12">
-      <ul class="tabs z-depth-1">
-        <li class="tab col s3"><a class="active" href="#test1">Routes</a></li>
-        <li class="tab col s3"><a href="#test2">Test 2</a></li>
-        <li class="tab col s3"><a href="#test3">Test 3</a></li>
-      </ul>
-    </div>
-  </div>
+<div class="wallPage">
+  <ul class="tabs z-depth-1">
+    <li class="tab col s3"><a class="active" href="#test1">Routes</a></li>
+    <li class="tab col s3"><a href="#test2">Route Distribution</a></li>
+    <li class="tab col s3"><a href="#test3">Route Info</a></li>
+  </ul>
   <div id="test1">
-    <route-table></route-table>
+    <div class="container">
+      <route-table></route-table>
+    </div>
   </div>
-  <div id="test2" class="row">Test 2</div>
-  <div id="test3" class="row">Test 3</div>
+  <div id="test2" class="row">
+    <div class="container">
+      PUT GOOGLE CHART HERE
+    </div>
+  </div>
+  <div id="test3" class="row">
+    <div class="container">
+      STATS ABOUT THE WALL
+    </div>
+  </div>
 </div>

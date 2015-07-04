@@ -2,7 +2,7 @@
 
 angular.module('sbp', [
     'notifications',
-
+    'overlay',
     'navbar',
 
     //Gyms
@@ -33,6 +33,5 @@ angular.module('sbp', [
     // custom stuff
     'CustomModule',
     'matSelect'
-
 
 ]);

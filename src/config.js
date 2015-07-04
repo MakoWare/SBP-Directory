@@ -26,7 +26,29 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
     }];
 
     var getSetters = ['UserModel', function(userModel){
-      return userModel.getSetters();
+        return userModel.getSetters();
+    }];
+
+
+    var initWalls = ['GymModel', '$q', '$stateParams', 'Notifications', function(gymModel, $q, params, notifications){
+        return gymModel.initGym().then(function(){
+            notifications.notify(models.events.HIDE_LOADING);
+        });
+    }];
+
+
+    var initWall = ['GymModel', 'WallModel', 'RouteModel', '$q', '$stateParams', 'Notifications', function(gymModel, wallModel, routeModel, $q, params, notifications){
+        console.log("halp");
+
+        var promises = [];
+        promises.push(wallModel.getWallById(params.id));
+        promises.push(routeModel.getRoutesByWallId(params.id));
+        promises.push(gymModel.initGym());
+
+        return $q.all(promises).then(function(){
+            console.log("done");
+            notifications.notify(models.events.HIDE_LOADING);
+        });
     }];
 
     $urlRouterProvider.otherwise("/gym/map");
@@ -61,7 +83,7 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
             url: "/walls",
             templateUrl: "partials/walls/wallsPage.html",
             resolve: {
-                initGym: initGym
+                initWalls: initWalls
             }
         })
         .state('wall', {
@@ -69,9 +91,7 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
             templateUrl: "partials/walls/wallPage.html",
             controller: WallController,
             resolve: {
-                initGym: initGym,
-                wall: getWallById,
-                routes: getRoutesByWallId,
+                initWall: initWall
             }
         })
         .state('routes', {
