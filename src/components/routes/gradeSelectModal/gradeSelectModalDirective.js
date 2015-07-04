@@ -17,20 +17,49 @@ var GradeSelectModalDirective = BaseDirective.extend({
     },
 
     defineListeners: function(){
+        this.$scope.selectGrade = this.selectGrade.bind(this);
         this.notifications.addEventListener(models.events.OPEN_GRADE_MODAL, this.handleOpenGradeModal.bind(this));
     },
 
     defineScope: function(){
-
+        this.$scope.grades = [
+            [
+                ['gray0'],
+                ['yellow0', 'yellow1', 'yellow2'],
+                ['green2', 'green3', 'green4'],
+                ['red3', 'red4', 'red5']
+            ],
+            [
+                ['blue4', 'blue5', 'blue6'],
+                ['orange5', 'orange6', 'orange7'],
+                ['purple7', 'purple8'],
+                ['black8', 'black9', 'black10'],
+                ['black11', 'black12', 'black13']
+            ]
+        ];
     },
 
     destroy: function(){
         this.notifications.removeEventListener(models.events.OPEN_GRADE_MODAL, this.handleOpenGradeModal);
     },
 
+    selectGrade: function(gradeString){
+        var color = gradeString.replace(/[0-9]/g, '');
+        var grade = gradeString.replace(/\D/g,'');
+        console.log(gradeString);
+        console.log(color);
+        console.log(grade);
+
+        this.$scope.currentGrade = gradeString;
+        this.$scope.route.set('color', color);
+        this.$scope.route.set('grade', grade);
+        $(this.$elm[0].querySelector("#gradeSelectModal")).closeModal();
+    },
+
     /** EVENT HANDLERS **/
     handleOpenGradeModal: function(event, route){
-        console.log(route);
+        this.$scope.route = route;
+        this.$scope.currentGrade = route.get('color') + route.get('grade');
         $(this.$elm[0].querySelector("#gradeSelectModal")).openModal();
     }
 

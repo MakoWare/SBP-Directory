@@ -1,8 +1,10 @@
 angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
 
-    var initGym = ['GymModel', function(gymModel){
+    var initGym = ['GymModel', 'Notifications', function(gymModel, notifications){
         // return gymModel.getDefaultGym();
-        return gymModel.initGym();
+        return gymModel.initGym().then(function(){
+            notifications.notify(models.events.HIDE_LOADING);
+        });
     }];
 
     var getWallById = ['$stateParams', 'WallModel', function(stateParams,wallModel){

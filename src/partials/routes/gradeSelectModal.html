@@ -1,6 +1,14 @@
-<div id="gradeSelectModal" class="modal">
+<div id="gradeSelectModal" class="modal gradeSelectModal">
   <div class="modal-content">
-    <h4>Modal Header</h4>
-    <p>A bunch of text</p>
+    <h4>Grade Select</h4>
+    <div class="row">
+      <div class="col s6" ng-repeat="gradeColumn in grades">
+        <div class="row" ng-repeat="gradeRow in gradeColumn">
+          <div class="col s4" ng-repeat="grade in gradeRow">
+            <img ng-src="images/grades/{{grade}}.png" ng-click="selectGrade(grade)" ng-class="{'selected': grade == currentGrade}" class="z-depth-4">
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
