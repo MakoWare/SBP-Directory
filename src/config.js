@@ -38,15 +38,12 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
 
 
     var initWall = ['GymModel', 'WallModel', 'RouteModel', '$q', '$stateParams', 'Notifications', function(gymModel, wallModel, routeModel, $q, params, notifications){
-        console.log("halp");
-
         var promises = [];
         promises.push(wallModel.getWallById(params.id));
         promises.push(routeModel.getRoutesByWallId(params.id));
         promises.push(gymModel.initGym());
 
         return $q.all(promises).then(function(){
-            console.log("done");
             notifications.notify(models.events.HIDE_LOADING);
         });
     }];

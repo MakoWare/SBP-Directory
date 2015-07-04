@@ -18,6 +18,7 @@ angular.module('sbp', [
     'routeList',
     'routeListItem',
     'routeTable',
+    'gradeSelectModal',
 
 
     //User

@@ -20,7 +20,6 @@ var WallModel = EventDispatcher.extend({
     },
 
     getWallsByGym: function(gym){
-        console.log(gym);
         return this.parseService.getWallsByGym(gym).then(function(results){
             this.wallsByGym[gym.id] = results;
             this.walls = results;
