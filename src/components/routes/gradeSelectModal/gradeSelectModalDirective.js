@@ -1,7 +1,8 @@
 'use strict';
 
 namespace('models.events').OPEN_GRADE_MODAL = "ActivityModel.OPEN_GRADE_MODAL";
-namespace('models.events').CLOSEO_GRADE_MODAL = "ActivityModel.CLOSE_GRADE_MODAL";
+namespace('models.events').CLOSE_GRADE_MODAL = "ActivityModel.CLOSE_GRADE_MODAL";
+namespace('models.events').GRADE_MODAL_CLOSED = "ActivityModel.CLOSE_GRADE_MODAL";
 
 var GradeSelectModalDirective = BaseDirective.extend({
     routeModel: null,
@@ -54,6 +55,7 @@ var GradeSelectModalDirective = BaseDirective.extend({
         this.$scope.route.set('color', color);
         this.$scope.route.set('grade', grade);
         $(this.$elm[0].querySelector("#gradeSelectModal")).closeModal();
+        this.notifications.notify(models.events.GRADE_MODAL_CLOSED);
     },
 
     /** EVENT HANDLERS **/
