@@ -2,8 +2,9 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
 
     var initGym = ['GymModel', 'Notifications', function(gymModel, notifications){
         // return gymModel.getDefaultGym();
-        return gymModel.initGym().then(function(){
+        return gymModel.initGym().then(function(gym){
             notifications.notify(models.events.HIDE_LOADING);
+            return Parse.Promise.as(gym);
         });
     }];
 
