@@ -12,7 +12,7 @@
     <tbody id="routesTable">
       <tr ng-repeat="route in routes | orderBy:[predicate, secondary]:reverse | filter:search:strict" class="routeRow">
         <td>
-          <img ng-click="openGradeSelectModal(route)" ng-src="images/grades/blue5.png" style="width: 50px">
+          <img ng-click="openGradeSelectModal(route)" ng-src="images/grades/{{route.attributes.color}}{{route.attributes.grade}}.png" style="width: 50px" class="circle responsive-img">
         </td>
         </td>
 
