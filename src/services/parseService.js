@@ -90,13 +90,11 @@ var ParseService = Class.extend({
   /** Routes **/
   getRoutesByWallId: function(id){
     var query = new Parse.Query(this.Route);
-    query.equalTo("wall", {
-      __type: "Pointer",
-      className: "Wall",
-      objectId: id
-    });
-
+    
+    query.include('setter');
+    query.equalTo('wall', new this.Wall({id:id}));
     query.equalTo("takenDown", null);
+
     return query.find();
   },
 
