@@ -38,6 +38,7 @@ var GradeSelectModalDirective = BaseDirective.extend({
                 ['black11', 'black12', 'black13']
             ]
         ];
+        this.order = ['gray', 'yellow', 'green', 'red', 'blue', 'orange', 'purple', 'black'];
     },
 
     destroy: function(){
@@ -47,13 +48,10 @@ var GradeSelectModalDirective = BaseDirective.extend({
     selectGrade: function(gradeString){
         var color = gradeString.replace(/[0-9]/g, '');
         var grade = gradeString.replace(/\D/g,'');
-        console.log(gradeString);
-        console.log(color);
-        console.log(grade);
-
         this.$scope.currentGrade = gradeString;
         this.$scope.route.set('color', color);
         this.$scope.route.set('grade', grade);
+        this.$scope.route.set('order', this.order.indexOf(color));
         $(this.$elm[0].querySelector("#gradeSelectModal")).closeModal();
         this.notifications.notify(models.events.GRADE_MODAL_CLOSED);
     },

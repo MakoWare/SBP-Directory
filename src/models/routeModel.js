@@ -2,6 +2,7 @@
 
 namespace('models.events').ROUTE_LOADED = "ActivityModel.ROUTE_LOADED";
 namespace('models.events').ROUTES_LOADED = "ActivityModel.ROUTES_LOADED";
+namespace('models.events').ROUTES_UPDATED = "ActivityModel.ROUTES_UPDATED";
 
 var RouteModel = EventDispatcher.extend({
     route: {},
@@ -26,44 +27,53 @@ var RouteModel = EventDispatcher.extend({
         }.bind(this));
     },
 
-    createRoute: function(wall){
+    createRoute: function(wallId){
+        console.log("createRoute");
 
+        var route = new this.parseService.Route();
+        route.setACL(this.parseService.RouteACL);
+        route.set("wall", wallId);
+        route.set("color", "gray");
+        route.set("grade", 0);
+        route.set("order", 0);
+        route.set("setter", null);
+        route.set("status", null);
+
+        this.routes.push(route);
+        this.notifications.notify(models.events.ROUTES_LOADED);
+        console.log(route);
     },
 
     saveRoute: function(route){
         console.log("saving");
-
     },
 
     saveRoutes: function(routes){
         routes.forEach(function(route){
-            if(route.dirty){
+            if(route.dirty || !route.id){
                 this.saveRoute(route);
             }
         }.bind(this));
     },
 
-    autoSaveRoutes: function(routes){
-        //If any route is dirty set the timeout to save in 20 seconds
-
+    autoSaveRoutes: function(){
         var dirty = false;
-        routes.forEach(function(route){
-            if(route.dirty){
+        this.routes.forEach(function(route){
+            if(route.dirty() || !route.id){
                 dirty = true;
             }
         });
 
         if(dirty){
+            console.log("dirty");
             if(this.timeout){
                 clearTimeout(this.timeout);
             }
             this.timeout = setTimeout(function(){
-                this.saveRoutes(routes);
+                this.saveRoutes(this.routes);
             }.bind(this), 20000);
         }
     }
-
-
 });
 
 

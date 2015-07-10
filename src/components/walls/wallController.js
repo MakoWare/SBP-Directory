@@ -17,11 +17,11 @@ var WallController = BaseController.extend({
 
     defineScope:function(){
         this.$scope.wall = this.wallModel.wall;
-
-
         $(document).ready(function(){
             $('ul.tabs').tabs();
         });
+
+        this.notifications.notify(models.events.BRAND_CHANGE, this.$scope.wall.get("name"));
     },
 
     destroy:function(){
