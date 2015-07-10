@@ -31,12 +31,38 @@ var RouteModel = EventDispatcher.extend({
     },
 
     saveRoute: function(route){
+        console.log("saving");
 
     },
 
     saveRoutes: function(routes){
+        routes.forEach(function(route){
+            if(route.dirty){
+                this.saveRoute(route);
+            }
+        }.bind(this));
+    },
 
+    autoSaveRoutes: function(routes){
+        //If any route is dirty set the timeout to save in 20 seconds
+
+        var dirty = false;
+        routes.forEach(function(route){
+            if(route.dirty){
+                dirty = true;
+            }
+        });
+
+        if(dirty){
+            if(this.timeout){
+                clearTimeout(this.timeout);
+            }
+            this.timeout = setTimeout(function(){
+                this.saveRoutes(routes);
+            }.bind(this), 20000);
+        }
     }
+
 
 });
 
