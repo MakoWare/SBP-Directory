@@ -29,19 +29,17 @@ var RouteModel = EventDispatcher.extend({
 
     createRoute: function(wallId){
         console.log("createRoute");
-
         var route = new this.parseService.Route();
-        route.setACL(this.parseService.RouteACL);
+        //route.setACL(this.parseService.RouteACL);
         route.set("wall", wallId);
         route.set("color", "gray");
         route.set("grade", 0);
         route.set("order", 0);
+        route.set("status", 0);
         route.set("setter", null);
-        route.set("status", null);
 
         this.routes.push(route);
         this.notifications.notify(models.events.ROUTES_LOADED);
-        console.log(route);
     },
 
     saveRoute: function(route){
@@ -72,6 +70,32 @@ var RouteModel = EventDispatcher.extend({
             this.timeout = setTimeout(function(){
                 this.saveRoutes(this.routes);
             }.bind(this), 20000);
+        }
+    },
+
+    removeRoute: function(route){
+        for(var i = 0; i < this.routes.length; i++){
+            if(this.routes[i] == route){
+                this.routes.splice(i, 1);
+            }
+        }
+        if(route.id){
+            this.notifications.notify(models.events.SHOW_LOADING);
+            var self = this;
+            route.set("takenDown", new Date());
+            return route.save(null, {
+                success: function(results){
+                    self.notifications.notify(models.events.ROUTES_UPDATED);
+                    console.log("soft delete complete");
+                },
+                error: function(error){
+                    console.log("error");
+                    console.log(error);
+                }
+            });
+        } else {
+            return null;
+            this.notifications.notify(models.events.ROUTES_UPDATED);
         }
     }
 });

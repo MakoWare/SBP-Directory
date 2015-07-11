@@ -1,13 +1,15 @@
-<a class="btn-floating btn-large waves-effect waves-light green" style="position: fixed; right: 7%; top: 140px;"><i class="material-icons" ng-click="addRoute()">add</i></a>
+<a class="btn-floating btn-large waves-effect waves-light green" style="position: fixed; right: 7%; top: 25%;"><i class="material-icons" ng-click="addRoute()">add</i></a>
+<a class="btn-floating btn-large waves-effect waves-light red" style="position: fixed; right: 7%; top: 40%;"><i class="material-icons" ng-click="replaceRoutes()">repeat</i></a>
 
 <div id="routeTable" class="routeTable">
   <table class="bordered centered hoverable responsive-table">
     <thead>
       <tr>
-        <th class="th-col s2 m2 l2"><a href="" ng-click="predicate = 'attributes.order'; reverse=!reverse">Grade</a></th>
-        <th class="th-col s2 m2 l2"><a href="" ng-click="predicate = 'attributes.status'; secondary = 'attributes.order'; reverse=!reverse">Status</a></th>
-        <th class="th-col s2 m2 l2"><a href="" ng-click="predicate = 'attributes.setter.attributes.username'; secondary = 'attributes.order'; reverse=!reverse">Setter</a></th>
-        <th class="th-col s2 m2 l2">Delete</th>
+        <th><a href="" ng-click="predicate = 'attributes.order'; reverse=!reverse">Grade</a></th>
+        <th><a href="" ng-click="predicate = 'attributes.status'; secondary = 'attributes.order'; reverse=!reverse">Status</a></th>
+        <th><a href="" ng-click="predicate = 'attributes.setter.attributes.username'; secondary = 'attributes.order'; reverse=!reverse">Setter</a></th>
+        <th>Notes</td>
+        <th>Remove</th>
       </tr>
     </thead>
     <tbody id="routesTable">
@@ -15,30 +17,26 @@
         <td>
           <img ng-click="openGradeSelectModal(route)" ng-src="images/grades/{{route.attributes.color + route.attributes.grade}}.png" style="width: 50px">
         </td>
-        <td ng-class="{status0: route.attributes.status == '1', status1: route.attributes.status == '2', status2: route.attributes.status == '3', status3: route.attributes.status == '4', status4: route.attributes.status == '5', status5: route.attributes.status == '6', status6: route.attributes.status == '6' }">
+        <td>
+          <img ng-click="openStateSelectModal(route)" ng-src="images/states/state{{route.attributes.status}}.png" style="width: 50px" class="z-depth-4">
+        </td>
+        <td>
           <div class="input-field col s12">
-            <select ng-model="route.attributes.status" name="status" style="font-size: 33px" ng-change="changeStatus(route)" class="routeStatusSelect" ng-change="autoSave()">
-              <option value="0"> </option>
-              <option value="1">&#8739</option>
-              <option value="2">&#8735</option>
-              <option value="3">&#8852</option>
-              <option value="4">&#9744</option>
-              <option value="5">&#9746;</option>
-              <option value="6">&#9745;</option>
+            <select class="routeSetterSelect" ng-model="route.attributes.setter" ng-select="autoSave()" ng-options="setter as setter.attributes.username for setter in setters track by setter.attibutes.id">
             </select>
           </div>
         </td>
         <td>
           <div class="input-field col s12">
-            <select class="routeSetterSelect" ng-model="route.attributes.setter" ng-select="autoSave()" ng-options="setter as setter.attributes.username for setter in setters track by setter.attibutes.id" ng-change="autoSave()">
-
-            </select>
+            <input placeholder="Notes" id="first_name" type="text" class="validate" ng-model="route.attributes.notes" ng-change="setNote(route)">
           </div>
         </td>
-        <td><button class="btn btn-danger" ng-click="deleteRoute(route)">Delete</button></td>
+
+        <td><button class="btn red lighten-1" ng-click="removeRoute(route)">Remove</button></td>
       </tr>
     </tbody>
   </table>
 </div>
 
 <grade-select-modal></grade-select-modal>
+<state-select-modal></state-select-modal>
