@@ -39,7 +39,6 @@ var RouteTableDirective = BaseDirective.extend({
         this.$timeout(function(){
             $(document).ready(function() {
                 $('.routeSetterSelect').material_select();
-                $('.routeStatusSelect').material_select();
             });
         });
     },
@@ -48,16 +47,20 @@ var RouteTableDirective = BaseDirective.extend({
         this.notifications.removeEventListener(models.events.ROUTES_LOADED, this.handleRoutesChanged);
         this.notifications.removeEventListener(models.events.ROUTES_UPDATED, this.handleRoutesChanged);
         this.notifications.removeEventListener(models.events.GRADE_MODAL_CLOSED, this.handleGradeModalClosed);
+
+        $('.routeSetterSelect').material_select('destroy');
     },
 
 
     addRoute: function(){
-        this.routeModel.createRoute(this.wallModel.wall.id);
+        this.routeModel.createRoute(this.wallModel.wall);
+        this.autoSave();
     },
 
     replaceRoutes: function(){
         if(confirm("Are you sure you want to replace routes?")){
             console.log("replace routes");
+            this.routeModel.replaceRoutes();
         }
     },
 

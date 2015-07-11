@@ -31,7 +31,7 @@ var StateSelectModalDirective = BaseDirective.extend({
     },
 
     selectState: function(status){
-        this.$scope.route.set('status', status);
+        this.$scope.route.set('status', status.toString());
         $(this.$elm[0].querySelector("#stateSelectModal")).closeModal();
         this.notifications.notify(models.events.STATE_MODAL_CLOSED);
     },

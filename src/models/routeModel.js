@@ -27,31 +27,81 @@ var RouteModel = EventDispatcher.extend({
         }.bind(this));
     },
 
-    createRoute: function(wallId){
+    createRoute: function(wall, color, grade, order, status, setter){
         console.log("createRoute");
         var route = new this.parseService.Route();
         //route.setACL(this.parseService.RouteACL);
-        route.set("wall", wallId);
-        route.set("color", "gray");
-        route.set("grade", 0);
-        route.set("order", 0);
-        route.set("status", 0);
-        route.set("setter", null);
+        route.set("wall", wall);
+
+        if(color){
+            route.set("color", color);
+        } else {
+            route.set("color", "gray");
+        }
+
+        if(grade){
+            route.set("grade", grade);
+        } else {
+            route.set("grade", "0");
+        }
+
+        if(order){
+            route.set("order", order);
+        } else {
+            route.set("order", 0);
+        }
+
+        if(status){
+            route.set("status", status);
+        } else {
+            route.set("status", "0");
+        }
+
+        if(setter){
+            route.set("setter", setter);
+        } else {
+            route.set("setter", null);
+        }
 
         this.routes.push(route);
         this.notifications.notify(models.events.ROUTES_LOADED);
     },
 
     saveRoute: function(route){
-        console.log("saving");
+        return route.save(null, {
+            success: function(route){
+
+            },
+            error: function(route, error){
+                console.log("error");
+                console.log(error);
+            }
+        });
     },
 
     saveRoutes: function(routes){
+        var routesToSave = [];
+        var self = this;
         routes.forEach(function(route){
-            if(route.dirty || !route.id){
-                this.saveRoute(route);
+            if(route.dirty() || !route.id){
+                routesToSave.push(route);
             }
         }.bind(this));
+
+        if(routesToSave.length > 0){
+            console.log("saving: " + routesToSave.length);
+            this.notifications.notify(models.events.SHOW_LOADING);
+            return Parse.Object.saveAll(routesToSave, {
+                success: function(routes) {
+                    console.log("hide");
+                    self.notifications.notify(models.events.HIDE_LOADING);
+                },
+                error: function(error) {
+                    self.notifications.notify(models.events.HIDE_LOADING);
+                    console.log(error);
+                }
+            });
+        }
     },
 
     autoSaveRoutes: function(){
@@ -69,7 +119,7 @@ var RouteModel = EventDispatcher.extend({
             }
             this.timeout = setTimeout(function(){
                 this.saveRoutes(this.routes);
-            }.bind(this), 20000);
+            }.bind(this), 2000);
         }
     },
 
@@ -89,6 +139,7 @@ var RouteModel = EventDispatcher.extend({
                     console.log("soft delete complete");
                 },
                 error: function(error){
+                    self.notifications.notify(models.events.ROUTES_UPDATED);
                     console.log("error");
                     console.log(error);
                 }
@@ -97,6 +148,18 @@ var RouteModel = EventDispatcher.extend({
             return null;
             this.notifications.notify(models.events.ROUTES_UPDATED);
         }
+    },
+
+    replaceRoutes: function(){
+        console.log('replaceRoutes');
+        var oldRoutes = this.routes;
+        this.routes = [];
+        oldRoutes.forEach(function(route){
+            var attributes = route.attributes;
+            this.createRoute(attributes.wall, attributes.color, attributes.grade, attributes.order);
+            this.removeRoute(route);
+        }.bind(this));
+        this.autoSaveRoutes();
     }
 });
 
