@@ -20,6 +20,7 @@ angular.module('sbp', [
     'routeTable',
     'gradeSelectModal',
     'stateSelectModal',
+    'routeDistribution',
 
 
     //User
@@ -34,6 +35,9 @@ angular.module('sbp', [
 
     // custom stuff
     'CustomModule',
-    'matSelect'
+    'matSelect',
+
+    // google-charts
+    'GoogleCharts'
 
 ]);

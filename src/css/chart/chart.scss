@@ -1,0 +1,18 @@
+
+.chart-overlay-wrapper {
+    position: relative;
+    // width: 700px;
+}
+
+.chart-overlay {
+    width: inherit;
+    height: inherit;
+    position: absolute;
+    top: 0px;  /* chartArea top  */
+    left: 0px; /* chartArea left */
+}
+
+.chart {
+    width:"100%";
+    height: "100%";
+}
