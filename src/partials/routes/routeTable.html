@@ -22,7 +22,7 @@
         </td>
         <td>
           <div class="input-field col s12">
-            <select class="routeSetterSelect" ng-model="route.attributes.setter" ng-select="autoSave()" ng-options="setter as setter.attributes.username for setter in setters track by setter.attibutes.id">
+            <select mat-select="attributes.username" class="routeSetterSelect" ng-model="route.attributes.setter" ng-change="changeSetter(route)" ng-options="setter as setter.attributes.username for setter in setters">
             </select>
           </div>
         </td>
