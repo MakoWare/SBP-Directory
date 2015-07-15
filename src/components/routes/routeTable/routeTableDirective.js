@@ -24,6 +24,7 @@ var RouteTableDirective = BaseDirective.extend({
     defineScope: function(){
         this.$scope.addRoute = this.addRoute.bind(this);
         this.$scope.autoSave = this.autoSave.bind(this);
+        this.$scope.changeSetter = this.changeSetter.bind(this);
         this.$scope.setNote = this.setNote.bind(this);
         this.$scope.removeRoute = this.removeRoute.bind(this);
         this.$scope.replaceRoutes = this.replaceRoutes.bind(this);
@@ -35,12 +36,13 @@ var RouteTableDirective = BaseDirective.extend({
         this.$scope.predicate = "attributes.order";
         this.$scope.secondary = "attributes.grade";
 
+        
         console.log(this.$scope.routes);
-        this.$timeout(function(){
-            $(document).ready(function() {
-                $('.routeSetterSelect').material_select();
-            });
-        });
+        // this.$timeout(function(){
+        //     $(document).ready(function() {
+        //         $('.routeSetterSelect').material_select();
+        //     });
+        // });
     },
 
     destroy: function(){
@@ -81,6 +83,11 @@ var RouteTableDirective = BaseDirective.extend({
         this.notifications.notify(models.events.OPEN_STATE_MODAL, route);
     },
 
+    changeSetter:function(route){
+        route.set('setter', route.attributes.setter);
+        this.autoSave();
+    },
+
     autoSave: function(){
         console.log("autoSave");
         this.routeModel.autoSaveRoutes();
@@ -90,12 +97,12 @@ var RouteTableDirective = BaseDirective.extend({
     handleRoutesChanged: function(){
         this.notifications.notify(models.events.HIDE_LOADING);
         this.$scope.routes = this.routeModel.routes;
-        this.$timeout(function(){
-            $(document).ready(function() {
-                $('.routeSetterSelect').material_select('destroy');
-                $('.routeSetterSelect').material_select();
-            });
-        });
+        // this.$timeout(function(){
+        //     $(document).ready(function() {
+        //         $('.routeSetterSelect').material_select('destroy');
+        //         $('.routeSetterSelect').material_select();
+        //     });
+        // });
     },
 
     handleGradeModalClosed: function(){

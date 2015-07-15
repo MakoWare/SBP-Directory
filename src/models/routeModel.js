@@ -90,6 +90,7 @@ var RouteModel = EventDispatcher.extend({
 
         if(routesToSave.length > 0){
             console.log("saving: " + routesToSave.length);
+            console.log(routesToSave);
             this.notifications.notify(models.events.SHOW_LOADING);
             return Parse.Object.saveAll(routesToSave, {
                 success: function(routes) {
@@ -105,22 +106,34 @@ var RouteModel = EventDispatcher.extend({
     },
 
     autoSaveRoutes: function(){
-        var dirty = false;
-        this.routes.forEach(function(route){
-            if(route.dirty() || !route.id){
-                dirty = true;
-            }
-        });
 
-        if(dirty){
-            console.log("dirty");
-            if(this.timeout){
-                clearTimeout(this.timeout);
+        (function(routes){
+            var dirty = false;
+
+            console.log('autoSaveRoutes');
+            routes.forEach(function(route){
+                if(route.dirty() || !route.id){
+                    dirty = true;
+                }
+            });
+
+            if(dirty){
+                console.log("dirty");
+                if(this.timeout){
+                    clearTimeout(this.timeout);
+                }
+                var timeoutFunction = function(saveRoutesFunc){
+
+                    return function(){
+                        console.log('save routes');
+                        saveRoutesFunc(routes);
+                    }
+                }(this.saveRoutes.bind(this));
+
+                this.timeout = setTimeout(timeoutFunction, 20000);
             }
-            this.timeout = setTimeout(function(){
-                this.saveRoutes(this.routes);
-            }.bind(this), 2000);
-        }
+        }.bind(this))(this.routes);
+
     },
 
     removeRoute: function(route){

@@ -142,8 +142,8 @@ var RouteDistributionDirective = BaseDirective.extend({
         var options;
         options = {
             isStacked:true,
-            width:'100%',
-            height:'auto',
+            width:900,
+            height:500,
             colors:colors,
             backgroundColor:'transparent',
             // series:series,

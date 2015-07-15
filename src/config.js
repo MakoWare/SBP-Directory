@@ -87,6 +87,7 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
         .state('walls', {
             url: "/walls",
             templateUrl: "partials/walls/wallsPage.html",
+            controller: WallsController,
             resolve: {
                 initWalls: initWalls
             }
