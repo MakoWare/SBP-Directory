@@ -27,12 +27,24 @@ var RouteModel = EventDispatcher.extend({
         }.bind(this));
     },
 
+    getRoutesByGym: function(gym){
+        return this.parseService.getRoutesByGym(gym).then(function(routes){
+            return this.setRoutesAndReturn(routes);
+        }.bind(this));
+    },
+
     getRoutesByUser: function(user){
         return this.parseService.getRoutesByUser(user).then(function(routes){
             this.routes = routes;
             this.notifications.notify(models.events.ROUTES_LOADED);
             return Parse.Promise.as(routes);
         }.bind(this));
+    },
+
+    setRoutesAndReturn: function(routes){
+        this.routes = routes;
+        this.notifications.notify(models.events.ROUTES_LOADED);
+        return Parse.Promise.as(routes);
     },
 
     createRoute: function(wall, color, grade, order, status, setter){

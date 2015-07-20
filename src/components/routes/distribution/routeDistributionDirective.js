@@ -9,15 +9,19 @@ var RouteDistributionDirective = BaseDirective.extend({
     /*
         OVERRIDE METHODS
     */
-    initialize:function($scope, $el, RouteModel, Notifications, googleChartApiLoader){
+    initialize:function($scope, $el, RouteModel, Notifications, googleChartApiLoader, $rootScope){
         this.$el = $($el);
         this.notifications = Notifications;
         this.routeModel = RouteModel;
         this.googleChartApiLoader = googleChartApiLoader;
+        this.$rootScope = $rootScope;
 
         this.chart1Div = this.$el.find('#chart_div');
         this.chart2Div = this.$el.find('#chart_div2');
         this.underChartDiv = this.$el.find('#under-chart');
+
+        console.log(this.grades);
+        console.log(this.routeModel.routes.length);
 
         this.boundDrawChart = this.drawChart.bind(this);
         googleChartApiLoader.then(this.boundDrawChart);
@@ -29,26 +33,33 @@ var RouteDistributionDirective = BaseDirective.extend({
     },
 
     defineScope:function(){
-
+        this.$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+            this.notifications.removeEventListener(models.events.ROUTES_LOADED, this.boundOnRoutesLoaded);
+        }.bind(this));
     },
 
     destroy:function(){
-
+        this.notifications.removeEventListener(models.events.ROUTES_LOADED, this.boundOnRoutesLoaded);
     },
 
     /*
         INSTANCE METHODS
     */
 
-    getTotals:function(){
+    onRoutesLoaded:function(){
+        console.log('reload chart');
+        this.drawChart();
+    },
 
+    getTotals:function(){
+        var grades = {};
         $.each(this.routeModel.routes, function(index,route){
             var gradeName = 'v'+route.get('grade');
             // get the grade array
-            var gradeObject = this.grades[gradeName];
+            var gradeObject = grades[gradeName];
             if(!gradeObject){
                 gradeObject = {};
-                this.grades[gradeName] = gradeObject;
+                grades[gradeName] = gradeObject;
             }
 
             var colorName = route.get('color');
@@ -65,12 +76,16 @@ var RouteDistributionDirective = BaseDirective.extend({
 
 
         }.bind(this));
-
+        this.grades = grades;
         return this.grades;
     },
 
     drawChart:function(google){
+        // set up the notifications after the lib is loaded
+        this.boundOnRoutesLoaded = this.onRoutesLoaded.bind(this);
+        this.notifications.addEventListener(models.events.ROUTES_LOADED, this.boundOnRoutesLoaded);
 
+        console.log('drawChart');
 
         // Create the data table.
 
@@ -90,20 +105,25 @@ var RouteDistributionDirective = BaseDirective.extend({
 
     drawChart1:function(data){
         var series = [];
-
+        console.log('grades: '+this.grades.length);
+        console.log(this.grades);
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'Grade');
 
         // add the color columns
         $.each(this.colorsArray, function(index, color){
             data.addColumn('number', color);
+            // set up ideal tooltip
+            if(this.$scope.gym && this.$scope.ideal===true){
+                data.addColumn({type: 'string', role: 'tooltip'});
+            }
             series.push({
                 color: color.toLowerCase(),
                 annotations: {
                     textStyle: {fontSize: 12, color: 'red' }
                 }
             });
-        });
+        }.bind(this));
 
 
 
@@ -128,7 +148,15 @@ var RouteDistributionDirective = BaseDirective.extend({
                     row.push(0);
                 }
 
+                // set up ideal tooltip
+                if(this.$scope.gym && this.$scope.ideal===true){
+                    var num = this.$scope.gym.get( color.toLowerCase()+grade.toUpperCase() );
+                    row.push( "Total: "+("0" && routes!== undefined && routes.length)+"\nIdeal: "+num );
+                }
+
             }.bind(this));
+
+
 
             data.addRow(row);
         }.bind(this));
@@ -405,14 +433,19 @@ var RouteDistributionDirective = BaseDirective.extend({
 
 (function(){
     angular.module('routeDistribution',[])
-    .directive('routeDistribution', ['RouteModel', 'Notifications', 'googleChartApiLoader', function(RouteModel, Notifications, googleChartApiLoader){
+    .directive('routeDistribution', ['RouteModel', 'Notifications', 'googleChartApiLoader', '$rootScope', function(RouteModel, Notifications, googleChartApiLoader, $rootScope){
         return {
             restrict:'E',
-            link: function($scope, el){
-                new RouteDistributionDirective($scope, el, RouteModel, Notifications, googleChartApiLoader);
+            link: function($scope, el, attrs){
+                // if(attrs.ideal && attrs.ideal==="true"){
+                //     console.log('route is ideal');
+                // }
+                new RouteDistributionDirective($scope, el, RouteModel, Notifications, googleChartApiLoader, $rootScope);
             },
             scope:{
-                wall:'='
+                wall:'=',
+                gym:'=',
+                ideal:'='
             },
             templateUrl: "partials/routes/routeDistributionDirective.html"
         };
