@@ -27,6 +27,14 @@ var RouteModel = EventDispatcher.extend({
         }.bind(this));
     },
 
+    getRoutesByUser: function(user){
+        return this.parseService.getRoutesByUser(user).then(function(routes){
+            this.routes = routes;
+            this.notifications.notify(models.events.ROUTES_LOADED);
+            return Parse.Promise.as(routes);
+        }.bind(this));
+    },
+
     createRoute: function(wall, color, grade, order, status, setter){
         console.log("createRoute");
         var route = new this.parseService.Route();
