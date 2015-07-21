@@ -99,6 +99,17 @@ var ParseService = Class.extend({
         return query.find();
     },
 
+    getRoutesByGym: function(gym){
+        var query = new Parse.Query(this.Route);
+
+        query.limit(1000);
+        query.include('setter');
+        query.equalTo('gymCreatedAt', gym);
+        query.equalTo("takenDown", null);
+
+        return query.find();
+    },
+
     //Get Route By User
     getRoutesByUser: function(user){
         var query = new Parse.Query(this.Route);

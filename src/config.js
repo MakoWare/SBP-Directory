@@ -20,6 +20,10 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
       return routeModel.getRoutesByWallId(stateParams.id);
     }];
 
+    var getRoutesByGym = ['initGym', 'RouteModel', function(gym, routeModel){
+      return routeModel.getRoutesByGym(gym);
+    }];
+
     var getRouteById = ['$stateParams', 'RouteModel', function(params, routeModel){
       return routeModel.getRouteById(params.id);
     }];
@@ -72,7 +76,8 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
             templateUrl: "partials/gym/gymInfo.html",
             controller: GymInfoController,
             resolve: {
-                initGym: initGym
+                initGym: initGym,
+                gymRoutes: getRoutesByGym
             }
         })
         .state('users', {
@@ -119,7 +124,7 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
             }
         })
         .state('userSettings', {
-            url: "/users/:id/settings",
+            url: "/users/:id/edit",
             templateUrl: "partials/user/edit.html",
             controller:UserCtrl,
             resolve: {

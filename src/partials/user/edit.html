@@ -29,28 +29,28 @@
     <table class="bordered centered hoverable">
       <thead>
         <tr>
-          <th class="th-col s2 m3 l3"><a href="" ng-click="predicate = 'attributes.name'; reverse=!reverse">Name</a></th>
-          <th class="th-col s2 m1 l1"><a href="" ng-click="predicate = 'attributes.color'; reverse=!reverse">Color</a></th>
-          <th class="th-col s2 m2 l2"><a href="" ng-click="predicate = 'attributes.grade'; reverse=!reverse">Grade</a></th>
+          <!-- <th class="th-col s2 m3 l3"><a href="" ng-click="predicate = 'attributes.name'; reverse=!reverse">Name</a></th> -->
+          <!-- <th class="th-col s2 m1 l1"><a href="" ng-click="predicate = 'attributes.color'; reverse=!reverse">Color</a></th> -->
+          <th class=""><a href="" ng-click="predicate = 'attributes.grade'; reverse=!reverse">Grade</a></th>
           <!-- <th><a href="" ng-click="predicate = 'attributes.setterComments'; reverse=!reverse">Setter's Comments</a></th> -->
           <!-- <th><a href="" ng-click="predicate = 'attributes.risk'; reverse=!reverse">Risk</a></th> -->
           <!-- <th><a href="" ng-click="predicate = 'attributes.intensity'; reverse=!reverse">Intensity</a></th> -->
           <!-- <th><a href="" ng-click="predicate = 'attributes.complexity'; reverse=!reverse">Complexity</a></th> -->
-          <th class="th-col s2 m1 offset-m1 l1 offset-l1"><a href="" ng-click="predicate = 'attributes.status'; reverse=!reverse">Status</a></th>
-          <th class="th-col s2 m2 l2"><a href="" ng-click="predicate = 'createdAt'; reverse=!reverse">Created On</a></th>
-          <th class="th-col s2 m2 l2">View</td>
+          <th class=""><a href="" ng-click="predicate = 'attributes.status'; reverse=!reverse">Status</a></th>
+          <th class=""><a href="" ng-click="predicate = 'createdAt'; reverse=!reverse">Created On</a></th>
+          <th class="">View</td>
         </tr>
       </thead>
       <tbody id="routesTable">
         <tr ng-repeat="route in user.attributes.routes | orderBy:predicate:reverse | filter:search:strict">
-          <td>{{route.attributes.name}}</td>
-          <td ng-style="{'background-color': route.attributes.color}"></td>
-          <td>{{route.attributes.grade}}</td>
+          <!-- <td>{{route.attributes.name}}</td> -->
+          <!-- <td ng-style="{'background-color': route.attributes.color}"></td> -->
+          <td><img ng-click="openGradeSelectModal(route)" ng-src="images/grades/{{route.attributes.color + route.attributes.grade}}.png" style="width: 50px"></td>
           <!-- <td>{{route.attributes.setterComments}}</td> -->
           <!-- <td>{{route.attributes.risk}}</td> -->
           <!-- <td>{{route.attributes.intensity}}</td> -->
           <!-- <td>{{route.attributes.complexity}}</td> -->
-          <td>{{route.attributes.status}}</td>
+          <td><img ng-click="openStateSelectModal(route)" ng-src="images/states/state{{route.attributes.status}}.png" style="width: 50px" class="z-depth-4"></td>
           <td>{{(route.createdAt.getMonth() + 1) + "/" + route.createdAt.getDate() + "/" + route.createdAt.getFullYear()}}</td>
           <td><button class="btn btn-primary" ng-click="editRoute(route)">View</button></td>
         </tr>
@@ -61,7 +61,7 @@
   <div id="tabRoutesSetDistribution">
     <div class="row">
       <div class="col-md-12">
-        <div style="font-size: 18px" class="ct-chart ct-octave" id="general"></div>
+        <route-distribution></route-distribution>
       </div>
     </div>
   </div>
@@ -77,3 +77,6 @@
 
 
 </div>
+
+<grade-select-modal></grade-select-modal>
+<state-select-modal></state-select-modal>

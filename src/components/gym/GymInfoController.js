@@ -19,6 +19,10 @@ var GymInfoController = BaseController.extend({
   defineScope:function(){
     this.$scope.gym = this.gymModel.gym;
     this.$scope.calculateTotals = this.calculateTotals.bind(this);
+
+    $(document).ready(function(){
+        $('ul#gym-info.tabs').tabs();
+    });
   },
 
   destroy:function(){
