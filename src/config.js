@@ -60,9 +60,10 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
         });
     }];
 
-    $urlRouterProvider.otherwise("/gym/map");
+    $urlRouterProvider.otherwise("/walls");
 
     $stateProvider
+    /*
         .state('gymMap', {
             url: "/gym/map",
             templateUrl: "partials/gym/map/map.html",
@@ -71,6 +72,7 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
                 initGym: initGym
             }
         })
+     */
         .state('gymInfo', {
             url: "/gym/info",
             templateUrl: "partials/gym/gymInfo.html",

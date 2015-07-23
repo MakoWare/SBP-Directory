@@ -35,7 +35,7 @@ var GradeSelectModalDirective = BaseDirective.extend({
                 [
                     ['blue4', 'blue5', 'blue6'],
                     ['orange5', 'orange6', 'orange7'],
-                    ['purple7', 'purple8'],
+                    ['purple6', 'purple7', 'purple8'],
                     ['black8', 'black9', 'black10'],
                     ['black11', 'black12', 'black13']
                 ]

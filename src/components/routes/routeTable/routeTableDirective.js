@@ -36,7 +36,7 @@ var RouteTableDirective = BaseDirective.extend({
         this.$scope.predicate = "attributes.order";
         this.$scope.secondary = "attributes.grade";
 
-        
+
         console.log(this.$scope.routes);
         // this.$timeout(function(){
         //     $(document).ready(function() {

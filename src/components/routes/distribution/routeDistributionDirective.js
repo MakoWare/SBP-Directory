@@ -1,5 +1,3 @@
-
-
 var RouteDistributionDirective = BaseDirective.extend({
 
     grades:{},

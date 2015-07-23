@@ -5,4 +5,5 @@ dist
 .sass-cache
 parse/config
 parse/public
+parse/parse
 .jshintrc
