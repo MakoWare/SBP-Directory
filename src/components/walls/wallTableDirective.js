@@ -34,6 +34,8 @@ var WallTableDirective = BaseDirective.extend({
                 }
             }.bind(this));
             wall.averageGrade = this.routeModel.getAverageGrade(wall.routes);
+            wall.averageNumber = wall.averageGrade.replace(/[^0-9]/, '');
+            wall.total = wall.routes.length;
         }.bind(this));
     },
 
