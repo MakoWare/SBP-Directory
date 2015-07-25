@@ -5,12 +5,13 @@ var RouteTableDirective = BaseDirective.extend({
     userModel: null,
     notifications: null,
 
-    initialize: function($scope, $state, $timeout, UserModel, RouteModel, WallModel, Notifications){
+    initialize: function($scope, $state, $timeout, UserModel, RouteModel, WallModel, GymModel, Notifications){
         this.$state = $state;
         this.$timeout = $timeout;
         this.userModel = UserModel;
         this.routeModel = RouteModel;
         this.wallModel = WallModel;
+        this.gymModel = GymModel;
         this.notifications = Notifications;
     },
 
@@ -35,14 +36,6 @@ var RouteTableDirective = BaseDirective.extend({
         this.$scope.setters = this.userModel.setters;
         this.$scope.predicate = "attributes.order";
         this.$scope.secondary = "attributes.grade";
-
-
-        console.log(this.$scope.routes);
-        // this.$timeout(function(){
-        //     $(document).ready(function() {
-        //         $('.routeSetterSelect').material_select();
-        //     });
-        // });
     },
 
     destroy: function(){
@@ -55,7 +48,7 @@ var RouteTableDirective = BaseDirective.extend({
 
 
     addRoute: function(){
-        this.routeModel.createRoute(this.wallModel.wall);
+        this.routeModel.createRoute(this.gymModel.gym, this.wallModel.wall);
         this.autoSave();
     },
 
@@ -116,12 +109,12 @@ var RouteTableDirective = BaseDirective.extend({
 });
 
 angular.module('routeTable',[])
-    .directive('routeTable', ['$state', '$timeout', 'UserModel', 'RouteModel', 'WallModel', 'Notifications', function($state, $timeout, UserModel, RouteModel, WallModel, Notifications){
+    .directive('routeTable', ['$state', '$timeout', 'UserModel', 'RouteModel', 'WallModel', 'GymModel', 'Notifications', function($state, $timeout, UserModel, RouteModel, WallModel, GymModel, Notifications){
         return {
             restrict:'E',
             isolate:true,
             link: function($scope){
-                new RouteTableDirective($scope, $state, $timeout, UserModel, RouteModel, WallModel, Notifications);
+                new RouteTableDirective($scope, $state, $timeout, UserModel, RouteModel, WallModel, GymModel, Notifications);
             },
             scope: true,
             templateUrl: "partials/routes/routeTable.html"

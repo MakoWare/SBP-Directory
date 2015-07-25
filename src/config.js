@@ -1,18 +1,19 @@
 angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
 
     var initGym = ['GymModel', 'Notifications', function(gymModel, notifications){
-        // return gymModel.getDefaultGym();
         return gymModel.initGym().then(function(gym){
-            notifications.notify(models.events.HIDE_LOADING);
             return Parse.Promise.as(gym);
         });
     }];
 
     var getWallById = ['$stateParams', 'WallModel', function(stateParams,wallModel){
-      return wallModel.getWallById(stateParams.id);
+        return wallModel.getWallById(stateParams.wallId).then(function(wall){
+            return Parse.Promise.as(wall);
+        });
     }];
 
     var getWalls = ['WallModel', 'initGym', function(wallModel, gym){
+        console.log("hi");
       return wallModel.getWallsByGym(gym);
     }];
 
@@ -22,6 +23,10 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
 
     var getRoutesByGym = ['initGym', 'RouteModel', function(gym, routeModel){
       return routeModel.getRoutesByGym(gym);
+    }];
+
+    var getCurrentRoutes = ['initGym', 'RouteModel', function(gym, routeModel){
+      return routeModel.getCurrentRoutes(gym);
     }];
 
     var getRouteById = ['$stateParams', 'RouteModel', function(params, routeModel){
@@ -96,15 +101,33 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
             templateUrl: "partials/walls/wallsPage.html",
             controller: WallsController,
             resolve: {
-                initWalls: initWalls
+                initGym: initGym,
+                getRoutesByGym: ['initGym', 'RouteModel',  function(gym, routeModel){
+                    return routeModel.getRoutesByGym(gym);
+                }],
+                getWallsByGym: ['initGym', 'WallModel', 'Notifications', function(gym, wallModel, notifications){
+                    return wallModel.getWallsByGym(gym);
+                }],
+
+                show: ['initGym', 'getWallsByGym', 'getRoutesByGym', 'Notifications', function(gym, walls, routes, notifications){
+                    notifications.notify(models.events.HIDE_LOADING);
+                }]
+
             }
         })
         .state('wall', {
-            url: "/walls/:id",
+            url: "/walls/:wallId",
             templateUrl: "partials/walls/wallPage.html",
             controller: WallController,
             resolve: {
-                initWall: initWall
+                initGym: initGym,
+                getWallById: getWallById,
+                getRoutesByWallId: ['getWallById', 'RouteModel', function(wall, routeModel){
+                    return routeModel.getRoutesByWallId(wall.id);
+                }],
+                show: ['initGym', 'getWallById', 'getRoutesByWallId', 'Notifications', function(gym, wall, routes, notifications){
+                    notifications.notify(models.events.HIDE_LOADING);
+                }]
             }
         })
         .state('routes', {

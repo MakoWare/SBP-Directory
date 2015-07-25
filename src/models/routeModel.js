@@ -47,11 +47,12 @@ var RouteModel = EventDispatcher.extend({
         return Parse.Promise.as(routes);
     },
 
-    createRoute: function(wall, color, grade, order, status, setter){
+    createRoute: function(gym, wall, color, grade, order, status, setter){
         console.log("createRoute");
         var route = new this.parseService.Route();
         //route.setACL(this.parseService.RouteACL);
         route.set("wall", wall);
+        route.set("gym", gym);
 
         if(color){
             route.set("color", color);
@@ -147,7 +148,7 @@ var RouteModel = EventDispatcher.extend({
                     return function(){
                         console.log('save routes');
                         saveRoutesFunc(routes);
-                    }
+                    };
                 }(this.saveRoutes.bind(this));
 
                 this.timeout = setTimeout(timeoutFunction, 20000);
@@ -189,11 +190,74 @@ var RouteModel = EventDispatcher.extend({
         this.routes = [];
         oldRoutes.forEach(function(route){
             var attributes = route.attributes;
-            this.createRoute(attributes.wall, attributes.color, attributes.grade, attributes.order);
+            this.createRoute(attributes.gym, attributes.wall, attributes.color, attributes.grade, attributes.order);
             this.removeRoute(route);
         }.bind(this));
         this.autoSaveRoutes();
+    },
+
+    getAverageGrade: function(routes){
+        var averageColorArray = [];
+        var gradeSum = 0;
+
+        routes.forEach(function(route){
+            gradeSum += parseInt(route.get('grade'));
+            averageColorArray.push(route.get('color'));
+        });
+
+        var gradeAverage;
+        if(gradeSum != 0){
+            gradeAverage = Math.round((gradeSum / routes.length));
+        } else {
+            gradeAverage = 0;
+        }
+
+        switch(gradeAverage){
+        case 0:
+            return "gray0";
+            break;
+        case 1:
+            return "yellow1";
+            break;
+        case 2:
+            return "green2";
+            break;
+        case 3:
+            return "green3";
+            break;
+        case 4:
+            return "red4";
+            break;
+        case 5:
+            return "blue5";
+            break;
+        case 6:
+            return "orange6";
+            break;
+        case 7:
+            return "purple7";
+            break;
+        case 8:
+            return "black8";
+            break;
+        case 9:
+            return "black9";
+            break;
+        case 10:
+            return "black10";
+            break;
+        case 11:
+            return "black11";
+            break;
+        case 12:
+            return "black12";
+            break;
+        default:
+            return "gray0";
+            break;
+        }
     }
+
 });
 
 

@@ -11,6 +11,7 @@ angular.module('sbp', [
     //Walls
     'WallModel',
     'wallList',
+    'wallTable',
     'wallListItem',
 
     //Routes
