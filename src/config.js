@@ -14,28 +14,34 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
 
     var getWalls = ['WallModel', 'initGym', function(wallModel, gym){
         console.log("hi");
-      return wallModel.getWallsByGym(gym);
+        return wallModel.getWallsByGym(gym);
     }];
 
     var getRoutesByWallId = ['$stateParams', 'RouteModel', function(stateParams,routeModel){
-      return routeModel.getRoutesByWallId(stateParams.id);
+        return routeModel.getRoutesByWallId(stateParams.id);
     }];
 
     var getRoutesByGym = ['initGym', 'RouteModel', function(gym, routeModel){
-      return routeModel.getRoutesByGym(gym);
+        return routeModel.getRoutesByGym(gym);
     }];
 
     var getCurrentRoutes = ['initGym', 'RouteModel', function(gym, routeModel){
-      return routeModel.getCurrentRoutes(gym);
+        return routeModel.getCurrentRoutes(gym);
     }];
 
     var getRouteById = ['$stateParams', 'RouteModel', function(params, routeModel){
-      return routeModel.getRouteById(params.id);
+        return routeModel.getRouteById(params.id);
     }];
 
-    var getUsers = ['UserModel','initGym', function(userModel, gym){
-      return userModel.getUsersForGym(gym);
+    var getUsers = ['UserModel', function(userModel, gym){
+        return userModel.getUsersForGym(gym);
     }];
+
+    var getUser = ['$stateParams', 'UserModel', function($stateParams, userModel){
+        var userId = $stateParams.userId;
+        return userModel.getUserById(userId);
+    }];
+
 
     var getSetters = ['UserModel', function(userModel){
         return userModel.getSetters();
@@ -69,14 +75,14 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
 
     $stateProvider
     /*
-        .state('gymMap', {
-            url: "/gym/map",
-            templateUrl: "partials/gym/map/map.html",
-            controller: GymMapController,
-            resolve: {
-                initGym: initGym
-            }
-        })
+     .state('gymMap', {
+     url: "/gym/map",
+     templateUrl: "partials/gym/map/map.html",
+     controller: GymMapController,
+     resolve: {
+     initGym: initGym
+     }
+     })
      */
         .state('gymInfo', {
             url: "/gym/info",
@@ -84,7 +90,10 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
             controller: GymInfoController,
             resolve: {
                 initGym: initGym,
-                gymRoutes: getRoutesByGym
+                gymRoutes: getRoutesByGym,
+                show: ['initGym', 'gymRoutes', 'Notifications', function(gym, routes, notifications){
+                    notifications.notify(models.events.HIDE_LOADING);
+                }]
             }
         })
         .state('users', {
@@ -93,7 +102,12 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
             controller: UsersCtrl,
             resolve: {
                 initGym: initGym,
-                Users: getUsers
+                getUsers: ['initGym', 'UserModel',  function(gym, userModel){
+                    return userModel.getUsersForGym(gym);
+                }],
+                show: ['initGym', 'getUsers', 'Notifications', function(gym, users, notifications){
+                    notifications.notify(models.events.HIDE_LOADING);
+                }]
             }
         })
         .state('walls', {
@@ -149,11 +163,16 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
             }
         })
         .state('userSettings', {
-            url: "/users/:id/edit",
+            url: "/users/:userId/edit",
             templateUrl: "partials/user/edit.html",
             controller:UserCtrl,
             resolve: {
-                initGym: initGym
+                initGym: initGym,
+                getUser: getUser,
+                show: ['initGym', 'getUser', 'Notifications', function(gym, user, notifications){
+                    notifications.notify(models.events.HIDE_LOADING);
+                }]
+
             }
         });
 });

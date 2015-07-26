@@ -16,10 +16,12 @@ var RouteTableDirective = BaseDirective.extend({
     },
 
     defineListeners: function(){
-        this.notifications.addEventListener(models.events.ROUTES_LOADED, this.handleRoutesChanged.bind(this));
-        this.notifications.addEventListener(models.events.ROUTES_UPDATED, this.handleRoutesChanged.bind(this));
-        this.notifications.addEventListener(models.events.GRADE_MODAL_CLOSED, this.handleGradeModalClosed.bind(this));
-        this.notifications.addEventListener(models.events.STATE_MODAL_CLOSED, this.handleStateModalClosed.bind(this));
+        this.handleRoutesChanged = this.handleRoutesChanged.bind(this);
+        this.handleGradeModalClosed = this.handleGradeModalClosed.bind(this);
+        this.handleStateModalClosed = this.handleStateModalClosed.bind(this);
+        this.notifications.addEventListener(models.events.ROUTES_UPDATED, this.handleRoutesChanged);
+        this.notifications.addEventListener(models.events.GRADE_MODAL_CLOSED, this.handleGradeModalClosed);
+        this.notifications.addEventListener(models.events.STATE_MODAL_CLOSED, this.handleStateModalClosed);
     },
 
     defineScope: function(){
@@ -90,12 +92,6 @@ var RouteTableDirective = BaseDirective.extend({
     handleRoutesChanged: function(){
         this.notifications.notify(models.events.HIDE_LOADING);
         this.$scope.routes = this.routeModel.routes;
-        // this.$timeout(function(){
-        //     $(document).ready(function() {
-        //         $('.routeSetterSelect').material_select('destroy');
-        //         $('.routeSetterSelect').material_select();
-        //     });
-        // });
     },
 
     handleGradeModalClosed: function(){

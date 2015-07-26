@@ -17,7 +17,11 @@ var WallsController = BaseController.extend({
     defineScope:function(){
         this.$scope.gym = this.gymModel.gym;
         this.$scope.createWall = this.createWall.bind(this);
-        this.notifications.notify(models.events.BRAND_CHANGE, this.$scope.gym.get("name"));
+        if(this.$scope.gym.get('name') == "Seattle Bouldering Project"){
+            this.notifications.notify(models.events.BRAND_CHANGE, "SBP");
+        } else {
+            this.notifications.notify(models.events.BRAND_CHANGE, "ABP");
+        }
     },
 
     destroy:function(){

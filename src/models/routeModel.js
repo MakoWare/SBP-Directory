@@ -85,7 +85,7 @@ var RouteModel = EventDispatcher.extend({
         }
 
         this.routes.push(route);
-        this.notifications.notify(models.events.ROUTES_LOADED);
+        this.notifications.notify(models.events.ROUTES_UPDATED);
     },
 
     saveRoute: function(route){
