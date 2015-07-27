@@ -17,9 +17,11 @@ var RouteTableDirective = BaseDirective.extend({
 
     defineListeners: function(){
         this.handleRoutesChanged = this.handleRoutesChanged.bind(this);
+        this.handleRouteRemoved = this.handleRouteRemoved.bind(this);
         this.handleGradeModalClosed = this.handleGradeModalClosed.bind(this);
         this.handleStateModalClosed = this.handleStateModalClosed.bind(this);
         this.notifications.addEventListener(models.events.ROUTES_UPDATED, this.handleRoutesChanged);
+        this.notifications.addEventListener(models.events.ROUTE_REMOVED, this.handleRouteRemoved);
         this.notifications.addEventListener(models.events.GRADE_MODAL_CLOSED, this.handleGradeModalClosed);
         this.notifications.addEventListener(models.events.STATE_MODAL_CLOSED, this.handleStateModalClosed);
     },
@@ -43,7 +45,9 @@ var RouteTableDirective = BaseDirective.extend({
     destroy: function(){
         this.notifications.removeEventListener(models.events.ROUTES_LOADED, this.handleRoutesChanged);
         this.notifications.removeEventListener(models.events.ROUTES_UPDATED, this.handleRoutesChanged);
+        this.notifications.removeEventListener(models.events.ROUTE_REMOVED, this.handleRouteRemoved);
         this.notifications.removeEventListener(models.events.GRADE_MODAL_CLOSED, this.handleGradeModalClosed);
+        this.notifications.removeEventListener(models.events.STATE_MODAL_CLOSED, this.handleStateModalClosed);
 
         $('.routeSetterSelect').material_select('destroy');
     },
@@ -56,8 +60,11 @@ var RouteTableDirective = BaseDirective.extend({
 
     replaceRoutes: function(){
         if(confirm("Are you sure you want to replace routes?")){
-            console.log("replace routes");
+            this.notifications.notify(models.events.SHOW_LOADING);
             this.routeModel.replaceRoutes();
+            var today = new Date();
+            this.$scope.wall.set('lastSet', today);
+            this.wallModel.saveWall(this.$scope.wall);
         }
     },
 
@@ -84,7 +91,6 @@ var RouteTableDirective = BaseDirective.extend({
     },
 
     autoSave: function(){
-        console.log("autoSave");
         this.routeModel.autoSaveRoutes();
     },
 
@@ -93,6 +99,12 @@ var RouteTableDirective = BaseDirective.extend({
         this.notifications.notify(models.events.HIDE_LOADING);
         this.$scope.routes = this.routeModel.routes;
     },
+
+    handleRouteRemoved: function(){
+        this.notifications.notify(models.events.HIDE_LOADING, true);
+        this.$scope.routes = this.routeModel.routes;
+    },
+
 
     handleGradeModalClosed: function(){
         this.autoSave();

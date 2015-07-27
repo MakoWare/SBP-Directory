@@ -30,9 +30,9 @@ var WallsController = BaseController.extend({
 
     createWall: function(){
         console.log("create wall");
-        this.wallModel.createWall(this.$scope.gym).then(function(wall){
+        this.wallModel.createWall(this.gymModel.gym).then(function(wall){
             console.log(wall);
-            this.$state.go('wall', {wallId: wall.id });
+            this.$state.go('wall', {wallId: wall.id, tab: "infoTab"});
         }.bind(this));
     }
 

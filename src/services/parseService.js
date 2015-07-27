@@ -80,13 +80,21 @@ var ParseService = Class.extend({
         return query.find();
     },
 
-
-
     getWallById: function(id){
         var query = new Parse.Query(this.Wall);
         return query.get(id);
     },
 
+    saveWall: function(wall){
+        return wall.save(null, {
+            success: function(wall){
+                return wall;
+            },
+            error: function(wall, error){
+                return error;
+            }
+        });
+    },
 
     /** Routes **/
     getRoutesByWallId: function(id){

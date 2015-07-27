@@ -130,7 +130,7 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
             }
         })
         .state('wall', {
-            url: "/walls/:wallId",
+            url: "/walls/:wallId?tab",
             templateUrl: "partials/walls/wallPage.html",
             controller: WallController,
             resolve: {

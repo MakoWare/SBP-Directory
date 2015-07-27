@@ -1,6 +1,7 @@
 'use strict';
 
 namespace('models.events').ROUTE_LOADED = "ActivityModel.ROUTE_LOADED";
+namespace('models.events').ROUTE_REMOVED = "ActivityModel.ROUTE_REMOVED";
 namespace('models.events').ROUTES_LOADED = "ActivityModel.ROUTES_LOADED";
 namespace('models.events').ROUTES_UPDATED = "ActivityModel.ROUTES_UPDATED";
 
@@ -48,11 +49,11 @@ var RouteModel = EventDispatcher.extend({
     },
 
     createRoute: function(gym, wall, color, grade, order, status, setter){
-        console.log("createRoute");
         var route = new this.parseService.Route();
         //route.setACL(this.parseService.RouteACL);
         route.set("wall", wall);
         route.set("gym", gym);
+        route.set("gymCreatedAt", gym);
 
         if(color){
             route.set("color", color);
@@ -110,17 +111,13 @@ var RouteModel = EventDispatcher.extend({
         }.bind(this));
 
         if(routesToSave.length > 0){
-            console.log("saving: " + routesToSave.length);
-            console.log(routesToSave);
             this.notifications.notify(models.events.SHOW_LOADING);
             return Parse.Object.saveAll(routesToSave, {
                 success: function(routes) {
-                    console.log("hide");
                     self.notifications.notify(models.events.HIDE_LOADING);
                 },
                 error: function(error) {
                     self.notifications.notify(models.events.HIDE_LOADING);
-                    console.log(error);
                 }
             });
         }
@@ -130,8 +127,6 @@ var RouteModel = EventDispatcher.extend({
 
         (function(routes){
             var dirty = false;
-
-            console.log('autoSaveRoutes');
             routes.forEach(function(route){
                 if(route.dirty() || !route.id){
                     dirty = true;
@@ -139,14 +134,12 @@ var RouteModel = EventDispatcher.extend({
             });
 
             if(dirty){
-                console.log("dirty");
                 if(this.timeout){
                     clearTimeout(this.timeout);
                 }
                 var timeoutFunction = function(saveRoutesFunc){
 
                     return function(){
-                        console.log('save routes');
                         saveRoutesFunc(routes);
                     };
                 }(this.saveRoutes.bind(this));
@@ -169,11 +162,10 @@ var RouteModel = EventDispatcher.extend({
             route.set("takenDown", new Date());
             return route.save(null, {
                 success: function(results){
-                    self.notifications.notify(models.events.ROUTES_UPDATED);
-                    console.log("soft delete complete");
+                    self.notifications.notify(models.events.ROUTE_REMOVED);
                 },
                 error: function(error){
-                    self.notifications.notify(models.events.ROUTES_UPDATED);
+                    self.notifications.notify(models.events.ROUTE_REMOVED);
                     console.log("error");
                     console.log(error);
                 }
@@ -193,7 +185,7 @@ var RouteModel = EventDispatcher.extend({
             this.createRoute(attributes.gym, attributes.wall, attributes.color, attributes.grade, attributes.order);
             this.removeRoute(route);
         }.bind(this));
-        this.autoSaveRoutes();
+        this.saveRoutes(this.routes);
     },
 
     getAverageGrade: function(routes){

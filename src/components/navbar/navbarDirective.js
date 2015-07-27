@@ -38,11 +38,6 @@ var NavBarDirective = BaseDirective.extend({
         this.$scope.gym = this.gymModel.gym;
         this.$scope.gyms = this.gymModel.gyms;
         this.$scope.onGymSelect = this.onGymSelect.bind(this);
-
-        this.$timeout(function(){
-            console.log(this.$state.current.name);
-            this.$scope.state = this.$state.current.name;
-        }.bind(this), 500);
     },
 
     onGymFetch:function(gym){
@@ -56,6 +51,12 @@ var NavBarDirective = BaseDirective.extend({
 
     onGymSelect:function(gym){
         this.gymModel.setCurrentGym(gym);
+        if(gym.get('name') === "Seattle Bouldering Project"){
+            this.$scope.brand = "SBP";
+        } else {
+            this.$scope.brand = "ABP";
+        }
+            this.$scope.$apply();
     },
 
     logout: function(){
