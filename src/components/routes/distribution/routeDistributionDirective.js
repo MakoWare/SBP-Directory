@@ -27,13 +27,12 @@ var RouteDistributionDirective = BaseDirective.extend({
         this.boundOnChartLoaded = this.onChartLoaded.bind(this);
         googleChartApiLoader.then(this.boundOnChartLoaded);
 
-
-        this.$el.parent('div.tab-page').on('$show', function(){
+        this.$el.parents('div.tab-page').on('$show', function(){
             this.chartIsVisible = true;
             this.drawChart();
         }.bind(this));
 
-        this.$el.parent('div.tab-page').on('$hide', function(){
+        this.$el.parents('div.tab-page').on('$hide', function(){
             this.chartIsVisible = false;
         }.bind(this));
 

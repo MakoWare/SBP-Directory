@@ -11,6 +11,8 @@ var GymInfoController = BaseController.extend({
     this.gymModel = GymModel;
     this.notifications = Notifications;
     this.routeModel = RouteModel;
+
+    console.log(this.routeModel.routes.length);
   },
 
   defineListeners:function(){
