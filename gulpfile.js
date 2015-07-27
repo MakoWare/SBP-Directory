@@ -79,7 +79,8 @@ gulp.task('copy', function () {
     gulp.src(['fonts/**/**']).pipe(gulp.dest('dist/font'));
     gulp.src(['index.html']).pipe(gulp.dest('dist'));
     gulp.src(['images/**/**']).pipe(gulp.dest('dist/images'));
-
+    gulp.src(['appcodes.js']).pipe(gulp.dest('dist'));
+    
 });
 
 

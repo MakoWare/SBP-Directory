@@ -4,6 +4,8 @@ var RouteDistributionDirective = BaseDirective.extend({
     colorsArray:['Gray','Yellow','Green','Red','Blue','Orange','Purple','Black'],
     gradesArray:['v0','v1','v2','v3','v4','v5','v6','v7','v8','v9','v10','v11','v12'],
 
+    chartIsVisible:false,
+
     /*
         OVERRIDE METHODS
     */
@@ -22,7 +24,18 @@ var RouteDistributionDirective = BaseDirective.extend({
         console.log(this.routeModel.routes.length);
 
         this.boundDrawChart = this.drawChart.bind(this);
-        googleChartApiLoader.then(this.boundDrawChart);
+        this.boundOnChartLoaded = this.onChartLoaded.bind(this);
+        googleChartApiLoader.then(this.boundOnChartLoaded);
+
+
+        this.$el.parent('div.tab-page').on('$show', function(){
+            this.chartIsVisible = true;
+            this.drawChart();
+        }.bind(this));
+
+        this.$el.parent('div.tab-page').on('$hide', function(){
+            this.chartIsVisible = false;
+        }.bind(this));
 
     },
 
@@ -34,6 +47,8 @@ var RouteDistributionDirective = BaseDirective.extend({
         this.$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
             this.notifications.removeEventListener(models.events.ROUTES_LOADED, this.boundOnRoutesLoaded);
         }.bind(this));
+
+        this.$scope.$on('__redrawGraph', this.boundDrawChart);
     },
 
     destroy:function(){
@@ -46,6 +61,14 @@ var RouteDistributionDirective = BaseDirective.extend({
 
     onRoutesLoaded:function(){
         console.log('reload chart');
+        this.drawChart();
+    },
+
+    onChartLoaded: function(){
+        // set up the notifications after the lib is loaded
+        this.boundOnRoutesLoaded = this.onRoutesLoaded.bind(this);
+        this.notifications.addEventListener(models.events.ROUTES_LOADED, this.boundOnRoutesLoaded);
+
         this.drawChart();
     },
 
@@ -79,19 +102,21 @@ var RouteDistributionDirective = BaseDirective.extend({
     },
 
     drawChart:function(google){
-        // set up the notifications after the lib is loaded
-        this.boundOnRoutesLoaded = this.onRoutesLoaded.bind(this);
-        this.notifications.addEventListener(models.events.ROUTES_LOADED, this.boundOnRoutesLoaded);
 
         console.log('drawChart');
+        console.log(this.$scope.gym);
+        console.log(this.chartIsVisible);
 
         // Create the data table.
 
-        this.getTotals();
+        if(this.chartIsVisible){
+            this.getTotals();
 
-        // this.drawUnderChart();
-        this.drawChart1();
-        // this.drawChart2();
+            // this.drawUnderChart();
+            this.drawChart1();
+            // this.drawChart2();
+        }
+
 
 
         // var chart = new google.visualization.Histogram(this.$el.find('#chart_div').get(0));
