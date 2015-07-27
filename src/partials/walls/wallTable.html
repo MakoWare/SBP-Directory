@@ -1,0 +1,30 @@
+<div style="padding-top: 2em">
+  <div id="routeTable" class="routeTable card-panel">
+    <table class="bordered centered hoverable responsive-table">
+      <thead>
+        <tr>
+          <th><a href="" ng-click="predicate = 'attributes.name'; reverse=!reverse">Name</a></th>
+          <th><a href="" ng-click="predicate = 'averageNumber'; reverse=!reverse">Average Grade</a></th>
+          <th><a href="" ng-click="predicate = 'total'; reverse=!reverse">Total Routes</a></th>
+          <th><a href="" ng-click="predicate = 'attributes.lastSet'; reverse=!reverse">Last Set</a></th>
+        </tr>
+      </thead>
+      <tbody id="routesTable">
+        <tr ng-repeat="wall in walls | orderBy:[predicate, secondary]:reverse | filter:search:strict" ng-click="goToWall(wall)">
+          <td>
+            <h5>{{wall.attributes.name}}</h5>
+          </td>
+          <td>
+            <img  ng-src="images/grades/{{wall.averageGrade}}.png" style="width: 50px">
+          </td>
+          <td>
+            <h5>{{wall.routes.length}}</h5>
+          </td>
+          <td>
+            <h5>{{wall.attributes.lastSet.monthName()}}</h5>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

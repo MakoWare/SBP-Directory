@@ -49,7 +49,7 @@ var GymModel = EventDispatcher.extend({
 
   setCurrentGym:function(gym){
     this.gym = gym;
-    this.notifications.notify(models.events.GYM_CHANGE,gym);
+    this.notifications.notify(models.events.GYM_CHANGE, gym);
   }
 
 });

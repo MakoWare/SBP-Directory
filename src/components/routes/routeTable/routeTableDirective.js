@@ -5,20 +5,25 @@ var RouteTableDirective = BaseDirective.extend({
     userModel: null,
     notifications: null,
 
-    initialize: function($scope, $state, $timeout, UserModel, RouteModel, WallModel, Notifications){
+    initialize: function($scope, $state, $timeout, UserModel, RouteModel, WallModel, GymModel, Notifications){
         this.$state = $state;
         this.$timeout = $timeout;
         this.userModel = UserModel;
         this.routeModel = RouteModel;
         this.wallModel = WallModel;
+        this.gymModel = GymModel;
         this.notifications = Notifications;
     },
 
     defineListeners: function(){
-        this.notifications.addEventListener(models.events.ROUTES_LOADED, this.handleRoutesChanged.bind(this));
-        this.notifications.addEventListener(models.events.ROUTES_UPDATED, this.handleRoutesChanged.bind(this));
-        this.notifications.addEventListener(models.events.GRADE_MODAL_CLOSED, this.handleGradeModalClosed.bind(this));
-        this.notifications.addEventListener(models.events.STATE_MODAL_CLOSED, this.handleStateModalClosed.bind(this));
+        this.handleRoutesChanged = this.handleRoutesChanged.bind(this);
+        this.handleRouteRemoved = this.handleRouteRemoved.bind(this);
+        this.handleGradeModalClosed = this.handleGradeModalClosed.bind(this);
+        this.handleStateModalClosed = this.handleStateModalClosed.bind(this);
+        this.notifications.addEventListener(models.events.ROUTES_UPDATED, this.handleRoutesChanged);
+        this.notifications.addEventListener(models.events.ROUTE_REMOVED, this.handleRouteRemoved);
+        this.notifications.addEventListener(models.events.GRADE_MODAL_CLOSED, this.handleGradeModalClosed);
+        this.notifications.addEventListener(models.events.STATE_MODAL_CLOSED, this.handleStateModalClosed);
     },
 
     defineScope: function(){
@@ -35,34 +40,31 @@ var RouteTableDirective = BaseDirective.extend({
         this.$scope.setters = this.userModel.setters;
         this.$scope.predicate = "attributes.order";
         this.$scope.secondary = "attributes.grade";
-
-
-        console.log(this.$scope.routes);
-        // this.$timeout(function(){
-        //     $(document).ready(function() {
-        //         $('.routeSetterSelect').material_select();
-        //     });
-        // });
     },
 
     destroy: function(){
         this.notifications.removeEventListener(models.events.ROUTES_LOADED, this.handleRoutesChanged);
         this.notifications.removeEventListener(models.events.ROUTES_UPDATED, this.handleRoutesChanged);
+        this.notifications.removeEventListener(models.events.ROUTE_REMOVED, this.handleRouteRemoved);
         this.notifications.removeEventListener(models.events.GRADE_MODAL_CLOSED, this.handleGradeModalClosed);
+        this.notifications.removeEventListener(models.events.STATE_MODAL_CLOSED, this.handleStateModalClosed);
 
         $('.routeSetterSelect').material_select('destroy');
     },
 
 
     addRoute: function(){
-        this.routeModel.createRoute(this.wallModel.wall);
+        this.routeModel.createRoute(this.gymModel.gym, this.wallModel.wall);
         this.autoSave();
     },
 
     replaceRoutes: function(){
         if(confirm("Are you sure you want to replace routes?")){
-            console.log("replace routes");
+            this.notifications.notify(models.events.SHOW_LOADING);
             this.routeModel.replaceRoutes();
+            var today = new Date();
+            this.$scope.wall.set('lastSet', today);
+            this.wallModel.saveWall(this.$scope.wall);
         }
     },
 
@@ -89,7 +91,6 @@ var RouteTableDirective = BaseDirective.extend({
     },
 
     autoSave: function(){
-        console.log("autoSave");
         this.routeModel.autoSaveRoutes();
     },
 
@@ -97,13 +98,13 @@ var RouteTableDirective = BaseDirective.extend({
     handleRoutesChanged: function(){
         this.notifications.notify(models.events.HIDE_LOADING);
         this.$scope.routes = this.routeModel.routes;
-        // this.$timeout(function(){
-        //     $(document).ready(function() {
-        //         $('.routeSetterSelect').material_select('destroy');
-        //         $('.routeSetterSelect').material_select();
-        //     });
-        // });
     },
+
+    handleRouteRemoved: function(){
+        this.notifications.notify(models.events.HIDE_LOADING, true);
+        this.$scope.routes = this.routeModel.routes;
+    },
+
 
     handleGradeModalClosed: function(){
         this.autoSave();
@@ -116,12 +117,12 @@ var RouteTableDirective = BaseDirective.extend({
 });
 
 angular.module('routeTable',[])
-    .directive('routeTable', ['$state', '$timeout', 'UserModel', 'RouteModel', 'WallModel', 'Notifications', function($state, $timeout, UserModel, RouteModel, WallModel, Notifications){
+    .directive('routeTable', ['$state', '$timeout', 'UserModel', 'RouteModel', 'WallModel', 'GymModel', 'Notifications', function($state, $timeout, UserModel, RouteModel, WallModel, GymModel, Notifications){
         return {
             restrict:'E',
             isolate:true,
             link: function($scope){
-                new RouteTableDirective($scope, $state, $timeout, UserModel, RouteModel, WallModel, Notifications);
+                new RouteTableDirective($scope, $state, $timeout, UserModel, RouteModel, WallModel, GymModel, Notifications);
             },
             scope: true,
             templateUrl: "partials/routes/routeTable.html"

@@ -1,22 +1,35 @@
 <div class="wallPage">
   <ul class="tabs z-depth-1">
-    <li class="tab col s3"><a class="active" href="#test1">Routes</a></li>
-    <li class="tab col s3"><a href="#test2">Route Distribution</a></li>
-    <li class="tab col s3"><a href="#test3">Wall Info</a></li>
+    <li class="tab col s3"><a href="#tableTab">Routes</a></li>
+    <li class="tab col s3"><a href="#distTab">Route Distribution</a></li>
+    <li class="tab col s3"><a href="#infoTab">Wall Info</a></li>
   </ul>
-  <div id="test1" class=" tab-page">
+  <div id="tableTab" class=" tab-page">
     <div class="container">
       <route-table></route-table>
     </div>
   </div>
-  <div id="test2" class="row tab-page">
+  <div id="distTab" class="row tab-page">
     <div class="container">
       <route-distribution></route-distribution>
     </div>
   </div>
-  <div id="test3" class="row tab-page">
+  <div id="infoTab" class="row tab-page">
     <div class="container">
-      STATS ABOUT THE WALL
+      <form name="wallForm">
+        <div class="row valign-wrapper card-panel">
+          <div class="input-field col s4">
+            <input ng-model="wall.attributes.name" type="text" name="name" class="" id="name" required/>
+            <label class="active" for="name">Name</label>
+          </div>
+          <div class="col s1 offset-s4">
+            <button class="btn red"  ng-click="deleteWall()">Delete</button>
+          </div>
+          <div class="col s1 offset-s1">
+            <button class="btn blue" ng-disabled="wallForm.$invalid || wallForm.$pristine" ng-click="saveWall()">Save</button>
+          </div>
+        </div>
+      </form>
     </div>
   </div>
 </div>

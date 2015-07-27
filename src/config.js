@@ -1,36 +1,47 @@
 angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
 
     var initGym = ['GymModel', 'Notifications', function(gymModel, notifications){
-        // return gymModel.getDefaultGym();
         return gymModel.initGym().then(function(gym){
-            notifications.notify(models.events.HIDE_LOADING);
             return Parse.Promise.as(gym);
         });
     }];
 
     var getWallById = ['$stateParams', 'WallModel', function(stateParams,wallModel){
-      return wallModel.getWallById(stateParams.id);
+        return wallModel.getWallById(stateParams.wallId).then(function(wall){
+            return Parse.Promise.as(wall);
+        });
     }];
 
     var getWalls = ['WallModel', 'initGym', function(wallModel, gym){
-      return wallModel.getWallsByGym(gym);
+        console.log("hi");
+        return wallModel.getWallsByGym(gym);
     }];
 
     var getRoutesByWallId = ['$stateParams', 'RouteModel', function(stateParams,routeModel){
-      return routeModel.getRoutesByWallId(stateParams.id);
+        return routeModel.getRoutesByWallId(stateParams.id);
     }];
 
     var getRoutesByGym = ['initGym', 'RouteModel', function(gym, routeModel){
-      return routeModel.getRoutesByGym(gym);
+        return routeModel.getRoutesByGym(gym);
+    }];
+
+    var getCurrentRoutes = ['initGym', 'RouteModel', function(gym, routeModel){
+        return routeModel.getCurrentRoutes(gym);
     }];
 
     var getRouteById = ['$stateParams', 'RouteModel', function(params, routeModel){
-      return routeModel.getRouteById(params.id);
+        return routeModel.getRouteById(params.id);
     }];
 
-    var getUsers = ['UserModel','initGym', function(userModel, gym){
-      return userModel.getUsersForGym(gym);
+    var getUsers = ['UserModel', function(userModel, gym){
+        return userModel.getUsersForGym(gym);
     }];
+
+    var getUser = ['$stateParams', 'UserModel', function($stateParams, userModel){
+        var userId = $stateParams.userId;
+        return userModel.getUserById(userId);
+    }];
+
 
     var getSetters = ['UserModel', function(userModel){
         return userModel.getSetters();
@@ -64,14 +75,14 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
 
     $stateProvider
     /*
-        .state('gymMap', {
-            url: "/gym/map",
-            templateUrl: "partials/gym/map/map.html",
-            controller: GymMapController,
-            resolve: {
-                initGym: initGym
-            }
-        })
+     .state('gymMap', {
+     url: "/gym/map",
+     templateUrl: "partials/gym/map/map.html",
+     controller: GymMapController,
+     resolve: {
+     initGym: initGym
+     }
+     })
      */
         .state('gymInfo', {
             url: "/gym/info",
@@ -79,7 +90,10 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
             controller: GymInfoController,
             resolve: {
                 initGym: initGym,
-                gymRoutes: getRoutesByGym
+                gymRoutes: getRoutesByGym,
+                show: ['initGym', 'gymRoutes', 'Notifications', function(gym, routes, notifications){
+                    notifications.notify(models.events.HIDE_LOADING);
+                }]
             }
         })
         .state('users', {
@@ -88,7 +102,12 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
             controller: UsersCtrl,
             resolve: {
                 initGym: initGym,
-                Users: getUsers
+                getUsers: ['initGym', 'UserModel',  function(gym, userModel){
+                    return userModel.getUsersForGym(gym);
+                }],
+                show: ['initGym', 'getUsers', 'Notifications', function(gym, users, notifications){
+                    notifications.notify(models.events.HIDE_LOADING);
+                }]
             }
         })
         .state('walls', {
@@ -96,15 +115,33 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
             templateUrl: "partials/walls/wallsPage.html",
             controller: WallsController,
             resolve: {
-                initWalls: initWalls
+                initGym: initGym,
+                getRoutesByGym: ['initGym', 'RouteModel',  function(gym, routeModel){
+                    return routeModel.getRoutesByGym(gym);
+                }],
+                getWallsByGym: ['initGym', 'WallModel', 'Notifications', function(gym, wallModel, notifications){
+                    return wallModel.getWallsByGym(gym);
+                }],
+
+                show: ['initGym', 'getWallsByGym', 'getRoutesByGym', 'Notifications', function(gym, walls, routes, notifications){
+                    notifications.notify(models.events.HIDE_LOADING);
+                }]
+
             }
         })
         .state('wall', {
-            url: "/walls/:id",
+            url: "/walls/:wallId?tab",
             templateUrl: "partials/walls/wallPage.html",
             controller: WallController,
             resolve: {
-                initWall: initWall
+                initGym: initGym,
+                getWallById: getWallById,
+                getRoutesByWallId: ['getWallById', 'RouteModel', function(wall, routeModel){
+                    return routeModel.getRoutesByWallId(wall.id);
+                }],
+                show: ['initGym', 'getWallById', 'getRoutesByWallId', 'Notifications', function(gym, wall, routes, notifications){
+                    notifications.notify(models.events.HIDE_LOADING);
+                }]
             }
         })
         .state('routes', {
@@ -126,11 +163,16 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
             }
         })
         .state('userSettings', {
-            url: "/users/:id/edit",
+            url: "/users/:userId/edit",
             templateUrl: "partials/user/edit.html",
             controller:UserCtrl,
             resolve: {
-                initGym: initGym
+                initGym: initGym,
+                getUser: getUser,
+                show: ['initGym', 'getUser', 'Notifications', function(gym, user, notifications){
+                    notifications.notify(models.events.HIDE_LOADING);
+                }]
+
             }
         });
 });

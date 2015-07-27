@@ -5,7 +5,8 @@ namespace('models.events').HIDE_LOADING = "ActivityModel.HIDE_LOADING";
 var OverlayDirective = BaseDirective.extend({
     notifications: null,
 
-    init: function($scope, Notifications){
+    init: function($scope, $rootScope, Notifications){
+        this.$rootScope = $rootScope;
         this.notifications = Notifications;
         this._super($scope);
     },
@@ -14,6 +15,10 @@ var OverlayDirective = BaseDirective.extend({
         this.notifications.addEventListener(models.events.SHOW_LOADING, this.handleShowLoading.bind(this));
         this.notifications.addEventListener(models.events.HIDE_LOADING, this.handleHideLoading.bind(this));
 
+        this.$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+            this.$scope.loading = true;
+        }.bind(this));
+
     },
 
     defineScope: function(){
@@ -21,22 +26,32 @@ var OverlayDirective = BaseDirective.extend({
     },
 
     /** EVENT HANDLERS **/
-    handleShowLoading: function(){
-        this.$scope.loading = true;
+    handleShowLoading: function(event, apply){
+        if(apply){
+            this.$scope.loading = true;
+            this.$scope.$apply();
+        } else {
+            this.$scope.loading = true;
+        }
     },
 
-    handleHideLoading: function(){
-        this.$scope.loading = false;
+    handleHideLoading: function(event, apply){
+        if(apply){
+            this.$scope.loading = false;
+            this.$scope.$apply();
+        } else {
+            this.$scope.loading = false;
+        }
     }
 });
 
 angular.module('overlay',[])
-    .directive('overlay', function(Notifications){
+    .directive('overlay', function($rootScope, Notifications){
 	return {
 	    restrict:'E',
 	    isolate:true,
 	    link: function($scope){
-		new OverlayDirective($scope, Notifications);
+		new OverlayDirective($scope, $rootScope, Notifications);
 	    },
 	    scope:true,
             templateUrl: "partials/overlay/overlay.html"

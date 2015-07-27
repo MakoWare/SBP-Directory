@@ -36,6 +36,14 @@ var UserModel = EventDispatcher.extend({
         }.bind(this));
     },
 
+    getUserById: function(id){
+        return this.ParseService.getUserById(id).then(function(results){
+            this.profile = results;
+            this.notifications.notify(models.events.PROFILE_LOADED);
+            return Parse.Promise.as(results);
+        }.bind(this));
+    },
+
     getUsersForGym:function(gym){
         return this.ParseService.getUsersForGym(gym).then(function(results){
             this.users = results;

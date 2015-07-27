@@ -2,62 +2,32 @@
 var UserCtrl = BaseController.extend({
 
     /**** OVERRIDE Methods ****/
-    initialize: function($scope, $location, ParseService, $stateParams, Notifications, RouteModel){
+    initialize: function($scope, $location, ParseService, $stateParams, Notifications, RouteModel, UserModel){
         this.ParseService = ParseService;
         this.$location = $location;
         this.$stateParams = $stateParams;
         this.notifications = Notifications;
         this.routeModel = RouteModel;
-        // GlobalService.showSpinner();
-
+        this.userModel = UserModel;
     },
 
     defineListeners: function(){
-        this.boundHandleGradeModalClosed = this.handleGradeModalClosed.bind(this);
-        this.boundHandleStateModalClosed = this.handleStateModalClosed.bind(this);
-        this.notifications.addEventListener(models.events.GRADE_MODAL_CLOSED, this.boundHandleGradeModalClosed);
-        this.notifications.addEventListener(models.events.STATE_MODAL_CLOSED, this.boundHandleStateModalClosed);
+
     },
 
     defineScope: function(){
+        this.$scope.user = this.userModel.profile;
+        this.getUserRoutes();
         this.$scope.tab = "routes";
-
+        this.notifications.notify(models.events.BRAND_CHANGE, this.$scope.user.get('username'));
         $(document).ready(function(){
             $('ul#user-tabs.tabs').tabs();
         });
-
-        // this.$scope.user = this.();
-        this.getUser(this.$stateParams.id);
-
-        this.$scope.editRoute = this.editRoute.bind(this);
-        this.$scope.openGradeSelectModal = this.openGradeSelectModal.bind(this);
-        this.$scope.openStateSelectModal = this.openStateSelectModal.bind(this);
     },
 
     destroy: function(){
-        this.notifications.removeEventListener(models.events.GRADE_MODAL_CLOSED, this.boundHandleGradeModalClosed);
-        this.notifications.removeEventListener(models.events.STATE_MODAL_CLOSED, this.boundHandleStateModalClosed);
+
     },
-
-    /**** Instance Methods ****/
-
-    //Get User
-    getUser : function(id){
-        this.ParseService.getUserById(id).then(function(results){
-            this.$scope.user = results;
-            this.$scope.title = results.attributes.username;
-            this.setUpUser();
-        }.bind(this),
-        function(err){
-            console.log('failed to find user with id: '+id);
-        }.bind(this));
-    },
-
-    //Set up User
-    setUpUser: function(){
-        this.getUserRoutes();
-    },
-
 
     //Get User's Routes
     getUserRoutes : function(){
@@ -465,33 +435,6 @@ var UserCtrl = BaseController.extend({
 
     },
 
-    /**** Scope Methods ****/
-
-    editRoute: function(route){
-        console.log(route);
-    },
-
-    autoSave: function(){
-        console.log("autoSave");
-        this.routeModel.autoSaveRoutes();
-    },
-
-    openGradeSelectModal: function(route){
-        this.notifications.notify(models.events.OPEN_GRADE_MODAL, route);
-    },
-
-    openStateSelectModal: function(route){
-        this.notifications.notify(models.events.OPEN_STATE_MODAL, route);
-    },
-
-    handleGradeModalClosed: function(){
-        this.autoSave();
-    },
-
-    handleStateModalClosed: function(){
-        this.autoSave();
-    }
-
 });
 
-UserCtrl.$inject = ['$scope', '$location', 'ParseService', '$stateParams', 'Notifications', 'RouteModel'];
+UserCtrl.$inject = ['$scope', '$location', 'ParseService', '$stateParams', 'Notifications', 'RouteModel', 'UserModel'];

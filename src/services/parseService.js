@@ -80,13 +80,21 @@ var ParseService = Class.extend({
         return query.find();
     },
 
-
-
     getWallById: function(id){
         var query = new Parse.Query(this.Wall);
         return query.get(id);
     },
 
+    saveWall: function(wall){
+        return wall.save(null, {
+            success: function(wall){
+                return wall;
+            },
+            error: function(wall, error){
+                return error;
+            }
+        });
+    },
 
     /** Routes **/
     getRoutesByWallId: function(id){
@@ -104,7 +112,7 @@ var ParseService = Class.extend({
 
         query.limit(1000);
         query.include('setter');
-        query.equalTo('gymCreatedAt', gym);
+        query.equalTo('gym', gym);
         query.equalTo("takenDown", null);
 
         return query.find();
@@ -149,3 +157,13 @@ var ParseService = Class.extend({
     angular.module('ParseService',[])
         .provider('ParseService', ParseServiceProvider);
 })();
+
+
+var monthNames = ["Jan", "Feb", "March", "April", "May", "June",
+  "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+
+Date.prototype.monthName = function(){
+    var date = new Date(this.valueOf());
+    return monthNames[date.getMonth()] + " " + date.getDate() + " " + date.getFullYear();
+};
