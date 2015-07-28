@@ -139,7 +139,10 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
                 getRoutesByWallId: ['getWallById', 'RouteModel', function(wall, routeModel){
                     return routeModel.getRoutesByWallId(wall.id);
                 }],
-                show: ['initGym', 'getWallById', 'getRoutesByWallId', 'Notifications', function(gym, wall, routes, notifications){
+                getSetters: ['initGym', 'UserModel', function(gym, userModel){
+                    return userModel.getSetters();
+                }],
+                show: ['initGym', 'getWallById', 'getRoutesByWallId', 'getSetters', 'Notifications', function(gym, wall, routes, setters, notifications){
                     notifications.notify(models.events.HIDE_LOADING);
                 }]
             }
