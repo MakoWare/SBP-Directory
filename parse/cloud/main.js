@@ -68,6 +68,33 @@ Parse.Cloud.job("routeMigration", function(request, status) {
   });
 });
 
+Parse.Cloud.job("setUpRoles", function(req, status){
+    // use master key
+    Parse.Cloud.useMasterKey();
+
+    var roleQuery = new Parse.Query(Parse.Role),
+        setterRole;
+
+    roleQuery.equalTo('name', 'Setter');
+
+    // get the setter role
+    roleQuery.first().then(function(role){
+        console.log(role);
+        setterRole  = role;
+
+        // get the users to add to this role
+        return new Parse.Query(Parse.User).find();
+    }).then(function(users){
+        console.log(users);
+        setterRole.getUsers().add(users);
+        return setterRole.save();
+    }).then(function(role){
+        status.success('!');
+    },function(e){
+        status.error(e);
+    });
+});
+
 /******* Express Rest API *******/
 
 app.get('/appcodes.js', function(req, res) {
