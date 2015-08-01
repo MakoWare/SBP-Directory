@@ -15,7 +15,7 @@
       <ul id="user-tabs" class="tabs z-depth-1">
         <li class="tab col s4 m4 l2"><a class="active" href="#tabRoutes">Routes</a></li>
         <li class="tab col s4 m4 l5"><a href="#tabRoutesSetDistribution">Set Distribution</a></li>
-        <li class="tab col s4 m4 l5"><a href="#tabHoldUsageDistribution">Hold Distribution</a></li>
+        <li class="tab col s4 m4 l5"><a href="#tabUserInfo">Info</a></li>
       </ul>
     </div>
     <!-- <div id="routes" class="col s12">Routes</div>
@@ -59,17 +59,36 @@
 
   <div id="tabRoutesSetDistribution" class="tab-page">
     <div class="row">
-      <div class="col-md-12">
+      <div class="col s12">
         <route-distribution></route-distribution>
       </div>
     </div>
   </div>
 
 
-  <div id="tabHoldUsageDistribution" class="tab-page">
-    <div class="row">
-      <div class="col-md-12">
-        <div style="font-size: 18px" class="ct-chart ct-octave" id="holdDistribution"></div>
+  <div id="tabUserInfo" class="tab-page">
+    <div class="row card-panel">
+      <div class="col s12">
+          <form name="userInfoForm">
+              <!-- first row of inputs -->
+              <div class="row">
+                  <div input-field class="col s4">
+                      <input id="user_name" type="text" class="validate" ng-model="user.attributes.username">
+                      <label for="user_name">Username</label>
+                  </div>
+                  <div input-field class="col s4">
+                      <input id="email" type="email" class="validate" ng-model="user.attributes.email">
+                      <label for="email">Email</label>
+                  </div>
+                  <div class="input-field col s4">
+                      <select mat-select="attributes.name" ng-model="user.attributes.currentGym" name="gym" ng-options="gym as gym.attributes.name for gym in gyms" ng-change="setUserGym(gym)" required>
+                        <!-- <option value="" disabled selected>Choose Setter</option> -->
+                      </select>
+                      <label for="gym">Gym</label>
+                  </div>
+
+              </div>
+          </form>
       </div>
     </div>
   </div>

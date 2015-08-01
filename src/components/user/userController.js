@@ -2,13 +2,14 @@
 var UserCtrl = BaseController.extend({
 
     /**** OVERRIDE Methods ****/
-    initialize: function($scope, $location, ParseService, $stateParams, Notifications, RouteModel, UserModel){
+    initialize: function($scope, $location, ParseService, $stateParams, Notifications, RouteModel, UserModel, GymModel){
         this.ParseService = ParseService;
         this.$location = $location;
         this.$stateParams = $stateParams;
         this.notifications = Notifications;
         this.routeModel = RouteModel;
         this.userModel = UserModel;
+        this.gymModel = GymModel;
     },
 
     defineListeners: function(){
@@ -17,12 +18,17 @@ var UserCtrl = BaseController.extend({
 
     defineScope: function(){
         this.$scope.user = this.userModel.profile;
+        this.$scope.gyms = this.gymModel.gyms;
         this.getUserRoutes();
         this.$scope.tab = "routes";
         this.notifications.notify(models.events.BRAND_CHANGE, this.$scope.user.get('username'));
         $(document).ready(function(){
-            $('ul#user-tabs.tabs').tabs();
-        });
+            $('ul.tabs').tabs();
+            console.log(this.$stateParams.tab);
+            if(this.$stateParams.tab){
+                $('ul.tabs').tabs('select_tab', this.$stateParams.tab);
+            }
+        }.bind(this));
     },
 
     destroy: function(){
@@ -437,4 +443,4 @@ var UserCtrl = BaseController.extend({
 
 });
 
-UserCtrl.$inject = ['$scope', '$location', 'ParseService', '$stateParams', 'Notifications', 'RouteModel', 'UserModel'];
+UserCtrl.$inject = ['$scope', '$location', 'ParseService', '$stateParams', 'Notifications', 'RouteModel', 'UserModel', 'GymModel'];

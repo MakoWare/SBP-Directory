@@ -1,22 +1,14 @@
 <div class="container">
-  <div class="row valign-wrapper">
-    <div class="col s12">
+    <a class="btn-floating btn-large waves-effect waves-light green" style="position: fixed; right: 7%; top: 25%;">
+        <i class="material-icons" ng-click="createUser()">add</i>
+    </a>
+    <div class="row valign-wrapper">
+        <div class="col s12">
+        </div>
     </div>
-    <!-- <div class="col s9 valign">
-      <div class="">
-        <a id="gymDropdown" class='dropdown-button btn' href='#' data-dropdown-options='{"inDuration": 300,"outDuration": 225,"constrain_width": false,"hover": false,"gutter": 0,"belowOrigin": true}' data-activates='gymDropdownList'>{{gym.attributes.name}}<i class="mdi-navigation-arrow-drop-down right"></i></a>
-      </div>
-      <ul id='gymDropdownList' class='dropdown-content'>
-        <li mat-dropdown-item="onMenuSelect(gym)" ng-repeat-start="gym in gyms">
-          <a href="#!">{{gym.attributes.name}}</a>
-        </li>
-        <li ng-repeat-end class="divider"></li>
-      </ul>
-    </div> -->
-  </div>
 
-  <div class="row">
-    <users-table></users-table>
-  </div>
+    <div class="row">
+        <users-table></users-table>
+    </div>
 
 </div>

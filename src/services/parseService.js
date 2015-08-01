@@ -45,6 +45,7 @@ var ParseService = Class.extend({
     //Get User by Id
     getUserById: function(id){
         var query = new Parse.Query("User");
+        query.include('currentGym');
         return query.get(id);
     },
 

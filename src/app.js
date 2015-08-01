@@ -36,7 +36,7 @@ angular.module('sbp', [
 
     // custom stuff
     'CustomModule',
-    'matSelect',
+    'mw.materialize',
 
     // google-charts
     'GoogleCharts'

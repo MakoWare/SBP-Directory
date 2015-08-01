@@ -27,6 +27,7 @@ var UsersCtrl = BaseController.extend({
         this.$scope.setUpUserObjectListeners = this.setUpUserObjectListeners.bind(this);
         this.$scope.viewUser = this.viewUser.bind(this);
         this.$scope.onMenuSelect = this.onMenuSelect.bind(this);
+        this.$scope.createUser = this.createUser.bind(this);
 
         if(this.$scope.gym.get('name') == "Seattle Bouldering Project"){
             this.notifications.notify(models.events.BRAND_CHANGE, "SBP");
@@ -108,6 +109,17 @@ var UsersCtrl = BaseController.extend({
             this.$scope.users = users;
             this.setUpUsers();
             $('#users-table').append(tableBody);
+        }.bind(this));
+    },
+
+    createUser: function(){
+        console.log("create user");
+        // this.wallModel.createWall(this.gymModel.gym).then(function(wall){
+        //     console.log(wall);
+        //     this.$state.go('wall', {wallId: wall.id, tab: "infoTab"});
+        // }.bind(this));
+        this.userModel.createUser().then(function(user){
+            this.$state.go('userSettings', {userId: user.id, tab: "tabRoutes"});
         }.bind(this));
     },
 
