@@ -6,6 +6,10 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
         });
     }];
 
+    var getAllGyms = ['GymModel', function(gymModel){
+        return gymModel.getGyms();
+    }];
+
     var getWallById = ['$stateParams', 'WallModel', function(stateParams,wallModel){
         return wallModel.getWallById(stateParams.wallId).then(function(wall){
             return Parse.Promise.as(wall);
@@ -166,11 +170,12 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
             }
         })
         .state('userSettings', {
-            url: "/users/:userId/edit",
+            url: "/users/:userId/edit?tab",
             templateUrl: "partials/user/edit.html",
             controller:UserCtrl,
             resolve: {
                 initGym: initGym,
+                allGyms: getAllGyms,
                 getUser: getUser,
                 show: ['initGym', 'getUser', 'Notifications', function(gym, user, notifications){
                     notifications.notify(models.events.HIDE_LOADING);

@@ -1,4 +1,6 @@
-angular.module('matSelect',[])
+angular.module('mw.materialize',['mw.materialize.matSelect','ui.materialize.inputfield']);
+
+angular.module('mw.materialize.matSelect',[])
 .directive('matSelect', function(){
 
     var traverse = function(obj, str){
@@ -24,7 +26,8 @@ angular.module('matSelect',[])
 
         if(params){
             ngModel.$formatters.push(function(val) {
-                return val ? traverse(val,params) : val;
+                var ret = val ? traverse(val,params) : val;
+                return ret;
             });
         }
 
@@ -38,3 +41,34 @@ angular.module('matSelect',[])
         link: link
     };
 });
+
+/** (taken from https://github.com/krescruz/angular-materialize)
+ * Instead of adding the .input-field class to a div surrounding a label and input, add the attribute input-field.
+ * That way it will also work when angular destroys/recreates the elements.
+ *
+ * Example:
+ <inputfield style="margin-top:10px">
+ <label>{{name}}:</label>
+ <input type="text" name="{{name}}" ng-model="value">
+ </inputfield>
+ */
+angular.module("ui.materialize.inputfield", [])
+    .directive('inputField', ["$compile", "$timeout", function ($compile, $timeout) {
+        return {
+            transclude: true,
+            scope: {},
+            link: function (scope, element) {
+                $timeout(function () {
+                    Materialize.updateTextFields();
+
+                    element.find('textarea, input').each(function (index, countable) {
+                        countable = angular.element(countable);
+                        if (!countable.siblings('span[class="character-counter"]').length) {
+                            countable.characterCounter();
+                        }
+                    });
+                });
+            },
+            template: '<div ng-transclude class="input-field"></div>'
+        };
+    }]);

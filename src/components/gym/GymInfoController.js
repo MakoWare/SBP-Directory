@@ -7,9 +7,12 @@ var GymInfoController = BaseController.extend({
     OVERRIDE METHODS
   */
 
-  initialize:function($scope, GymModel, Notifications){
+  initialize:function($scope, GymModel, Notifications, RouteModel){
     this.gymModel = GymModel;
     this.notifications = Notifications;
+    this.routeModel = RouteModel;
+
+    console.log(this.routeModel.routes.length);
   },
 
   defineListeners:function(){
@@ -73,11 +76,14 @@ var GymInfoController = BaseController.extend({
   onGymChange:function(event, gym){
     this.$scope.$apply(function(scope){
       scope.gym = gym;
+      this.routeModel.getRoutesByGym(gym);
       this.calculateTotals();
     }.bind(this));
+
+    // this.$scope.$broadcast("__redrawGraph");
   }
 
 
 });
 
-GymInfoController.$inject = ['$scope', 'GymModel', 'Notifications'];
+GymInfoController.$inject = ['$scope', 'GymModel', 'Notifications', 'RouteModel'];

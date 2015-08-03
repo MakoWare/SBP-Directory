@@ -51,6 +51,26 @@ var UserModel = EventDispatcher.extend({
             return Parse.Promise.as(results);
         }.bind(this));
     },
+    
+    getUsersAndStatsForGym:function(gym){
+        return this.ParseService.getUsersAndStatsForGym(gym).then(function(results){
+            this.users = results;
+            this.notifications.notify(models.events.USERS_FETCHED);
+            return Parse.Promise.as(results);
+        }.bind(this));
+    },
+
+    getNewUser: function(){
+        var user = new Parse.User();
+
+        return user;
+    },
+
+    createUser: function(user){
+
+        return this.ParseService.createUser(user);
+
+    },
 
     getSetters: function(){
         return this.ParseService.getSetters().then(function(results){

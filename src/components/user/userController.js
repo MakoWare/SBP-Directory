@@ -2,13 +2,14 @@
 var UserCtrl = BaseController.extend({
 
     /**** OVERRIDE Methods ****/
-    initialize: function($scope, $location, ParseService, $stateParams, Notifications, RouteModel, UserModel){
+    initialize: function($scope, $location, ParseService, $stateParams, Notifications, RouteModel, UserModel, GymModel){
         this.ParseService = ParseService;
         this.$location = $location;
         this.$stateParams = $stateParams;
         this.notifications = Notifications;
         this.routeModel = RouteModel;
         this.userModel = UserModel;
+        this.gymModel = GymModel;
     },
 
     defineListeners: function(){
@@ -17,12 +18,20 @@ var UserCtrl = BaseController.extend({
 
     defineScope: function(){
         this.$scope.user = this.userModel.profile;
+        this.$scope.gyms = this.gymModel.gyms;
         this.getUserRoutes();
         this.$scope.tab = "routes";
         this.notifications.notify(models.events.BRAND_CHANGE, this.$scope.user.get('username'));
         $(document).ready(function(){
-            $('ul#user-tabs.tabs').tabs();
-        });
+            $('ul.tabs').tabs();
+            console.log(this.$stateParams.tab);
+            if(this.$stateParams.tab){
+                $('ul.tabs').tabs('select_tab', this.$stateParams.tab);
+            }
+        }.bind(this));
+
+        this.$scope.resetPassword = this.resetPassword.bind(this);
+        this.$scope.saveUser = this.saveUser.bind(this);
     },
 
     destroy: function(){
@@ -432,9 +441,19 @@ var UserCtrl = BaseController.extend({
 
     //Save User
     saveUser : function(){
-
+        this.$scope.user.save().then(null, function(e){
+            Materialize.toast('An error has occurred. ('+e.code+')\n'+e.message, 2500, 'error');
+        });
     },
+
+    resetPassword:function(){
+        this.$scope.user.save().then(function(user){
+            return Parse.User.requestPasswordReset(user.get('email'));
+        }).then(null,function(e){
+            Materialize.toast('An error has occurred. ('+e.code+')\n'+e.message, 2500, 'error');
+        });
+    }
 
 });
 
-UserCtrl.$inject = ['$scope', '$location', 'ParseService', '$stateParams', 'Notifications', 'RouteModel', 'UserModel'];
+UserCtrl.$inject = ['$scope', '$location', 'ParseService', '$stateParams', 'Notifications', 'RouteModel', 'UserModel', 'GymModel'];
