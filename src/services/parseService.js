@@ -8,6 +8,16 @@ var ParseService = Class.extend({
     Hold: Parse.Object.extend("Hold"),
     RouteACL: new Parse.ACL(),
 
+
+    /**** util ****/
+    genRandomPass:function(){
+        var string = 'password';
+        for(var i=0;i<10;i++){
+            string = string+(Math.floor(Math.random() * 9) + 1).toString();
+        }
+        return string;
+    },
+
     /**** Users ****/
     signIn: function(email, password){
 
@@ -19,6 +29,32 @@ var ParseService = Class.extend({
 
     updateUser: function(user){
 
+    },
+
+    createUser: function(user){
+        // var p = this.genRandomPass();
+        // console.log(p);
+        // user.set('username', user.attributes.username);
+        // user.set('password', user.attributes.password);
+        // user.set('email', user.attributes.email);
+        // user.set('currentGym', user.attributes.currentGym);
+        user.currentGym = user.currentGym.id;
+
+        return Parse.Cloud.run('createUser',user);
+
+        // return user.signUp().then(function(newUser){
+        //     var roleQuery = new Parse.Query(Parse.Role);
+        //     roleQuery.equalTo('name', 'Setter');
+        //     return roleQuery.find().then(function(roles){
+        //         console.log(roles);
+        //         var role = roles[0];
+        //         role.getUsers().add(newUser);
+        //         return role.save();
+        //     });
+        // });
+        // .then(function(user){
+        //     return Parse.User.requestPasswordReset(user.get('email'));
+        // });
     },
 
     getUsers: function(){
@@ -53,6 +89,13 @@ var ParseService = Class.extend({
         return Parse.Cloud.run('toggleUserSetterStatus',{userId:userId,setter:setter});
     },
 
+    getStatsForUser: function(user){
+        return Parse.Cloud.run('generateUserStats', {userId:user.id});
+    },
+
+    getUsersAndStatsForGym:function(gym){
+        return Parse.Cloud.run('getUsersAndStatsForGym', {gymId:gym.id});
+    },
 
     /**** Gyms ****/
     baseGymQuery:function(){

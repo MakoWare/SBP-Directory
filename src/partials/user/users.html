@@ -1,7 +1,9 @@
 <div class="container">
-    <a class="btn-floating btn-large waves-effect waves-light green" style="position: fixed; right: 7%; top: 25%;">
-        <i class="material-icons" ng-click="createUser()">add</i>
-    </a>
+    <div class="fixed-action-btn" style="right: 65px; top: 70px;">
+        <a id="newUserModalTrigger" class="btn-floating btn-large waves-effect waves-light green modal-trigger" ng-click="openUserModal()" >
+            <i class="material-icons">add</i>
+        </a>
+    </div>
     <div class="row valign-wrapper">
         <div class="col s12">
         </div>
@@ -11,4 +13,49 @@
         <users-table></users-table>
     </div>
 
+</div>
+<!-- Modal Trigger -->
+<!-- <a class="waves-effect waves-light btn modal-trigger" href="#modal1">Modal</a> -->
+
+<!-- Modal Structure -->
+<div id="newUserModal" class="modal">
+    <form name="userInfoForm" autocomplete="off">
+        <div class="modal-content">
+
+            <!-- first row of inputs -->
+            <div class="row">
+                <!-- fake fields are a workaround for chrome autofill getting the wrong fields -->
+                <input style="display:none" type="text" name="fakeusernameremembered"/>
+                <input style="display:none" type="password" name="fakepasswordremembered"/>
+
+                <div input-field class="col s3">
+                    <input id="user_name" type="text" class="" autocomplete="off" ng-model="user.username" required>
+                    <label for="user_name">Username</label>
+                </div>
+                <div input-field class="col s3">
+                    <input id="password" type="password" class="validate" autocomplete="off" ng-model="user.password">
+                    <label for="pass">Password</label>
+                </div>
+                <div class="input-field col s5">
+                    <select mat-select ng-model="user.currentGym" name="gym" ng-options="gym as gym.attributes.name for gym in gyms" ng-change="setUserGym(gym)" required>
+                      <!-- <option value="" disabled selected>Choose Setter</option> -->
+                    </select>
+                    <label for="gym">Gym</label>
+                </div>
+
+            </div>
+
+            <!-- second row of inputs -->
+            <div class="row">
+                <div input-field class="col s4">
+                    <input id="email" type="email" class="" autocomplete="off" ng-model="user.email">
+                    <label for="email">Email</label>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button ng-disabled="userInfoForm.$invalid || userInfoForm.$pristine" class=" modal-action waves-effect waves-green btn-flat" ng-click="createUser()">Create</button>
+            <button class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</button>
+        </div>
+    </form>
 </div>

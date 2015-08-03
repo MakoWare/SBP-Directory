@@ -3,3 +3,12 @@
     margin-left: auto !important;
     margin-right: auto !important;
 }
+
+#toast-container {
+
+    .error {
+        background-color: map-get($red, 'base');
+        // left:auto;
+        // right: 50%;
+    }
+}

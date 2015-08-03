@@ -1,6 +1,8 @@
 //Users Controller
 var UsersCtrl = BaseController.extend({
 
+    usersStats: [],
+
     /**** OVERRIDE Methods ****/
     initialize:function($scope, $location, Notifications, ParseService, UserModel, $state, GymModel){
         this.$location = $location;
@@ -22,6 +24,7 @@ var UsersCtrl = BaseController.extend({
         this.$scope.gym = this.gymModel.gym;
         this.$scope.gyms = this.gymModel.gyms;
         this.$scope.users = this.userModel.users;
+
         this.setUpUsers();
         // this.getUsers();
         this.$scope.setUpUserObjectListeners = this.setUpUserObjectListeners.bind(this);
@@ -34,10 +37,28 @@ var UsersCtrl = BaseController.extend({
         } else {
             this.notifications.notify(models.events.BRAND_CHANGE, "ABP");
         }
+
+        this.setUpModal();
     },
 
     destroy:function(){
         $(':checkbox').off('.switchListen');
+    },
+
+    /**** setup methods ****/
+    setUpModal: function(){
+        this.$scope.openUserModal = this.openUserModal.bind(this);
+        // $(document).ready(function(){
+        //     $('#newUserModalTrigger').leanModal({
+        //         dismissible: false, // Modal can be dismissed by clicking outside of the modal
+        //         opacity: .3, // Opacity of modal background
+        //         in_duration: 300, // Transition in duration
+        //         out_duration: 200 // Transition out duration
+        //         // ready: this.newUserModalReady.bind(this), // Callback for Modal open
+        //         // complete: this.createUser.bind(this) // Callback for Modal close
+        //     });
+        // }.bind(this));
+
     },
 
     /**** Instance Methods ****/
@@ -56,16 +77,29 @@ var UsersCtrl = BaseController.extend({
 
     setUpUsers:function(){
         this.$scope.users.forEach(function(user){
-            this.getUserRoutes(user);
-
+            this.getUserRoutes(user)
         }.bind(this));
     },
 
     getUserRoutes:function(user){
-        this.ParseService.getRoutesByUser(user).then(function(results){
-            user.attributes.routes = results;
-            this.$scope.$apply();
-            this.generateStats(user);
+        // this.ParseService.getRoutesByUser(user).then(function(results){
+        //
+        //     this.$scope.$applyAsync(function(){
+        //         user.attributes.routes = results;
+        //         this.generateStats(user);
+        //     }.bind(this));
+        // }.bind(this));
+
+        return this.ParseService.getStatsForUser(user).then(function(statsObject){
+            if(statsObject !== undefined){
+                this.$scope.$evalAsync(function(){
+                    $('td#'+user.id+'-routes-length').html(statsObject.routes.length);
+                    $('td#'+user.id+'-most-color').css('background-color', statsObject.mostColor);
+                    $('td#'+user.id+'-most-grade').html(statsObject.mostGrade);
+                    $('td#'+user.id+'-most-theme').html(statsObject.mostTheme);
+                });
+            }
+
         }.bind(this));
     },
 
@@ -112,15 +146,51 @@ var UsersCtrl = BaseController.extend({
         }.bind(this));
     },
 
+    newUserModalReady:function(){
+        this.$scope.user = {};
+    },
+
+    openUserModal:function(){
+        this.$scope.user = {};
+        
+        $('#newUserModal').openModal({
+            dismissible: false, // Modal can be dismissed by clicking outside of the modal
+            opacity: 0.3, // Opacity of modal background
+            in_duration: 300, // Transition in duration
+            out_duration: 200 // Transition out duration
+            // ready: this.newUserModalReady.bind(this), // Callback for Modal open
+            // complete: this.createUser.bind(this) // Callback for Modal close
+        });
+    },
+
     createUser: function(){
-        console.log("create user");
-        // this.wallModel.createWall(this.gymModel.gym).then(function(wall){
-        //     console.log(wall);
-        //     this.$state.go('wall', {wallId: wall.id, tab: "infoTab"});
+        // console.log("create user");
+        // this.userModel.createUser().then(function(user){
+        //     this.$state.go('userSettings', {userId: user.id, tab: "tabRoutes"});
         // }.bind(this));
-        this.userModel.createUser().then(function(user){
-            this.$state.go('userSettings', {userId: user.id, tab: "tabRoutes"});
-        }.bind(this));
+
+        // console.log(this.$scope.user);
+        this.userModel.createUser(this.$scope.user).then(function(user){
+            console.log('new user yay');
+            if(user.get('currentGym').id === this.gymModel.gym.id){
+                this.$scope.$apply(function(scope){
+                    this.userModel.users.splice(0,0,user);
+                }.bind(this));
+            }
+            $('#newUserModal').closeModal();
+        }.bind(this), function(e){
+            console.error(e);
+            switch (e.code) {
+                case 202:
+                    Materialize.toast('That username is already taken.', 2500, 'error');
+                    break;
+                case 203:
+                    Materialize.toast('That email is already taken.', 2500, 'error');
+                    break;
+                default:
+                    Materialize.toast('An error has occurred. ('+e.code+')\n'+e.message, 2500, 'error');
+            }
+        });
     },
 
     /**** Statistics Methods ****/

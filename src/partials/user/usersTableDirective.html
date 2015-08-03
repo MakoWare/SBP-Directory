@@ -13,10 +13,10 @@
   <tbody id="users-table-body">
     <tr ng-repeat="user in users">
       <td>{{user.attributes.username}}</td>
-      <td>{{user.attributes.routes.length}}</td>
-      <td ng-style="{'background-color': user.attributes.mostColor}"></td>
-      <td>{{user.attributes.mostGrade}}</td>
-      <td>{{user.attributes.mostTheme}}</td>
+      <td id="{{user.id}}-routes-length"></td>
+      <td id="{{user.id}}-most-color"></td>
+      <td id="{{user.id}}-most-grade"></td>
+      <td id="{{user.id}}-most-theme"></td>
       <td>
         <div class="switch">
           <label>

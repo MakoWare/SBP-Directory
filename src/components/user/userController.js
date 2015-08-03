@@ -29,6 +29,9 @@ var UserCtrl = BaseController.extend({
                 $('ul.tabs').tabs('select_tab', this.$stateParams.tab);
             }
         }.bind(this));
+
+        this.$scope.resetPassword = this.resetPassword.bind(this);
+        this.$scope.saveUser = this.saveUser.bind(this);
     },
 
     destroy: function(){
@@ -438,8 +441,18 @@ var UserCtrl = BaseController.extend({
 
     //Save User
     saveUser : function(){
-
+        this.$scope.user.save().then(null, function(e){
+            Materialize.toast('An error has occurred. ('+e.code+')\n'+e.message, 2500, 'error');
+        });
     },
+
+    resetPassword:function(){
+        this.$scope.user.save().then(function(user){
+            return Parse.User.requestPasswordReset(user.get('email'));
+        }).then(null,function(e){
+            Materialize.toast('An error has occurred. ('+e.code+')\n'+e.message, 2500, 'error');
+        });
+    }
 
 });
 

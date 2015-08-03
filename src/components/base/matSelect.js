@@ -26,10 +26,7 @@ angular.module('mw.materialize.matSelect',[])
 
         if(params){
             ngModel.$formatters.push(function(val) {
-                var ret = val ? traverse(val,params) : val
-                console.log(val);
-                console.log(ret);
-
+                var ret = val ? traverse(val,params) : val;
                 return ret;
             });
         }
