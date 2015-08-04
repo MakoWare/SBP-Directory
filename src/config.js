@@ -1,8 +1,12 @@
 angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
 
-    var auth = ['$location', function($location){
-        console.log(Parse);
-        console.log(Parse.currentUser);
+    var auth = ['$location', '$q', function($location, $q){
+        console.log("hi");
+        console.log(!Parse.User.current());
+        if(!Parse.User.current()){
+            $location.path("/login");
+        }
+        return $q.when();
     }];
 
     var initGym = ['GymModel', 'Notifications', '$stateParams', function(gymModel, notifications, $stateParams){
@@ -112,7 +116,7 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
             resolve: {
                 auth: auth,
                 initGym: initGym,
-                getRoutesByGym: ['initGym', 'RouteModel',  function(gym, routeModel){
+                getRoutesByGym: ['initGym', 'RouteModel', function(gym, routeModel){
                     return routeModel.getRoutesByGym(gym);
                 }],
                 getWallsByGym: ['initGym', 'WallModel', 'Notifications', function(gym, wallModel, notifications){

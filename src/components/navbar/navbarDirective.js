@@ -37,6 +37,7 @@ var NavBarDirective = BaseDirective.extend({
         this.$scope.gym = this.gymModel.gym;
         this.$scope.gyms = this.gymModel.gyms;
         this.$scope.onGymSelect = this.onGymSelect.bind(this);
+        this.currentUser = this.userModel.currentUser;
     },
 
     onGymFetch:function(gym){

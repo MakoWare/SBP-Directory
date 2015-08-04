@@ -32,6 +32,7 @@ var LoginCtrl = BaseController.extend({
         this.ParseService.login(this.$scope.username, this.$scope.password).then(function(results){
             this.notifications.notify(models.events.HIDE_LOADING, true);
             this.userModel.currentUser = results;
+            this.notifications.notify(models.events.USER_SIGNED_IN);
             this.$state.go("walls");
         }.bind(this), function(error){
             this.notifications.notify(models.events.HIDE_LOADING);

@@ -4,7 +4,7 @@
       <div class="nav-wrapper">
         <a  ui-sref="walls" class="brand-logo">{{brand}}</a>
         <a href="#" data-activates="sideNav" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
-        <ul class="right hide-on-med-and-down">
+        <ul class="right hide-on-med-and-down" ng-if="currentUser">
           <!-- <li><a ui-sref="gymMap">Gym</a></li> -->
           <!-- Dropdown Trigger -->
           <li><a class="dropdown-button" ui-sref="walls({gymId: gym.id})" data-dropdown-options='{"constrain_width": false,"hover": true,"gutter": 0,"belowOrigin": true}' data-activates="gym-select">{{gym.attributes.name}}<i class="material-icons right">arrow_drop_down</i></a></li>
