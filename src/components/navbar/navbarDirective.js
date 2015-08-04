@@ -13,14 +13,14 @@ var NavBarDirective = BaseDirective.extend({
         this.userModel = UserModel;
         this.notifications = Notifications;
         this.gymModel = GymModel;
-        this.gymModel.getDefaultGym().then(this.onGymFetch.bind(this));
-        this.gymModel.getGyms().then(this.onGymsFetch.bind(this));
     },
 
     defineListeners: function(){
         this.notifications.addEventListener(models.events.USER_SIGNED_IN, this.handleUserSignedIn.bind(this));
         this.notifications.addEventListener(models.events.BRAND_CHANGE, this.handleBrandChange.bind(this));
         this.notifications.addEventListener(models.events.GYM_CHANGE, this.onGymChange.bind(this));
+        this.notifications.addEventListener(models.events.GYM_LOADED, this.onGymChange.bind(this));
+        this.notifications.addEventListener(models.events.GYMS_LOADED, this.onGymsLoaded.bind(this));
 
         this.$scope.logout = this.logout.bind(this);
 
@@ -31,14 +31,12 @@ var NavBarDirective = BaseDirective.extend({
 
     defineScope: function(){
         this.navShowing = false;
-
         this.$scope.currentUser = this.userModel.currentUser;
         $(".button-collapse").sideNav();
 
         this.$scope.gym = this.gymModel.gym;
         this.$scope.gyms = this.gymModel.gyms;
         this.$scope.onGymSelect = this.onGymSelect.bind(this);
-
     },
 
     onGymFetch:function(gym){
@@ -79,12 +77,7 @@ var NavBarDirective = BaseDirective.extend({
     },
 
     onGymChange:function(event, gym){
-        this.$scope.$apply(function(scope){
-            scope.gym = gym;
-        });
-
         this.$scope.gym = this.gymModel.gym;
-
         if(this.$scope.gym.get('name') == "Seattle Bouldering Project"){
             this.$scope.brand = "SBP";
             this.$scope.$apply();
@@ -92,7 +85,12 @@ var NavBarDirective = BaseDirective.extend({
             this.$scope.brand = "ABP";
             this.$scope.$apply();
         }
+    },
+
+    onGymsLoaded: function(event, gyms){
+        this.$scope.gyms = this.gymModel.gyms;
     }
+
 
 });
 

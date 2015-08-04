@@ -1,16 +1,15 @@
 angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
 
+    var auth = ['$location', function($location){
+        console.log(Parse);
+        console.log(Parse.currentUser);
+    }];
+
     var initGym = ['GymModel', 'Notifications', '$stateParams', function(gymModel, notifications, $stateParams){
         console.log($stateParams);
-        if($stateParams.gymId){
-            return gymModel.getGymById($stateParams.gymId).then(function(gym){
-                return Parse.Promise.as(gym);
-            });
-        } else {
-            return gymModel.initGym().then(function(gym){
-                return Parse.Promise.as(gym);
-            });
-        }
+        return gymModel.initGym($stateParams.gymId).then(function(gym){
+            return Parse.Promise.as(gym);
+        });
     }];
 
     var getAllGyms = ['GymModel', function(gymModel){
@@ -59,30 +58,7 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
     }];
 
 
-    var initWalls = ['GymModel', '$q', '$stateParams', 'Notifications', function(gymModel, $q, params, notifications){
-        return gymModel.initGym().then(function(){
-            notifications.notify(models.events.HIDE_LOADING);
-        });
-    }];
-
-
-    var initWall = ['GymModel', 'WallModel', 'UserModel', 'RouteModel', '$q', '$stateParams', 'Notifications', function(gymModel, wallModel, userModel, routeModel, $q, params, notifications){
-        notifications.notify(models.events.SHOW_LOADING);
-        var promises = [];
-        promises.push(wallModel.getWallById(params.id));
-        promises.push(routeModel.getRoutesByWallId(params.id));
-        promises.push(userModel.getSetters());
-        promises.push(gymModel.initGym());
-
-
-
-        return Parse.Promise.when(promises).then(function(){
-            notifications.notify(models.events.HIDE_LOADING);
-            return Parse.Promise.as(arguments);
-        });
-    }];
-
-    $urlRouterProvider.otherwise("/walls");
+    $urlRouterProvider.otherwise("/login");
 
     $stateProvider
     /*
@@ -95,11 +71,18 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
      }
      })
      */
+
+        .state('login', {
+            url: "/login",
+            templateUrl: "partials/user/loginPage.html",
+            controller: LoginCtrl
+        })
         .state('gymInfo', {
             url: "/gym/info?gymId",
             templateUrl: "partials/gym/gymInfo.html",
             controller: GymInfoController,
             resolve: {
+                auth: auth,
                 initGym: initGym,
                 gymRoutes: getRoutesByGym,
                 show: ['initGym', 'gymRoutes', 'Notifications', function(gym, routes, notifications){
@@ -112,6 +95,7 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
             templateUrl: "partials/user/users.html",
             controller: UsersCtrl,
             resolve: {
+                auth: auth,
                 initGym: initGym,
                 getUsers: ['initGym', 'UserModel',  function(gym, userModel){
                     return userModel.getUsersForGym(gym);
@@ -126,6 +110,7 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
             templateUrl: "partials/walls/wallsPage.html",
             controller: WallsController,
             resolve: {
+                auth: auth,
                 initGym: initGym,
                 getRoutesByGym: ['initGym', 'RouteModel',  function(gym, routeModel){
                     return routeModel.getRoutesByGym(gym);
@@ -145,6 +130,7 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
             templateUrl: "partials/walls/wallPage.html",
             controller: WallController,
             resolve: {
+                auth: auth,
                 initGym: initGym,
                 getWallById: getWallById,
                 getRoutesByWallId: ['getWallById', 'RouteModel', function(wall, routeModel){
@@ -162,6 +148,7 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
             url: "/routes?gymId",
             templateUrl: "partials/routes/routes.html",
             resolve: {
+                auth: auth,
                 initGym: initGym
             }
         })
@@ -170,6 +157,7 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
             templateUrl: "partials/routes/route.html",
             controller: RouteCtrl,
             resolve: {
+                auth: auth,
                 initGym: initGym,
                 route: getRouteById,
                 setters: getSetters,
@@ -181,13 +169,13 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
             templateUrl: "partials/user/edit.html",
             controller:UserCtrl,
             resolve: {
+                auth: auth,
                 initGym: initGym,
                 allGyms: getAllGyms,
                 getUser: getUser,
                 show: ['initGym', 'getUser', 'Notifications', function(gym, user, notifications){
                     notifications.notify(models.events.HIDE_LOADING);
                 }]
-
             }
         });
 });
