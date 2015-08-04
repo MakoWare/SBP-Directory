@@ -30,6 +30,7 @@ var RouteModel = EventDispatcher.extend({
 
     getRoutesByGym: function(gym){
         return this.parseService.getRoutesByGym(gym).then(function(routes){
+            console.log(routes.length);
             return this.setRoutesAndReturn(routes);
         }.bind(this));
     },
