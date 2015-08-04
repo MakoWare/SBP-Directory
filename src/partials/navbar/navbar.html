@@ -7,7 +7,7 @@
         <ul class="right hide-on-med-and-down">
           <!-- <li><a ui-sref="gymMap">Gym</a></li> -->
           <!-- Dropdown Trigger -->
-          <li><a class="dropdown-button" ui-sref="walls" data-dropdown-options='{"constrain_width": false,"hover": true,"gutter": 0,"belowOrigin": true}' data-activates="gym-select">{{gym.attributes.name}}<i class="material-icons right">arrow_drop_down</i></a></li>
+          <li><a class="dropdown-button" ui-sref="walls({gymId: gym.id})" data-dropdown-options='{"constrain_width": false,"hover": true,"gutter": 0,"belowOrigin": true}' data-activates="gym-select">{{gym.attributes.name}}<i class="material-icons right">arrow_drop_down</i></a></li>
           <li ng-class="{'active': state == 'users' || state == 'userSettings'}"><a ui-sref="users">Users</a></li>
           <li ng-class="{'active': state == 'walls' || state == 'wall'}"><a ui-sref="walls">Walls</a></li>
           <li ng-class="{'active': state == 'gym' || state == 'gymInfo'}"><a ui-sref="gymInfo">Info</a></li>

@@ -15,22 +15,19 @@ var GymModel = EventDispatcher.extend({
 
 
   getDefaultGym: function(){
-    if(this.gym){
-      return Parse.Promise.as(this.gym);
-    } else {
-      return this.parseService.getDefaultGym().then(function(gym){
-        this.gym = gym;
-        this.notifications.notify(models.events.GYM_LOADED);
-        return Parse.Promise.as(gym);
-      }.bind(this),
-      function(err){
-        this.notifications.notify(models.events.GYM_LOAD_FAILED);
-        return Parse.Promise.as(null);
-      }.bind(this));
-    }
-
-
-  },
+      if(this.gym){
+          return Parse.Promise.as(this.gym);
+      } else {
+          return this.parseService.getDefaultGym().then(function(gym){
+              this.gym = gym;
+              this.notifications.notify(models.events.GYM_LOADED);
+              return Parse.Promise.as(gym);
+          }.bind(this), function(err){
+              this.notifications.notify(models.events.GYM_LOAD_FAILED);
+              return Parse.Promise.as(null);
+          }.bind(this));
+      }
+},
 
   initGym:function(){
     this.getGyms();
@@ -38,7 +35,12 @@ var GymModel = EventDispatcher.extend({
   },
 
   getGymById: function(id){
-
+      this.getGyms();
+      return this.parseService.getGymById(id).then(function(gym){
+          this.gym = gym;
+          this.notifications.notify(models.events.GYM_CHANGE);
+          return Parse.Promise.as(gym);
+      }.bind(this));
   },
 
   getGyms: function(gym){
@@ -59,9 +61,10 @@ var GymModel = EventDispatcher.extend({
   var GymModelProvider = Class.extend({
     instance: new GymModel(),
 
-    $get: function(Notifications, ParseService){
+    $get: function(Notifications, ParseService, $stateParams){
       this.instance.notifications = Notifications;
       this.instance.parseService = ParseService;
+        this.instance.$stateParams = $stateParams;
       return this.instance;
     }
   });

@@ -31,13 +31,14 @@ var NavBarDirective = BaseDirective.extend({
 
     defineScope: function(){
         this.navShowing = false;
-        this.$scope.brand = "SBP";
+
         this.$scope.currentUser = this.userModel.currentUser;
         $(".button-collapse").sideNav();
 
         this.$scope.gym = this.gymModel.gym;
         this.$scope.gyms = this.gymModel.gyms;
         this.$scope.onGymSelect = this.onGymSelect.bind(this);
+
     },
 
     onGymFetch:function(gym){
@@ -50,6 +51,9 @@ var NavBarDirective = BaseDirective.extend({
     },
 
     onGymSelect:function(gym){
+        console.log(this.$state.current);
+        this.$state.go(this.$state.current, {gymId: gym.id});
+        /*
         this.gymModel.setCurrentGym(gym);
         if(gym.get('name') === "Seattle Bouldering Project"){
             this.$scope.brand = "SBP";
@@ -57,6 +61,7 @@ var NavBarDirective = BaseDirective.extend({
             this.$scope.brand = "ABP";
         }
             this.$scope.$apply();
+         */
     },
 
     logout: function(){
@@ -77,6 +82,16 @@ var NavBarDirective = BaseDirective.extend({
         this.$scope.$apply(function(scope){
             scope.gym = gym;
         });
+
+        this.$scope.gym = this.gymModel.gym;
+
+        if(this.$scope.gym.get('name') == "Seattle Bouldering Project"){
+            this.$scope.brand = "SBP";
+            this.$scope.$apply();
+        } else {
+            this.$scope.brand = "ABP";
+            this.$scope.$apply();
+        }
     }
 
 });

@@ -1,9 +1,16 @@
 angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
 
-    var initGym = ['GymModel', 'Notifications', function(gymModel, notifications){
-        return gymModel.initGym().then(function(gym){
-            return Parse.Promise.as(gym);
-        });
+    var initGym = ['GymModel', 'Notifications', '$stateParams', function(gymModel, notifications, $stateParams){
+        console.log($stateParams);
+        if($stateParams.gymId){
+            return gymModel.getGymById($stateParams.gymId).then(function(gym){
+                return Parse.Promise.as(gym);
+            });
+        } else {
+            return gymModel.initGym().then(function(gym){
+                return Parse.Promise.as(gym);
+            });
+        }
     }];
 
     var getWallById = ['$stateParams', 'WallModel', function(stateParams,wallModel){
@@ -85,7 +92,7 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
      })
      */
         .state('gymInfo', {
-            url: "/gym/info",
+            url: "/gym/info?gymId",
             templateUrl: "partials/gym/gymInfo.html",
             controller: GymInfoController,
             resolve: {
@@ -97,7 +104,7 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
             }
         })
         .state('users', {
-            url: "/users",
+            url: "/users?gymId",
             templateUrl: "partials/user/users.html",
             controller: UsersCtrl,
             resolve: {
@@ -111,7 +118,7 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
             }
         })
         .state('walls', {
-            url: "/walls",
+            url: "/walls?gymId",
             templateUrl: "partials/walls/wallsPage.html",
             controller: WallsController,
             resolve: {
@@ -130,7 +137,7 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
             }
         })
         .state('wall', {
-            url: "/walls/:wallId?tab",
+            url: "/walls/:wallId?tab?gymId",
             templateUrl: "partials/walls/wallPage.html",
             controller: WallController,
             resolve: {
@@ -148,14 +155,14 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
             }
         })
         .state('routes', {
-            url: "/routes",
+            url: "/routes?gymId",
             templateUrl: "partials/routes/routes.html",
             resolve: {
                 initGym: initGym
             }
         })
         .state('route', {
-            url: "/routes/:id",
+            url: "/routes/:id?gymId",
             templateUrl: "partials/routes/route.html",
             controller: RouteCtrl,
             resolve: {
@@ -166,7 +173,7 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
             }
         })
         .state('userSettings', {
-            url: "/users/:userId/edit",
+            url: "/users/:userId/edit?gymId",
             templateUrl: "partials/user/edit.html",
             controller:UserCtrl,
             resolve: {
