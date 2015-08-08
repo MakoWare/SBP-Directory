@@ -8,6 +8,7 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
     }];
 
     var initGym = ['GymModel', 'Notifications', '$stateParams', function(gymModel, notifications, $stateParams){
+        console.log($stateParams);
         return gymModel.initGym($stateParams.gymId).then(function(gym){
             return Parse.Promise.as(gym);
         });

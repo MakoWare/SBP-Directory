@@ -37,6 +37,8 @@ var WallTableDirective = BaseDirective.extend({
             wall.averageNumber = wall.averageGrade.replace(/[^0-9]/, '');
             wall.total = wall.routes.length;
         }.bind(this));
+        this.$scope.gym = this.gymModel.gym;
+        console.log(this.$scope.gym);
     },
 
     destroy:function(){
@@ -50,7 +52,7 @@ var WallTableDirective = BaseDirective.extend({
     },
 
     goToWall: function(wall){
-        this.$state.go("wall", {wallId: wall.id});
+        this.$state.go("wall", {wallId: wall.id, gymId: this.$scope.gym.id});
     },
 
     handleUserChange: function(){
