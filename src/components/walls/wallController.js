@@ -24,7 +24,6 @@ var WallController = BaseController.extend({
         this.$scope.saveWall = this.saveWall.bind(this);
         $(document).ready(function(){
             $('ul.tabs').tabs();
-            console.log(this.$stateParams.tab);
             if(this.$stateParams.tab){
                 $('ul.tabs').tabs('select_tab', this.$stateParams.tab);
             }
