@@ -112,7 +112,12 @@ var ParseService = Class.extend({
     },
 
     getDefaultGym: function(){
-        return this.getGymById("4WChpaHxDE");
+        if(Parse.User.current() && Parse.User.current().get('currentGym')){
+            return this.getGymById(Parse.User.current().get('currentGym').id);
+        } else {
+            return this.getGymById("4WChpaHxDE");
+        }
+
     },
 
     getGymById:function(id){
@@ -197,7 +202,7 @@ var ParseService = Class.extend({
             // dev
             //Parse.initialize("XGoT7LbqQtXgUpwKAi2UYwRdKFsn8LYXmEX4cZZw","PiwZNcAIZTMVroBGHifVc9ps1y97zBhtKH8pHNQn");
             // prod
-            //Parse.initialize("NKnM9iqa0hnqZhA1M2TdyDYMMMVpW24QNcqaSZ2Y","k7cekvXmYutKXkuSuOp2scFgbkRnAUdQMh4SewsG");
+            Parse.initialize("NKnM9iqa0hnqZhA1M2TdyDYMMMVpW24QNcqaSZ2Y","k7cekvXmYutKXkuSuOp2scFgbkRnAUdQMh4SewsG");
 
             this.instance.RouteACL.setRoleWriteAccess("Setter", true);
             this.instance.RouteACL.setPublicReadAccess(true);

@@ -37,7 +37,6 @@ var NavBarDirective = BaseDirective.extend({
         this.$scope.gym = this.gymModel.gym;
         this.$scope.gyms = this.gymModel.gyms;
         this.$scope.onGymSelect = this.onGymSelect.bind(this);
-        this.currentUser = this.userModel.currentUser;
     },
 
     onGymFetch:function(gym){
@@ -50,7 +49,6 @@ var NavBarDirective = BaseDirective.extend({
     },
 
     onGymSelect:function(gym){
-        console.log(this.$state.current);
         this.$state.go(this.$state.current, {gymId: gym.id});
         /*
         this.gymModel.setCurrentGym(gym);

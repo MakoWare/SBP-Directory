@@ -88,7 +88,7 @@
                   </div>
 
                   <div class="input-field col s4 offset-s2">
-                      <select mat-select="attributes.name" ng-model="user.attributes.currentGym" name="gym" ng-options="gym as gym.attributes.name for gym in gyms" ng-change="setUserGym(gym)" required>
+                      <select mat-select="attributes.name" ng-model="user.attributes.currentGym" name="gym" ng-options="gym as gym.attributes.name for gym in gyms track by gym.id" ng-change="setUserGym(gym)" required>
                         <!-- <option value="" disabled selected>Choose Setter</option> -->
                       </select>
                       <label for="gym">Gym</label>

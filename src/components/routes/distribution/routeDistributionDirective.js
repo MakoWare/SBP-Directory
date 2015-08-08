@@ -20,9 +20,6 @@ var RouteDistributionDirective = BaseDirective.extend({
         this.chart2Div = this.$el.find('#chart_div2');
         this.underChartDiv = this.$el.find('#under-chart');
 
-        console.log(this.grades);
-        console.log(this.routeModel.routes.length);
-
         this.boundDrawChart = this.drawChart.bind(this);
         this.boundOnChartLoaded = this.onChartLoaded.bind(this);
         googleChartApiLoader.then(this.boundOnChartLoaded);
@@ -59,7 +56,6 @@ var RouteDistributionDirective = BaseDirective.extend({
     */
 
     onRoutesLoaded:function(){
-        console.log('reload chart');
         this.drawChart();
     },
 
@@ -102,9 +98,6 @@ var RouteDistributionDirective = BaseDirective.extend({
 
     drawChart:function(google){
 
-        console.log('drawChart');
-        console.log(this.$scope.gym);
-        console.log(this.chartIsVisible);
 
         // Create the data table.
 
@@ -130,8 +123,6 @@ var RouteDistributionDirective = BaseDirective.extend({
 
     drawChart1:function(data){
         var series = [];
-        console.log('grades: '+this.grades.length);
-        console.log(this.grades);
         var data = new google.visualization.DataTable();
 
         // first column is grade

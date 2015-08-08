@@ -51,7 +51,7 @@ var UserModel = EventDispatcher.extend({
             return Parse.Promise.as(results);
         }.bind(this));
     },
-    
+
     getUsersAndStatsForGym:function(gym){
         return this.ParseService.getUsersAndStatsForGym(gym).then(function(results){
             this.users = results;
@@ -89,6 +89,7 @@ var UserModel = EventDispatcher.extend({
         $get: function(ParseService, Notifications){
             this.instance.ParseService = ParseService;
             this.instance.notifications = Notifications;
+            this.instance.currentUser = Parse.User.current();
             return this.instance;
         }
     });

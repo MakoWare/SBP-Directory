@@ -2,14 +2,15 @@
 var LoginCtrl = BaseController.extend({
 
     /**** OVERRIDE Methods ****/
-    initialize:function($scope, $location, Notifications, ParseService, UserModel, $state, GymModel){
+    initialize:function($scope, $location, $timeout, Notifications, ParseService, UserModel, $state, GymModel){
         this.$location = $location;
         this.ParseService = ParseService;
         this.userModel = UserModel;
         this.gymModel = GymModel;
         this.$state = $state;
+        this.$timeout = $timeout;
         this.notifications = Notifications;
-        this.notifications.notify(models.events.HIDE_LOADING);
+
     },
 
     defineListeners:function(){
@@ -20,6 +21,11 @@ var LoginCtrl = BaseController.extend({
         this.$scope.username = "";
         this.$scope.password = "";
         this.$scope.login = this.login.bind(this);
+        this.notifications.notify(models.events.BRAND_CHANGE, "Route Management System");
+
+        this.$timeout(function(){
+            this.notifications.notify(models.events.HIDE_LOADING);
+        }.bind(this), 5);
     },
 
     destroy: function(){
@@ -35,7 +41,7 @@ var LoginCtrl = BaseController.extend({
             this.notifications.notify(models.events.USER_SIGNED_IN);
             this.$state.go("walls");
         }.bind(this), function(error){
-            this.notifications.notify(models.events.HIDE_LOADING);
+            this.notifications.notify(models.events.HIDE_LOADING, true);
             this.$scope.errorMessage = error.message;
             this.$scope.error = true;
         }.bind(this));
@@ -43,4 +49,4 @@ var LoginCtrl = BaseController.extend({
 
 });
 
-LoginCtrl.$inject = ['$scope', '$location', 'Notifications', 'ParseService', 'UserModel', '$state','GymModel'];
+LoginCtrl.$inject = ['$scope', '$location', '$timeout', 'Notifications', 'ParseService', 'UserModel', '$state','GymModel'];

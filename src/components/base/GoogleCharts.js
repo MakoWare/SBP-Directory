@@ -1,4 +1,3 @@
-
 angular.module('GoogleCharts',[])
 .factory('googleChartApiLoader', ['$rootScope', '$q', googleChartApiLoader]);
 
@@ -7,9 +6,7 @@ function googleChartApiLoader($rootScope, $q) {
 
     if($('#googleChartsScript').length===0){
         var onScriptLoad = function () {
-            console.log('on script load');
             var onLoadCallback = function(){
-                console.log('on load callback');
                 apiPromise.resolve(window.google);
             };
 

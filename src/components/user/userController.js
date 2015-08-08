@@ -19,12 +19,12 @@ var UserCtrl = BaseController.extend({
     defineScope: function(){
         this.$scope.user = this.userModel.profile;
         this.$scope.gyms = this.gymModel.gyms;
+
         this.getUserRoutes();
         this.$scope.tab = "routes";
         this.notifications.notify(models.events.BRAND_CHANGE, this.$scope.user.get('username'));
         $(document).ready(function(){
             $('ul.tabs').tabs();
-            console.log(this.$stateParams.tab);
             if(this.$stateParams.tab){
                 $('ul.tabs').tabs('select_tab', this.$stateParams.tab);
             }
@@ -32,10 +32,17 @@ var UserCtrl = BaseController.extend({
 
         this.$scope.resetPassword = this.resetPassword.bind(this);
         this.$scope.saveUser = this.saveUser.bind(this);
+        this.$scope.setUserGym = this.setUserGym.bind(this);
+        console.log(this.$scope.gyms);
     },
 
     destroy: function(){
 
+    },
+
+    setUserGym: function(gym){
+        console.log(gym);
+        this.$scope.user.set('currentGym', this.gymModel.gym);
     },
 
     //Get User's Routes
@@ -441,9 +448,14 @@ var UserCtrl = BaseController.extend({
 
     //Save User
     saveUser : function(){
-        this.$scope.user.save().then(null, function(e){
+        console.log(this.$scope.user);
+        this.notifications.notify(models.events.SHOW_LOADING);
+        this.$scope.user.save().then(function(results){
+            this.notifications.notify(models.events.HIDE_LOADING, true);
+        }.bind(this), function(e){
+            this.notifications.notify(models.events.HIDE_LOADING, true);
             Materialize.toast('An error has occurred. ('+e.code+')\n'+e.message, 2500, 'error');
-        });
+        }.bind(this));
     },
 
     resetPassword:function(){

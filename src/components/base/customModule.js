@@ -35,7 +35,6 @@ angular.module('CustomModule',[])
       });
 
       scope.$on('$destroy', function(){
-        console.log('destory dropdown items');
         $(elm).off('click.'+params);
       });
     }

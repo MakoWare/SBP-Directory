@@ -1,8 +1,6 @@
 angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
 
     var auth = ['$location', '$q', function($location, $q){
-        console.log("hi");
-        console.log(!Parse.User.current());
         if(!Parse.User.current()){
             $location.path("/login");
         }
@@ -10,7 +8,6 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
     }];
 
     var initGym = ['GymModel', 'Notifications', '$stateParams', function(gymModel, notifications, $stateParams){
-        console.log($stateParams);
         return gymModel.initGym($stateParams.gymId).then(function(gym){
             return Parse.Promise.as(gym);
         });
@@ -27,7 +24,6 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
     }];
 
     var getWalls = ['WallModel', 'initGym', function(wallModel, gym){
-        console.log("hi");
         return wallModel.getWallsByGym(gym);
     }];
 
