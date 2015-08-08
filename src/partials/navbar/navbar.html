@@ -13,10 +13,10 @@
           <li ng-class="{'active': state == 'gym' || state == 'gymInfo'}"><a ui-sref="gymInfo({gymId: gym.id})">Info</a></li>
         </ul>
         <ul class="side-nav" id="sideNav">
-          <li><a ui-sref="gymMap">Gym</a></li>
-          <li><a ui-sref="users">Users</a></li>
-          <li><a ui-sref="walls">Walls</a></li>
-          <li><a ui-sref="gymInfo">Info</a></li>
+          <li><a class="dropdown-button" ui-sref="walls({gymId: gym.id})">{{gym.attributes.name}}<i class="material-icons right">arrow_drop_down</i></a></li>
+          <li ng-class="{'active': state == 'users' || state == 'userSettings'}"><a ui-sref="users({gymId: gym.id})">Users</a></li>
+          <li ng-class="{'active': state == 'walls' || state == 'wall'}"><a ui-sref="walls({gymId: gym.id})">Walls</a></li>
+          <li ng-class="{'active': state == 'gym' || state == 'gymInfo'}"><a ui-sref="gymInfo({gymId: gym.id})">Info</a></li>
         </ul>
       </div>
     </div>
