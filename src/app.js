@@ -39,6 +39,9 @@ angular.module('sbp', [
     'mw.materialize',
 
     // google-charts
-    'GoogleCharts'
+    'GoogleCharts',
 
+    // gym tables
+    'SBPTableDirective',
+    'ABPTableDirective',
 ]);

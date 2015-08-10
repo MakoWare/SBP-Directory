@@ -1,7 +1,7 @@
 var RouteDistributionDirective = BaseDirective.extend({
 
     grades:{},
-    colorsArray:['Gray','Yellow','Green','Red','Blue','Orange','Purple','Black'],
+    colorsArray:['Gray','Yellow','Green','Red','Blue','Orange','Purple','Black','White','Pink'],
     gradesArray:['v0','v1','v2','v3','v4','v5','v6','v7','v8','v9','v10','v11','v12'],
 
     chartIsVisible:false,
@@ -69,6 +69,7 @@ var RouteDistributionDirective = BaseDirective.extend({
 
     getTotals:function(){
         var grades = {};
+        this.maxTotal = 0;
         $.each(this.routeModel.routes, function(index,route){
             var gradeName = 'v'+route.get('grade');
             // get the grade array
@@ -86,13 +87,31 @@ var RouteDistributionDirective = BaseDirective.extend({
                 gradeObject[colorName] = colorArray;
             }
 
-
-
             colorArray.push(route);
 
+            // determine max total
+            var total = gradeObject.total;
+            total = (total===undefined?0:total)+1;
+            gradeObject.total = total;
 
         }.bind(this));
         this.grades = grades;
+
+        // console.log(this.grades);
+        $.each(this.grades, function(ix, gradeObject){
+            if(gradeObject.total > this.maxTotal){
+                this.maxTotal = gradeObject.total;
+            }
+        }.bind(this));
+        if(this.$scope.gym && this.$scope.ideal===true){
+            var t;
+            $.each(this.colorsArray, function(ix, color){
+                t = this.$scope.gym.get('total'+color);
+                if(t > this.maxTotal){
+                    this.maxTotal = t;
+                }
+            }.bind(this));
+        }
         return this.grades;
     },
 
@@ -167,7 +186,12 @@ var RouteDistributionDirective = BaseDirective.extend({
                 }
 
                 // add the data for the color style column
-                row.push('color:'+color+';');
+                if(color.toLowerCase()==='white'){
+                    row.push('color:'+color+';stroke-color:black;stroke-width:1');
+                } else {
+                    row.push('color:'+color+';');
+                }
+
 
             }.bind(this));
 
@@ -197,7 +221,7 @@ var RouteDistributionDirective = BaseDirective.extend({
                 position: 'none'
             },
             chartArea:{
-                left:"10%",
+                left:"5%",
                 top:"5%",
                 width:'90%',
                 height:'90%'
@@ -208,7 +232,9 @@ var RouteDistributionDirective = BaseDirective.extend({
             vAxis:{
                 gridlines:{
                     count:-1
-                }
+                },
+                minValue:0,
+                maxValue:this.maxTotal
             }
         };
 
@@ -219,6 +245,9 @@ var RouteDistributionDirective = BaseDirective.extend({
         // this.chart1 = new google.charts.Bar(this.chart1Div.get(0));
         // google.charts.Bar.convertOptions(options)
         // this.chart1.draw(data, options);
+
+
+        // console.log(wrapper.getOptions());
     },
 
     drawChart2:function(data){
@@ -261,7 +290,12 @@ var RouteDistributionDirective = BaseDirective.extend({
                 }
 
                 // add the data for the color style column
-                row.push('color:'+color+';'+'opacity:0.6;');
+                if(color.toLowerCase()==='white'){
+                    row.push('color:'+color+';stroke-color:black;stroke-width:1;stroke-opacity:0.6;');
+                } else {
+                    row.push('color:'+color+';'+'opacity:0.6;');
+                }
+
 
             }.bind(this));
 
@@ -291,7 +325,7 @@ var RouteDistributionDirective = BaseDirective.extend({
                 position: 'none'
             },
             chartArea:{
-                left:"10%",
+                left:"5%",
                 top:"5%",
                 width:'90%',
                 height:'90%'
@@ -307,7 +341,9 @@ var RouteDistributionDirective = BaseDirective.extend({
                 gridlines:{
                     count:-1,
                     color:'transparent'
-                }
+                },
+                minValue:0,
+                maxValue:this.maxTotal
             },
             hAxis:{
                 textStyle:{

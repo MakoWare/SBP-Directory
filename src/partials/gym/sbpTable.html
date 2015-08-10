@@ -1,0 +1,198 @@
+<table class="bordered centered columned shrunken">
+    <thead>
+        <tr>
+            <th></th>
+            <th>v0</th>
+            <th>v1</th>
+            <th>v2</th>
+            <th>v3</th>
+            <th>v4</th>
+            <th>v5</th>
+            <th>v6</th>
+            <th>v7</th>
+            <th>v8</th>
+            <th>v9</th>
+            <th>v10</th>
+            <th>v11</th>
+            <th>v12</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="grey white-text">Gray</td>
+            <td><input ng-change="calculateTotals()" ng-model="gym.attributes.grayV0" type="number" class="form-control no-scroll"/></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <!-- <td><input ng-model="gym.attributes.totalGray" type="number" class="form-control" disabled/></td> -->
+            <td><h5>{{gym.attributes.totalGray}}</h5></td>
+        </tr>
+        <tr>
+            <td class="yellow black-text">Yellow</td>
+            <td><input ng-change="calculateTotals()" ng-model="gym.attributes.yellowV0" type="number" class="form-control no-scroll"/></td>
+            <td><input ng-change="calculateTotals()" ng-model="gym.attributes.yellowV1" type="number" class="form-control no-scroll"/></td>
+            <td><input ng-change="calculateTotals()" ng-model="gym.attributes.yellowV2" type="number" class="form-control no-scroll"/></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <!-- <td><input  ng-model="gym.attributes.totalYellow" class="form-control" disabled/></td> -->
+            <td><h5>{{gym.attributes.totalYellow}}</h5></td>
+        </tr>
+        <tr>
+            <td class="green white-text">Green</td>
+            <td></td>
+            <td></td>
+            <td><input ng-change="calculateTotals()" ng-model="gym.attributes.greenV2" type="number" class="form-control no-scroll"/></td>
+            <td><input ng-change="calculateTotals()" ng-model="gym.attributes.greenV3" type="number" class="form-control no-scroll"/></td>
+            <td><input ng-change="calculateTotals()" ng-model="gym.attributes.greenV4" type="number" class="form-control no-scroll"/></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <!-- <td><input ng-model="gym.attributes.totalGreen" class="form-control" disabled/></td> -->
+            <td><h5>{{gym.attributes.totalGreen}}</h5></td>
+        </tr>
+        <tr>
+            <td class="red white-text">Red</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><input ng-change="calculateTotals()" ng-model="gym.attributes.redV3" type="number" class="form-control no-scroll"/></td>
+            <td><input ng-change="calculateTotals()" ng-model="gym.attributes.redV4" type="number" class="form-control no-scroll"/></td>
+            <td><input ng-change="calculateTotals()" ng-model="gym.attributes.redV5" type="number" class="form-control no-scroll"/></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <!-- <td><input ng-model="gym.attributes.totalRed" class="form-control" disabled/></td> -->
+            <td><h5>{{gym.attributes.totalRed}}</h5></td>
+        </tr>
+        <tr>
+            <td class="blue white-text">Blue</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><input ng-change="calculateTotals()" ng-model="gym.attributes.blueV4" type="number" class="form-control no-scroll"/></td>
+            <td><input ng-change="calculateTotals()" ng-model="gym.attributes.blueV5" type="number" class="form-control no-scroll"/></td>
+            <td><input ng-change="calculateTotals()" ng-model="gym.attributes.blueV6" type="number" class="form-control no-scroll"/></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <!-- <td><input ng-model="gym.attributes.totalBlue" class="form-control" disabled/></td> -->
+            <td><h5>{{gym.attributes.totalBlue}}</h5></td>
+        </tr>
+        <tr>
+            <td class="orange black-text">Orange</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><input ng-change="calculateTotals()" ng-model="gym.attributes.orangeV5" type="number" class="form-control no-scroll"/></td>
+            <td><input ng-change="calculateTotals()" ng-model="gym.attributes.orangeV6" type="number" class="form-control no-scroll"/></td>
+            <td><input ng-change="calculateTotals()" ng-model="gym.attributes.orangeV7" type="number" class="form-control no-scroll"/></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <!-- <td><input ng-model="gym.attributes.totalOrange" class="form-control" disabled/></td> -->
+            <td><h5>{{gym.attributes.totalOrange}}</h5></td>
+        </tr>
+        <tr>
+            <td class="purple white-text">Purple</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><input ng-change="calculateTotals()" ng-model="gym.attributes.purpleV6" type="number" class="form-control no-scroll"/></td>
+            <td><input ng-change="calculateTotals()" ng-model="gym.attributes.purpleV7" type="number" class="form-control no-scroll"/></td>
+            <td><input ng-change="calculateTotals()" ng-model="gym.attributes.purpleV8" type="number" class="form-control no-scroll"/></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <!-- <td><input ng-model="gym.attributes.totalPurple" class="form-control" disabled/></td> -->
+            <td><h5>{{gym.attributes.totalPurple}}</h5></td>
+        </tr>
+        <tr>
+            <td class="black white-text">Black</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><input ng-change="calculateTotals()" ng-model="gym.attributes.blackV8" type="number" class="form-control no-scroll"/></td>
+            <td><input ng-change="calculateTotals()" ng-model="gym.attributes.blackV9" type="number" class="form-control no-scroll"/></td>
+            <td><input ng-change="calculateTotals()" ng-model="gym.attributes.blackV10" type="number" class="form-control no-scroll"/></td>
+            <td><input ng-change="calculateTotals()" ng-model="gym.attributes.blackV11" type="number" class="form-control no-scroll"/></td>
+            <td><input ng-change="calculateTotals()" ng-model="gym.attributes.blackV12" type="number" class="form-control no-scroll"/></td>
+            <!-- <td><input ng-change="calculateTotals()" ng-model="gym.attributes.totalBlack" class="form-control" disabled/></td> -->
+            <td><h5>{{gym.attributes.totalBlack}}</h5></td>
+        </tr>
+        <tr>
+            <td>Total</td>
+            <!-- <td><input ng-model="gym.attributes.totalV0" type="text" class="form-control" disabled/></td> -->
+            <td><h5>{{gym.attributes.totalV0}}</h5></td>
+            <!-- <td><input ng-model="gym.attributes.totalV1" type="text" class="form-control" disabled/></td> -->
+            <td><h5>{{gym.attributes.totalV1}}</h5></td>
+            <!-- <td><input ng-model="gym.attributes.totalV2" type="text" class="form-control" disabled/></td> -->
+            <td><h5>{{gym.attributes.totalV2}}</h5></td>
+            <!-- <td><input ng-model="gym.attributes.totalV3" type="text" class="form-control" disabled/></td> -->
+            <td><h5>{{gym.attributes.totalV3}}</h5></td>
+            <!-- <td><input ng-model="gym.attributes.totalV4" type="text" class="form-control" disabled/></td> -->
+            <td><h5>{{gym.attributes.totalV4}}</h5></td>
+            <!-- <td><input ng-model="gym.attributes.totalV5" type="text" class="form-control" disabled/></td> -->
+            <td><h5>{{gym.attributes.totalV5}}</h5></td>
+            <!-- <td><input ng-model="gym.attributes.totalV6" type="text" class="form-control" disabled/></td> -->
+            <td><h5>{{gym.attributes.totalV6}}</h5></td>
+            <!-- <td><input ng-model="gym.attributes.totalV7" type="text" class="form-control" disabled/></td> -->
+            <td><h5>{{gym.attributes.totalV7}}</h5></td>
+            <!-- <td><input ng-model="gym.attributes.totalV8" type="text" class="form-control" disabled/></td> -->
+            <td><h5>{{gym.attributes.totalV8}}</h5></td>
+            <!-- <td><input ng-model="gym.attributes.totalV9" type="text" class="form-control" disabled/></td> -->
+            <td><h5>{{gym.attributes.totalV9}}</h5></td>
+            <!-- <td><input ng-model="gym.attributes.totalV10" type="text" class="form-control" disabled/></td> -->
+            <td><h5>{{gym.attributes.totalV10}}</h5></td>
+            <!-- <td><input ng-model="gym.attributes.totalV11" type="text" class="form-control" disabled/></td> -->
+            <td><h5>{{gym.attributes.totalV11}}</h5></td>
+            <!-- <td><input ng-model="gym.attributes.totalV12" type="text" class="form-control" disabled/></td> -->
+            <td><h5>{{gym.attributes.totalV12}}</h5></td>
+            <!-- <td><input ng-model="gym.attributes.totalIdealRoutes" class="form-control" disabled/></td> -->
+            <td><h5>{{gym.attributes.totalIdealRoutes}}</h5></td>
+        </tr>
+    </tbody>
+</table>
