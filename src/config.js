@@ -167,7 +167,7 @@ angular.module('sbp').config(function($stateProvider, $urlRouterProvider) {
         })
         .state('userSettings', {
             url: "/users/:userId/edit?tab",
-            templateUrl: "partials/user/edit.html",
+            templateUrl: "partials/user/user.html",
             controller:UserCtrl,
             resolve: {
                 auth: auth,
