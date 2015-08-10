@@ -4,11 +4,14 @@
     margin-right: auto !important;
 }
 
-#toast-container {
+.toast.error {
+    background-color: map-get($red, 'base');
+    // left:auto;
+    // right: 50%;
+}
 
-    .error {
-        background-color: map-get($red, 'base');
-        // left:auto;
-        // right: 50%;
-    }
+.toast.success {
+    background-color: map-get($green, 'base');
+    // left:auto;
+    // right: 50%;
 }

@@ -65,6 +65,7 @@ var UserCtrl = BaseController.extend({
         this.$scope.user.save().then(function(results){
             this.notifications.notify(models.events.HIDE_LOADING, true);
             this.$scope.userInfoForm.$setPristine(true);
+            Materialize.toast('Saved User!', 1500, 'success');
         }.bind(this), function(e){
             this.notifications.notify(models.events.HIDE_LOADING, true);
             Materialize.toast('An error has occurred. ('+e.code+')\n'+e.message, 2500, 'error');

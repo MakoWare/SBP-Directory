@@ -152,7 +152,7 @@ var UsersCtrl = BaseController.extend({
 
     openUserModal:function(){
         this.$scope.user = {};
-        
+
         $('#newUserModal').openModal({
             dismissible: false, // Modal can be dismissed by clicking outside of the modal
             opacity: 0.3, // Opacity of modal background
