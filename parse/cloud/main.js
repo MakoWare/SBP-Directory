@@ -4,6 +4,39 @@ var _ = require('underscore');
 
 /******* DEFINES *******/
 
+
+// function for toggling the currentGym of a user
+Parse.Cloud.define("updateUser", function(req, resp) {
+  var userId = req.params.userId,
+      gymId = req.params.gymId,
+      username = req.params.username,
+      email = req.params.username,
+      setter = req.params.setter,
+      userQuery = new Parse.Query(Parse.User);
+
+    Parse.Cloud.useMasterKey();
+
+  // TODO: add logic for ACL test to determine if user can toggle
+
+  userQuery.get(userId).then(function(user){
+      var Gym = Parse.Object.extend("Gym");
+      var gym = new Gym();
+      gym.id = gymId;
+      user.set('currentGym', gym);
+      user.set('username', username);
+      //user.set('email', email);
+      user.set('setter', setter);
+      return user.save();
+  }).then(function(user){
+    resp.success(user);
+  },
+  function(err){
+    resp.error(""+userId+" "+gymId+"; err: "+err.message);
+  });
+
+});
+
+
 // function for toggling the setter status of a user
 Parse.Cloud.define("toggleUserSetterStatus", function(req, resp) {
   var userId = req.params.userId,

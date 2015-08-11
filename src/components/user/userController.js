@@ -62,7 +62,8 @@ var UserCtrl = BaseController.extend({
     saveUser : function(){
         console.log(this.$scope.user);
         this.notifications.notify(models.events.SHOW_LOADING);
-        this.$scope.user.save().then(function(results){
+        this.userModel.updateUser(this.$scope.user).then(function(results){
+            this.$scope.user = results;
             this.notifications.notify(models.events.HIDE_LOADING, true);
             this.$scope.userInfoForm.$setPristine(true);
             Materialize.toast('Saved User!', 1500, 'success');

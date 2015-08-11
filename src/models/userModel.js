@@ -72,6 +72,16 @@ var UserModel = EventDispatcher.extend({
 
     },
 
+    updateUser: function(user){
+        return Parse.Cloud.run('updateUser',{
+            userId: user.id,
+            gymId: user.attributes.currentGym.id,
+            email: user.attributes.email,
+            setter: user.attributes.setter,
+            username: user.attributes.username
+        });
+    },
+
     getSetters: function(){
         return this.ParseService.getSetters().then(function(results){
             this.setters = results;

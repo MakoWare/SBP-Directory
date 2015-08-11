@@ -37,7 +37,14 @@ var RouteTableDirective = BaseDirective.extend({
         this.$scope.openStateSelectModal = this.openStateSelectModal.bind(this);
         this.$scope.routes = this.routeModel.routes;
         this.$scope.wall = this.wallModel.wall;
-        this.$scope.setters = this.userModel.setters;
+        this.$scope.gym = this.gymModel.gym;
+        this.$scope.setters = [];
+        this.userModel.setters.forEach(function(setter){
+            if(setter.get('currentGym').id == this.$scope.gym.id || setter.get('username') == "Guest Setter" || setter.get('username') == "CO-LAB" || setter.get('username') == "Apprentice"){
+                this.$scope.setters.push(setter);
+            }
+        }.bind(this));
+
         this.$scope.predicate = "attributes.order";
         this.$scope.secondary = "attributes.grade";
     },
