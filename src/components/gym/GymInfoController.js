@@ -12,7 +12,7 @@ var GymInfoController = BaseController.extend({
         this.notifications = Notifications;
         this.routeModel = RouteModel;
 
-        console.log(this.routeModel.routes.length);
+        this.$scope.totalRoutes = this.routeModel.routes.length;
     },
 
     defineListeners:function(){

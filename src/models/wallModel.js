@@ -6,65 +6,79 @@ namespace('models.events').WALL_DELETED = "ActivityModel.WALL_DELETED";
 namespace('models.events').WALLS_LOADED = "ActivityModel.WALLS_LOADED";
 
 var WallModel = EventDispatcher.extend({
-    wall: {},
-    walls: [],
-    wallsByGym:{},
+  wall: {},
+  walls: [],
+  wallsByGym:{},
 
-    notifications: null,
-    parseService: null,
+  notifications: null,
+  parseService: null,
 
-    getWallById: function(id){
-        return this.parseService.getWallById(id).then(function(results){
-            this.wall = results;
-            this.notifications.notify(models.events.WALL_LOADED);
-            return Parse.Promise.as(results);
-        }.bind(this));
-    },
+  getWallById: function(id){
+    return this.parseService.getWallById(id).then(function(results){
+      this.wall = results;
+      this.notifications.notify(models.events.WALL_LOADED);
+      return Parse.Promise.as(results);
+    }.bind(this));
+  },
 
-    getWallsByGym: function(gym){
-        return this.parseService.getWallsByGym(gym).then(function(results){
-            this.wallsByGym[gym.id] = results;
-            this.walls = results;
-            this.notifications.notify(models.events.WALLS_LOADED);
-            return Parse.Promise.as(results);
-        }.bind(this));
-    },
+  getWallsByGym: function(gym){
+    return this.parseService.getWallsByGym(gym).then(function(results){
+      this.wallsByGym[gym.id] = results;
+      this.walls = results;
+      this.notifications.notify(models.events.WALLS_LOADED);
+      return Parse.Promise.as(results);
+    }.bind(this));
+  },
 
-    createWall: function(gym){
-        var wall = new this.parseService.Wall();
-        //wall.setACL(this.parseService.RouteACL);
-        wall.set("gym", gym);
-        wall.set("name", "New Wall");
-        return wall.save();
-    },
+  createWall: function(gym){
+    var wall = new this.parseService.Wall();
+    //wall.setACL(this.parseService.RouteACL);
+    wall.set("gym", gym);
+    wall.set("name", "New Wall");
+    return wall.save();
+  },
 
-    saveWall: function(wall){
-        console.log(wall);
+  saveWall: function(wall){
+    console.log(wall);
+    if(wall.attributes.newImage){
+      var parseFile = new Parse.File(wall.attributes.image.name, wall.attributes.image);
+      return parseFile.save().then(function(result) {
+        wall.set("image", result);
         return this.parseService.saveWall(wall).then(function(results){
-            this.wall = results;
-            this.notifications.notify(models.events.WALL_UPDATED);
-            return Parse.Promise.as(results);
+          this.wall = results;
+          this.notifications.notify(models.events.WALL_UPDATED);
+          return Parse.Promise.as(results);
         }.bind(this));
-    },
-
-    deleteWall: function(wall){
-        return wall.destroy();
+      }.bind(this), function(error) {
+        alert(error.message);
+      }.bind(this));
+    } else {
+      return this.parseService.saveWall(wall).then(function(results){
+        this.wall = results;
+        this.notifications.notify(models.events.WALL_UPDATED);
+        return Parse.Promise.as(results);
+      }.bind(this));
     }
+  },
+
+  deleteWall: function(wall){
+    return wall.destroy();
+  }
 
 });
 
 
-(function (){
+  (function (){
     var WallModelProvider = Class.extend({
-        instance: new WallModel(),
+      instance: new WallModel(),
 
-        $get: function( Notifications, ParseService){
-            this.instance.notifications = Notifications;
-            this.instance.parseService = ParseService;
-            return this.instance;
-        }
+      $get: function( Notifications, ParseService){
+        this.instance.notifications = Notifications;
+        this.instance.parseService = ParseService;
+        return this.instance;
+      }
     });
 
     angular.module('WallModel',[])
-        .provider('WallModel', WallModelProvider);
-}());
+           .provider('WallModel', WallModelProvider);
+  }());

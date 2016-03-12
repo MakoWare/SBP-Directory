@@ -22,11 +22,26 @@
             <input ng-model="wall.attributes.name" type="text" name="name" class="" id="name" required/>
             <label class="active" for="name">Name</label>
           </div>
-          <div class="col s1 offset-s4">
+        </div>
+        <div class="row valign-wrapper card-panel">
+          <div class="file-field input-field">
+            <div class="btn">
+              <span>File</span>
+              <input type="file" onchange="onWallFileChange(this.files)" ng-model="wallFile">
+            </div>
+            <div class="file-path-wrapper">
+              <input class="file-path validate" type="text" ng-model="wall.attributes.imageName" disabled>
+              <p>Current Image: {{wall.attributes.imageName}}</p>
+            </div>
+          </div>
+          <img ng-src="{{wall.attributes.image.url()}}" width="300" height="200" style="margin-left: 4em;">
+        </div>
+        <div class="row valign-wrapper card-panel">
+          <div class="col s1 offset-s8">
             <button class="btn red"  ng-click="deleteWall()">Delete</button>
           </div>
           <div class="col s1 offset-s1">
-            <button class="btn blue" ng-disabled="wallForm.$invalid || wallForm.$pristine" ng-click="saveWall()">Save</button>
+            <button class="btn blue" ng-disabled="wallForm.$invalid" ng-click="saveWall()">Save</button>
           </div>
         </div>
       </form>
