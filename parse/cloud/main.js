@@ -59,6 +59,68 @@ Parse.Cloud.define("toggleUserSetterStatus", function(req, resp) {
 
 });
 
+// function for sending routes
+Parse.Cloud.define("sendRoutes", function(req, resp) {
+  var SentRoute = Parse.Object.extend("SentRoute");
+  var Route = Parse.Object.extend("Route");
+
+  var userId = req.params.userId,
+      routes = req.params.routes;
+
+  var routesToSave = [];
+
+  var userQuery = new Parse.Query(Parse.User);
+  Parse.Cloud.useMasterKey();
+  userQuery.get(userId).then(function(user){
+    return user;
+  }).then(function(user){
+    var sentRouteQuery = new Parse.Query("SentRoute");
+    sentRouteQuery.limit(1000);
+    sentRouteQuery.equalTo("user", user);
+    sentRouteQuery.find().then(function(sentRoutes){
+      var routesToDelete = [];
+      var routesToCreate = [];
+      routes.forEach(function(routeToBeUpdated){
+        var found = false;
+        sentRoutes.forEach(function(sentRoute){
+          if(sentRoute.id === routeToBeUpdated.id){
+            found = true;
+            if(!routeToBeUpdated.sent){
+              routesToDelete.push(sentRoute);
+            }
+          }
+        });
+        if(!found){
+          routesToCreate.push(routeToBeUpdated);
+        }
+      });
+
+      //Create Sent Routes
+      routesToCreate.forEach(function(routeToCreate){
+        var route = new Route();
+        route.id = routeToCreate.id;
+        var sentRoute = new SentRoute();
+        sentRoute.set("user", user);
+        sentRoute.set("route", route);
+        routesToSave.push(sentRoute);
+      });
+
+      Parse.Object.saveAll(routesToSave, {
+        success: function(routes){
+          resp.success(routes);
+        }, error: function(){
+          resp.error(err.message);
+        }
+      });
+    }, function(err){
+      resp.error(err.message);
+    });
+  }, function(err){
+    resp.error(err.message);
+  });
+});
+
+
 Parse.Cloud.define('getUsersAndStatsForGym', function(req, resp){
     var gymId = req.params.gymId;
 
