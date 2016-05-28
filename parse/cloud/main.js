@@ -107,7 +107,17 @@ Parse.Cloud.define("sendRoutes", function(req, resp) {
 
       Parse.Object.saveAll(routesToSave, {
         success: function(routes){
-          resp.success(routes);
+          var query = new Parse.Query("SentRoute");
+          query.equalTo("user", user);
+          query.limit(1000);
+          query.include("route");
+          query.find({
+            success: function(sentRoutes){
+              resp.success(sentRoutes);
+            }, error {
+              resp.error(error);
+            }
+          });
         }, error: function(){
           resp.error(err.message);
         }
