@@ -114,7 +114,7 @@ Parse.Cloud.define("sendRoutes", function(req, resp) {
           query.find({
             success: function(sentRoutes){
               resp.success(sentRoutes);
-            }, error {
+            }, error: function(error){
               resp.error(error);
             }
           });
